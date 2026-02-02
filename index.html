@@ -290,7 +290,6 @@
             <div class="window-content">
                 <div class="animals">
                     <span>🐮</span>
-                    <span>🦁</span>
                 </div>
                 
                 <h1>You have been invited to dinner<br>this <span class="highlight">Wednesday</span></h1>
@@ -371,6 +370,8 @@
         
         let isNoButtonMoving = false;
         let isSecondStage = false;
+        let mobileJumpInterval = null;
+        const isMobile = window.innerWidth <= 768;
 
         // Function to move the No button
         function moveNoButton() {
@@ -391,6 +392,31 @@
             const randomY = Math.random() * maxY - maxY / 2;
             
             noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        // Start automatic jumping on mobile
+        function startMobileJumping() {
+            if (!isMobile || !isSecondStage) return;
+            
+            // Clear any existing interval
+            if (mobileJumpInterval) {
+                clearInterval(mobileJumpInterval);
+            }
+            
+            // Make button jump every 800ms
+            mobileJumpInterval = setInterval(() => {
+                if (isSecondStage) {
+                    moveNoButton();
+                }
+            }, 400);
+        }
+
+        // Stop mobile jumping
+        function stopMobileJumping() {
+            if (mobileJumpInterval) {
+                clearInterval(mobileJumpInterval);
+                mobileJumpInterval = null;
+            }
         }
 
         // Handle initial No button click
@@ -414,6 +440,11 @@
             isNoButtonMoving = false;
             
             setupMovingBehavior();
+            
+            // Start automatic jumping on mobile
+            if (isMobile) {
+                startMobileJumping();
+            }
         });
 
         // Setup moving behavior
@@ -423,6 +454,16 @@
                 e.preventDefault();
                 moveNoButton();
             });
+            
+            // On mobile, also move on click attempts
+            if (isMobile) {
+                noBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    moveNoButton();
+                });
+            stopMobileJumping();
+            
+            }
         }
 
         // Initial No button click
