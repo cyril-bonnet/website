@@ -524,6 +524,77 @@
             color: #003C74;
         }
 
+        .feedback-panel {
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .feedback-list {
+            background: #ECE9D8;
+            border: 1px solid #B0B0B0;
+            min-height: 220px;
+            max-height: 360px;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .feedback-item {
+            background: #FFFFFF;
+            border: 2px solid #808080;
+            padding: 7px;
+            font-size: 12px;
+            line-height: 1.35;
+            word-break: break-word;
+        }
+
+        .feedback-item-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3px;
+            color: #003C74;
+            font-weight: bold;
+            font-size: 11px;
+            gap: 8px;
+        }
+
+        .feedback-type {
+            border: 1px solid #808080;
+            padding: 1px 5px;
+            background: #D6E9FF;
+            color: #003C74;
+        }
+
+        .feedback-form {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: 110px 1fr auto;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .feedback-form select,
+        .feedback-form input {
+            width: 100%;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .feedback-empty {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+            padding: 8px;
+        }
+
         .option-button {
             width: 100%;
             padding: 20px;
@@ -532,6 +603,21 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+        }
+
+        .chat-option-badge {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border: 1px solid #9B1C1C;
+            background: #FF4D4D;
+            color: #FFFFFF;
+            font-size: 11px;
+            line-height: 1;
+            font-weight: bold;
         }
 
         .back-button {
@@ -950,7 +1036,15 @@
                 grid-template-columns: 1fr;
             }
 
+            .feedback-form {
+                grid-template-columns: 1fr;
+            }
+
             .weekly-form button {
+                width: 100%;
+            }
+
+            .feedback-form button {
                 width: 100%;
             }
 
@@ -1030,8 +1124,9 @@
                         <input type="password" id="loginPasswordInput" class="login-auth-input" placeholder="Enter password" />
                         <p class="login-auth-error" id="loginAuthError"></p>
                         <div class="login-auth-buttons">
-                            <button type="button" id="loginAuthSubmitBtn">Continue</button>
                             <button type="button" id="loginAuthCancelBtn">Cancel</button>
+                            <button type="button" id="loginAuthSubmitBtn">Continue</button>
+
                         </div>
                     </div>
                 </div>
@@ -1075,6 +1170,11 @@
                         <button class="option-button" onclick="showView('chatView')">
                             <span>💬</span>
                             <span>Chat</span>
+                            <span class="chat-option-badge" id="chatUnreadBadge">NEW</span>
+                        </button>
+                        <button class="option-button" onclick="showView('feedbackView')">
+                            <span>💡</span>
+                            <span>Feedback & Suggestions</span>
                         </button>
                     </div>
 
@@ -1345,6 +1445,40 @@
                 </div>
             </div>
         </div>
+
+        <!-- Feedback View -->
+        <div class="view" id="feedbackView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>💡</span>
+                        <span>feedback.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Feature Feedback</h1>
+                    <div class="feedback-panel">
+                        <div class="feedback-list" id="feedbackList"></div>
+                        <form class="feedback-form" id="feedbackForm">
+                            <select id="feedbackType">
+                                <option value="Suggestion">Suggestion</option>
+                                <option value="Feedback">Feedback</option>
+                                <option value="Bug">Bug</option>
+                            </select>
+                            <input type="text" id="feedbackInput" placeholder="Share your idea or feedback" maxlength="280" required />
+                            <button type="submit">Post</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="music-player">
@@ -1390,6 +1524,11 @@
             if (viewId === 'chatView') {
                 initSocial();
                 renderChatMessages();
+                markChatAsSeen();
+            }
+
+            if (viewId === 'feedbackView') {
+                initFeedback();
             }
             
             // Reset invitation view if going back
@@ -1409,22 +1548,27 @@
         let weeklyInitialized = false;
         let moodsInitialized = false;
         let socialInitialized = false;
+        let feedbackInitialized = false;
         let firebaseDbRef = null;
         let weeklyDbRef = null;
         let moodsDbRef = null;
         let quickNoteDbRef = null;
         let chatDbRef = null;
+        let feedbackDbRef = null;
         let userStatusDbRef = null;
         let firebaseUnsubscribe = null;
         let weeklyUnsubscribe = null;
         let moodsUnsubscribe = null;
         let quickNoteUnsubscribe = null;
         let chatUnsubscribe = null;
+        let feedbackUnsubscribe = null;
         let userStatusUnsubscribe = null;
         let weeklyItems = [];
         let userMoods = { ru: 'normal', kiki: 'normal' };
         let quickNotes = {};
         let chatMessages = [];
+        let feedbackItems = [];
+        let chatHasSyncedOnce = false;
         let userStatus = { ru: { period: false }, kiki: { period: false } };
         let currentUser = null;
         let usersDbRef = null;
@@ -1445,6 +1589,8 @@
         const MOODS_STORAGE_KEY = 'rugile_user_moods';
         const QUICK_NOTE_STORAGE_KEY = 'rugile_quick_notes';
         const CHAT_STORAGE_KEY = 'rugile_chat_messages';
+        const CHAT_LAST_SEEN_STORAGE_KEY = 'rugile_chat_last_seen';
+        const FEEDBACK_STORAGE_KEY = 'rugile_feedback_items';
         const USER_STATUS_STORAGE_KEY = 'rugile_user_status';
         const USER_STORAGE_KEY = 'rugile_current_user';
         const FIREBASE_BOARD_ID = 'rugile-shared-board';
@@ -1477,6 +1623,92 @@
         };
 
         const MOOD_OPTIONS = ['happy', 'normal', 'meh', 'grumpy', 'sad'];
+        let chatLastSeen = { ru: 0, kiki: 0 };
+        const notificationAudio = new Audio('notification.mp3');
+        notificationAudio.preload = 'auto';
+
+        function getLatestIncomingChatTimestamp(messages, userKey) {
+            if (!Array.isArray(messages) || !messages.length || !userKey) return 0;
+            return messages.reduce((latest, message) => {
+                if (!message || message.from === userKey) return latest;
+                const timestamp = Number(message.timestamp) || 0;
+                return timestamp > latest ? timestamp : latest;
+            }, 0);
+        }
+
+        function playNotificationSound() {
+            try {
+                notificationAudio.currentTime = 0;
+                notificationAudio.play().catch(() => {});
+            } catch {
+                // no-op
+            }
+        }
+
+        function loadChatLastSeen() {
+            const saved = localStorage.getItem(CHAT_LAST_SEEN_STORAGE_KEY);
+            if (!saved) {
+                chatLastSeen = { ru: 0, kiki: 0 };
+                return;
+            }
+            try {
+                const parsed = JSON.parse(saved) || {};
+                chatLastSeen = {
+                    ru: Number(parsed.ru) || 0,
+                    kiki: Number(parsed.kiki) || 0
+                };
+            } catch {
+                chatLastSeen = { ru: 0, kiki: 0 };
+            }
+        }
+
+        function saveChatLastSeen() {
+            localStorage.setItem(CHAT_LAST_SEEN_STORAGE_KEY, JSON.stringify(chatLastSeen));
+        }
+
+        function latestChatTimestamp() {
+            if (!Array.isArray(chatMessages) || !chatMessages.length) return 0;
+            return chatMessages.reduce((latest, message) => {
+                const value = Number(message?.timestamp) || 0;
+                return value > latest ? value : latest;
+            }, 0);
+        }
+
+        function unreadChatCount() {
+            if (!currentUser) return 0;
+            const lastSeenForUser = Number(chatLastSeen[currentUser.key]) || 0;
+            return chatMessages.filter((message) => {
+                const fromOtherUser = message?.from && message.from !== currentUser.key;
+                const messageTime = Number(message?.timestamp) || 0;
+                return fromOtherUser && messageTime > lastSeenForUser;
+            }).length;
+        }
+
+        function renderChatUnreadBadge() {
+            const badge = document.getElementById('chatUnreadBadge');
+            if (!badge) return;
+            const count = unreadChatCount();
+            if (count > 0) {
+                badge.style.display = 'inline-flex';
+                badge.textContent = count > 99 ? '99+' : String(count);
+                return;
+            }
+            badge.style.display = 'none';
+        }
+
+        function markChatAsSeen() {
+            if (!currentUser) return;
+            const latest = latestChatTimestamp();
+            const currentSeen = Number(chatLastSeen[currentUser.key]) || 0;
+            if (latest > currentSeen) {
+                chatLastSeen = {
+                    ...chatLastSeen,
+                    [currentUser.key]: latest
+                };
+                saveChatLastSeen();
+            }
+            renderChatUnreadBadge();
+        }
 
         function normalizeMoods(raw) {
             const defaults = { ru: 'normal', kiki: 'normal' };
@@ -1540,28 +1772,17 @@
             periodButtonsRu.innerHTML = '';
             if (!currentUser || currentUser.key !== 'ru') return;
 
-            const yesBtn = document.createElement('button');
-            yesBtn.type = 'button';
-            yesBtn.className = 'period-btn';
-            yesBtn.textContent = 'Set Yes';
-            yesBtn.addEventListener('click', () => {
-                userStatus = { ...userStatus, ru: { period: true } };
+            const toggleBtn = document.createElement('button');
+            toggleBtn.type = 'button';
+            toggleBtn.className = 'period-btn';
+            toggleBtn.textContent = onPeriod ? 'Toggle to No' : 'Toggle to Yes';
+            toggleBtn.addEventListener('click', () => {
+                userStatus = { ...userStatus, ru: { period: !onPeriod } };
                 saveUserStatus();
                 renderPeriodControls();
             });
 
-            const noBtn = document.createElement('button');
-            noBtn.type = 'button';
-            noBtn.className = 'period-btn';
-            noBtn.textContent = 'Set No';
-            noBtn.addEventListener('click', () => {
-                userStatus = { ...userStatus, ru: { period: false } };
-                saveUserStatus();
-                renderPeriodControls();
-            });
-
-            periodButtonsRu.appendChild(yesBtn);
-            periodButtonsRu.appendChild(noBtn);
+            periodButtonsRu.appendChild(toggleBtn);
         }
 
         function saveQuickNotes() {
@@ -1666,6 +1887,84 @@
             });
 
             list.scrollTop = list.scrollHeight;
+            renderChatUnreadBadge();
+        }
+
+        function saveFeedbackItems() {
+            if (feedbackDbRef) {
+                feedbackDbRef.set(feedbackItems).catch((error) => {
+                    console.error('Firebase feedback save failed, fallback to localStorage:', error);
+                    localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(feedbackItems));
+                });
+                return;
+            }
+            localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(feedbackItems));
+        }
+
+        function loadFeedbackItems() {
+            const saved = localStorage.getItem(FEEDBACK_STORAGE_KEY);
+            if (!saved) {
+                feedbackItems = [];
+                return;
+            }
+            try {
+                feedbackItems = JSON.parse(saved) || [];
+            } catch {
+                feedbackItems = [];
+            }
+        }
+
+        function renderFeedbackItems() {
+            const list = document.getElementById('feedbackList');
+            if (!list) return;
+
+            list.innerHTML = '';
+            if (!feedbackItems.length) {
+                const empty = document.createElement('div');
+                empty.className = 'feedback-empty';
+                empty.textContent = 'No feedback yet. Add the first one.';
+                list.appendChild(empty);
+                return;
+            }
+
+            const latestFirst = [...feedbackItems].slice(-120).reverse();
+            latestFirst.forEach((item) => {
+                const row = document.createElement('div');
+                row.className = 'feedback-item';
+
+                const head = document.createElement('div');
+                head.className = 'feedback-item-head';
+
+                const author = document.createElement('span');
+                author.textContent = `${item.addedByEmoji || '❓'}`;
+
+                const type = document.createElement('span');
+                type.className = 'feedback-type';
+                type.textContent = item.type || 'Feedback';
+
+                const text = document.createElement('div');
+                text.textContent = item.text || '';
+
+                head.appendChild(author);
+                head.appendChild(type);
+                row.appendChild(head);
+                row.appendChild(text);
+                list.appendChild(row);
+            });
+        }
+
+        function initFeedback() {
+            if (feedbackInitialized) {
+                renderFeedbackItems();
+                return;
+            }
+
+            feedbackInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadFeedbackItems();
+            }
+            renderFeedbackItems();
         }
 
         function renderMoodButtonsFor(userKey) {
@@ -1770,6 +2069,7 @@
                 renderQuickNoteInbox();
                 renderChatMessages();
                 renderPeriodControls();
+                renderChatUnreadBadge();
                 return;
             }
 
@@ -1782,6 +2082,7 @@
                 renderQuickNoteInbox();
                 renderChatMessages();
                 renderPeriodControls();
+                renderChatUnreadBadge();
             }
         }
 
@@ -1805,12 +2106,14 @@
 
             if (!currentUser) {
                 bar.classList.remove('visible');
+                renderChatUnreadBadge();
                 return;
             }
 
             text.textContent = `Current user: ${currentUser.emoji} ${currentUser.name}`;
             bar.classList.add('visible');
             renderMoods();
+            renderChatUnreadBadge();
         }
 
         function clearLoginAuthError() {
@@ -1910,6 +2213,7 @@
         }
 
         function initUserSession() {
+            loadChatLastSeen();
             const savedUserKey = localStorage.getItem(USER_STORAGE_KEY);
             if (savedUserKey && USER_MAP[savedUserKey]) {
                 currentUser = USER_MAP[savedUserKey];
@@ -1953,6 +2257,7 @@
                 moodsDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/moods`);
                 quickNoteDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/quickNotes`);
                 chatDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/chat`);
+                feedbackDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/feedback`);
                 userStatusDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/userStatus`);
                 usersDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/users`);
 
@@ -1970,6 +2275,9 @@
                 }
                 if (chatUnsubscribe) {
                     chatUnsubscribe();
+                }
+                if (feedbackUnsubscribe) {
+                    feedbackUnsubscribe();
                 }
                 if (userStatusUnsubscribe) {
                     userStatusUnsubscribe();
@@ -1999,9 +2307,30 @@
                 });
 
                 const chatListener = chatDbRef.on('value', (snapshot) => {
+                    const previousMessages = chatMessages;
                     const value = snapshot.val();
                     chatMessages = Array.isArray(value) ? value : [];
+
+                    if (currentUser) {
+                        const previousIncoming = getLatestIncomingChatTimestamp(previousMessages, currentUser.key);
+                        const nextIncoming = getLatestIncomingChatTimestamp(chatMessages, currentUser.key);
+                        if (chatHasSyncedOnce && nextIncoming > previousIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    chatHasSyncedOnce = true;
                     renderChatMessages();
+                    const chatView = document.getElementById('chatView');
+                    if (chatView && chatView.classList.contains('active')) {
+                        markChatAsSeen();
+                    }
+                });
+
+                const feedbackListener = feedbackDbRef.on('value', (snapshot) => {
+                    const value = snapshot.val();
+                    feedbackItems = Array.isArray(value) ? value : [];
+                    renderFeedbackItems();
                 });
 
                 const userStatusListener = userStatusDbRef.on('value', (snapshot) => {
@@ -2014,6 +2343,7 @@
                 moodsUnsubscribe = () => moodsDbRef.off('value', moodsListener);
                 quickNoteUnsubscribe = () => quickNoteDbRef.off('value', quickNoteListener);
                 chatUnsubscribe = () => chatDbRef.off('value', chatListener);
+                feedbackUnsubscribe = () => feedbackDbRef.off('value', feedbackListener);
                 userStatusUnsubscribe = () => userStatusDbRef.off('value', userStatusListener);
                 return true;
             } catch (error) {
@@ -2023,6 +2353,7 @@
                 moodsDbRef = null;
                 quickNoteDbRef = null;
                 chatDbRef = null;
+                feedbackDbRef = null;
                 userStatusDbRef = null;
                 return false;
             }
@@ -2392,6 +2723,37 @@
             input.value = '';
             saveChatMessages();
             renderChatMessages();
+            markChatAsSeen();
+        });
+
+        document.getElementById('feedbackForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const type = document.getElementById('feedbackType').value || 'Feedback';
+            const input = document.getElementById('feedbackInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            feedbackItems = [
+                ...feedbackItems,
+                {
+                    id: Date.now(),
+                    type,
+                    text,
+                    from: currentUser.key,
+                    addedByEmoji: currentUser.emoji,
+                    timestamp: Date.now()
+                }
+            ];
+
+            if (feedbackItems.length > 200) {
+                feedbackItems = feedbackItems.slice(-200);
+            }
+
+            input.value = '';
+            saveFeedbackItems();
+            renderFeedbackItems();
         });
 
         // ============================================
