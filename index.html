@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
     <title>rugilė.exe</title>
     <style>
         * {
@@ -26,6 +28,14 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
         }
 
         /* Windows XP Window Style */
@@ -270,95 +280,472 @@
                 min-height: 80px;
             }
         }
+
+        /* Home Page Styles */
+        .home-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-button {
+            width: 100%;
+            padding: 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .back-button {
+            margin-bottom: 15px;
+            min-width: 100px;
+        }
+
+        /* Todo List Styles */
+        .todo-container {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .todo-column {
+            flex: 1;
+            min-width: 150px;
+            background: #FFFFFF;
+            border: 2px solid #808080;
+            padding: 10px;
+        }
+
+        .todo-column h3 {
+            color: #003C74;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .task-item {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 8px;
+            padding: 8px;
+            cursor: move;
+            word-wrap: break-word;
+            font-size: 13px;
+        }
+
+        .task-item:active {
+            opacity: 0.5;
+        }
+
+        .task-item.dragging {
+            opacity: 0.5;
+        }
+
+        .todo-column.drag-over {
+            background: #ECE9D8;
+        }
+
+        .add-task-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .add-task-form input {
+            flex: 1;
+            min-width: 200px;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 14px;
+            border: 2px solid #808080;
+            background: white;
+        }
+
+        .add-task-form input:focus {
+            outline: 1px solid #0054E3;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 16px;
+            color: #003C74;
+        }
+
+        @media (max-width: 768px) {
+            .todo-container {
+                flex-direction: column;
+            }
+
+            .todo-column {
+                min-width: 100%;
+            }
+
+            .option-button {
+                font-size: 14px;
+                padding: 15px;
+            }
+
+            .add-task-form {
+                flex-direction: column;
+            }
+
+            .add-task-form input {
+                min-width: 100%;
+            }
+
+            .add-task-form button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Main Invitation Window -->
-        <div class="window" id="mainWindow">
-            <div class="window-header">
-                <div class="window-title">
-                    <span>📅</span>
-                    <span>rugilė.exe</span>
-                </div>
-                <div class="window-controls">
-                    <div class="window-button">_</div>
-                    <div class="window-button">□</div>
-                    <div class="window-button">×</div>
-                </div>
-            </div>
-            <div class="window-content">
-                <div class="animals">
-                    <span>🐮</span>
-                </div>
-                
-                <h1>You have been invited on a date<br>this <span class="highlight">Thursday evening</span></h1>
-                <p class="question">
-                    Please provide your answer below :
-                </p>
-                
-                <div class="buttons-container" id="buttonsContainer">
-                    <button id="yesBtn" class="hidden">Yes!</button>
-                    <button id="noBtn">No</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- No Message Window (Initial) -->
-        <div class="window" id="noWindow" style="display: none;">
-            <div class="window-header">
-                <div class="window-title">
-                    <span>🇰🇿🐴🥛</span>
-                    <span>rejection.txt</span>
-                </div>
-                <div class="window-controls">
-                    <div class="window-button">_</div>
-                    <div class="window-button">□</div>
-                    <div class="window-button">×</div>
-                </div>
-            </div>
-            <div class="window-content">
-                <div class="section">
-                    <h2 style="text-align: center;">Well that is a bit disappointing..</h2>
-                    <img src="no.jpg" alt="No first!" class="result-image" id="noImage">
-                    <p>
-                        but now that you started with your "no"...<br><br>
-                        let's get your <span class="highlight">real</span> answer
-                    </p>
-                    <button id="continueBtn">Continue</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Success Window -->
-        <div class="window" id="successWindow" style="display: none;">
-            <div class="window-header">
-                <div class="window-title">
-                    <span>🐧</span>
-                    <span>success.txt</span>
-                </div>
-                <div class="window-controls">
-                    <div class="window-button">_</div>
-                    <div class="window-button">□</div>
-                    <div class="window-button">×</div>
-                </div>
-            </div>
-            <div class="window-content">
-                <div class="section">
-                    <div style="text-align: center; font-size: 40px; margin: 10px 0;">
-                        🐮 🐮 🐮
+        <!-- Home View -->
+        <div class="view active" id="homeView">
+            <div class="window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🐮</span>
+                        <span>rugilė.exe</span>
                     </div>
-                    <h2 style="text-align: center;">I knew you'd say yes!</h2>
-                    <img src="yes.jpg" alt="Yes!" class="result-image" id="yesImage">
-                    <p style="text-align: center;">
-                        Enjoy the rest of your shift :)
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="animals">
+                        <span>🐮</span>
+                    </div>
+                    <h1>Welcome to rugilė.exe</h1>
+                    <p class="question">Please choose an option:</p>
+                    <div class="home-options">
+                        <button class="option-button" onclick="showView('invitationView')">
+                            <span>📅</span>
+                            <span>Invitation</span>
+                        </button>
+                        <button class="option-button" onclick="showView('todoView')">
+                            <span>📝</span>
+                            <span>Todo List Planner</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invitation View -->
+        <div class="view" id="invitationView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+            
+            <!-- Main Invitation Window -->
+            <div class="window" id="mainWindow">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>📅</span>
+                        <span>rugilė.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="animals">
+                        <span>🐮</span>
+                    </div>
+                    
+                    <h1>You have been invited on a date<br>this <span class="highlight">Thursday evening</span></h1>
+                    <p class="question">
+                        Please provide your answer below :
                     </p>
+                    
+                    <div class="buttons-container" id="buttonsContainer">
+                        <button id="yesBtn" class="hidden">Yes!</button>
+                        <button id="noBtn">No</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Message Window (Initial) -->
+            <div class="window" id="noWindow" style="display: none;">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🇰🇿🐴🥛</span>
+                        <span>rejection.txt</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="section">
+                        <h2 style="text-align: center;">Well that is a bit disappointing..</h2>
+                        <img src="no.jpg" alt="No first!" class="result-image" id="noImage">
+                        <p>
+                            but now that you started with your "no"...<br><br>
+                            let's get your <span class="highlight">real</span> answer
+                        </p>
+                        <button id="continueBtn">Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Window -->
+            <div class="window" id="successWindow" style="display: none;">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🐧</span>
+                        <span>success.txt</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="section">
+                        <div style="text-align: center; font-size: 40px; margin: 10px 0;">
+                            🐮 🐮 🐮
+                        </div>
+                        <h2 style="text-align: center;">I knew you'd say yes!</h2>
+                        <img src="yes.jpg" alt="Yes!" class="result-image" id="yesImage">
+                        <p style="text-align: center;">
+                            Enjoy the rest of your shift :)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Todo List View -->
+        <div class="view" id="todoView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+            
+            <div class="window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>📝</span>
+                        <span>todo_planner.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="animals">
+                        <span>🐮</span>
+                    </div>
+                    <h1>Task Planner</h1>
+                    
+                    <div id="todoLoading" class="loading">Loading tasks...</div>
+                    
+                    <div id="todoContent" style="display: none;">
+                        <div class="todo-container" id="todoContainer">
+                            <!-- Columns will be generated here -->
+                        </div>
+                        
+                        <form class="add-task-form" id="addTaskForm">
+                            <input 
+                                type="text" 
+                                id="newTaskInput" 
+                                placeholder="Add a task" 
+                                autocomplete="off"
+                            />
+                            <button type="submit">Add</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ============================================
+        // VIEW SWITCHING
+        // ============================================
+        function showView(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Show selected view
+            document.getElementById(viewId).classList.add('active');
+            
+            // Initialize todo list if switching to it
+            if (viewId === 'todoView') {
+                initTodoList();
+            }
+            
+            // Reset invitation view if going back
+            if (viewId === 'invitationView') {
+                resetInvitation();
+            }
+        }
+
+        // ============================================
+        // TODO LIST FUNCTIONALITY
+        // ============================================
+        let tasks = [];
+        let draggedTaskId = null;
+        let todoInitialized = false;
+        const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
+        const STORAGE_KEY = 'rugile_todo_tasks';
+
+        function saveTasks() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    tasks = JSON.parse(saved);
+                } catch (e) {
+                    tasks = [];
+                }
+            }
+        }
+
+        function initTodoList() {
+            if (todoInitialized) {
+                renderTodoList();
+                return;
+            }
+            
+            todoInitialized = true;
+            loadTasks();
+            document.getElementById('todoLoading').style.display = 'none';
+            document.getElementById('todoContent').style.display = 'block';
+            renderTodoList();
+        }
+
+        function renderTodoList() {
+            const container = document.getElementById('todoContainer');
+            container.innerHTML = '';
+            
+            statuses.forEach(status => {
+                const column = document.createElement('div');
+                column.className = 'todo-column';
+                column.dataset.status = status;
+                
+                const title = document.createElement('h3');
+                title.textContent = status;
+                column.appendChild(title);
+                
+                // Add tasks for this status
+                const columnTasks = tasks.filter(task => task.status === status);
+                columnTasks.forEach(task => {
+                    const taskButton = document.createElement('button');
+                    taskButton.className = 'task-item';
+                    taskButton.textContent = task.title;
+                    taskButton.draggable = true;
+                    taskButton.dataset.taskId = task.id;
+                    
+                    taskButton.addEventListener('dragstart', handleDragStart);
+                    taskButton.addEventListener('dragend', handleDragEnd);
+                    
+                    column.appendChild(taskButton);
+                });
+                
+                // Add drag over handlers to column
+                column.addEventListener('dragover', handleDragOver);
+                column.addEventListener('drop', handleDrop);
+                column.addEventListener('dragleave', handleDragLeave);
+                
+                container.appendChild(column);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedTaskId = parseInt(e.target.dataset.taskId);
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            document.querySelectorAll('.todo-column').forEach(col => {
+                col.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            if (e.currentTarget === e.target) {
+                e.currentTarget.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            
+            if (draggedTaskId === null) return;
+            
+            const newStatus = e.currentTarget.dataset.status;
+            
+            tasks = tasks.map(task => {
+                if (task.id === draggedTaskId) {
+                    return { ...task, status: newStatus };
+                }
+                return task;
+            });
+            
+            draggedTaskId = null;
+            saveTasks();
+            renderTodoList();
+        }
+
+        // Add task form handler
+        document.getElementById('addTaskForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const input = document.getElementById('newTaskInput');
+            const title = input.value.trim();
+            
+            if (!title) return;
+            
+            const nextId = tasks.length > 0 
+                ? Math.max(...tasks.map(task => task.id)) + 1 
+                : 1;
+            
+            tasks.push({
+                id: nextId,
+                title: title,
+                status: 'Todo'
+            });
+            
+            input.value = '';
+            saveTasks();
+            renderTodoList();
+        });
+
+        // ============================================
+        // INVITATION PAGE FUNCTIONALITY
+        // ============================================
+        // ============================================
+        // INVITATION PAGE FUNCTIONALITY
+        // ============================================
         // Discord Webhook Configuration
         const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1467867622203854951/D4khJNbGb7wZkHNEzk9u58IoDzYC78r_luwpg54_6SHXEeGoFQsw1RUPhPiMkoz-_LSr';
         
@@ -370,19 +757,7 @@
             
             const info = {
                 device: navigator.userAgent,
-                platform: navigator.platform,
-                language: navigator.language,
-                languages: navigator.languages.join(', '),
-                screen: `${screen.width}x${screen.height}`,
-                colorDepth: `${screen.colorDepth}-bit`,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                referrer: document.referrer || 'Direct visit',
-                cookiesEnabled: navigator.cookieEnabled,
-                doNotTrack: navigator.doNotTrack || 'Not set',
-                cpuCores: navigator.hardwareConcurrency || 'Unknown',
-                deviceMemory: navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown',
-                touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
-                onlineStatus: navigator.onLine ? 'Online' : 'Offline'
+                platform: navigator.platform
             };
             
             // Parse browser info from user agent
@@ -393,54 +768,37 @@
             else if (ua.includes('Edge')) info.browser = 'Edge';
             else info.browser = 'Other';
             
+            // Detect if it's a bot/crawler
+            const botPatterns = /bot|crawler|spider|scraper|headless|phantom|slurp|prerender|wget|curl|python-requests|java|axios|fetch|http|scrape/i;
+            info.isBot = botPatterns.test(ua) || !navigator.webdriver === false;
+            info.botType = '🤖 LIKELY BOT';
+            
+            // Additional bot checks
+            if (/Googlebot|Bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|TelegramBot/i.test(ua)) {
+                info.isBot = true;
+                info.botType = '🤖 CONFIRMED BOT/CRAWLER';
+            }
+            if (!navigator.webdriver === false || navigator.webdriver) {
+                info.isBot = true;
+                info.botType = '🤖 AUTOMATED BROWSER';
+            }
+            if (!info.isBot) {
+                info.botType = '✅ LIKELY HUMAN';
+            }
+            
             // Detect device type
             if (/Mobile|Android|iPhone/i.test(ua)) info.deviceType = '📱 Mobile';
             else if (/iPad|Tablet/i.test(ua)) info.deviceType = '📱 Tablet';
             else info.deviceType = '💻 Desktop';
             
-            // Get connection info if available
-            if (navigator.connection) {
-                const conn = navigator.connection;
-                info.connectionType = conn.effectiveType || 'Unknown';
-                info.downlink = conn.downlink ? `${conn.downlink} Mbps` : 'Unknown';
-                info.rtt = conn.rtt ? `${conn.rtt} ms` : 'Unknown';
-                info.saveData = conn.saveData ? 'Enabled' : 'Disabled';
-            }
-            
-            // Get battery info if available
-            if (navigator.getBattery) {
-                try {
-                    const battery = await navigator.getBattery();
-                    info.batteryLevel = `${Math.round(battery.level * 100)}%`;
-                    info.batteryCharging = battery.charging ? '⚡ Charging' : '🔋 Not charging';
-                } catch (e) {
-                    info.batteryLevel = 'N/A';
-                }
-            }
-            
-            // Check for returning visitor
-            const visitCount = parseInt(localStorage.getItem('visitCount') || '0') + 1;
-            localStorage.setItem('visitCount', visitCount.toString());
-            info.visitCount = visitCount;
-            info.firstVisit = localStorage.getItem('firstVisit') || new Date().toISOString();
-            if (!localStorage.getItem('firstVisit')) {
-                localStorage.setItem('firstVisit', info.firstVisit);
-            }
-            
-            // Try to get IP and location info from ipapi.co (free, no key needed)
+            // Try to get country only (no city/region/IP)
             try {
                 const response = await fetch('https://ipapi.co/json/');
                 const data = await response.json();
-                info.ip = data.ip;
-                info.city = data.city;
-                info.region = data.region;
                 info.country = data.country_name;
-                info.postalCode = data.postal;
-                info.coordinates = `${data.latitude}, ${data.longitude}`;
-                info.isp = data.org;
                 info.flag = data.country_code ? `:flag_${data.country_code.toLowerCase()}:` : '';
             } catch (error) {
-                console.log('Could not fetch IP info:', error);
+                console.log('Could not fetch location info:', error);
             }
             
             visitorInfo = info;
@@ -460,33 +818,13 @@
                 // Build fields for Discord embed
                 const fields = [
                     { 
-                        name: '🌍 Location', 
-                        value: info.ip ? `${info.flag} ${info.city}, ${info.region}\n${info.country} ${info.postalCode || ''}\nIP: \`${info.ip}\`\n📍 ${info.coordinates || 'N/A'}` : 'Unknown', 
-                        inline: true 
-                    },
-                    { 
-                        name: '📡 Network', 
-                        value: `ISP: ${info.isp || 'Unknown'}\nType: ${info.connectionType || 'N/A'}\nSpeed: ${info.downlink || 'N/A'}\nPing: ${info.rtt || 'N/A'}`, 
+                        name: '🌍 Country', 
+                        value: info.country ? `${info.flag} ${info.country}` : 'Unknown', 
                         inline: true 
                     },
                     { 
                         name: '💻 Device', 
-                        value: `${info.deviceType}\nOS: ${info.platform}\nCPU: ${info.cpuCores} cores\nRAM: ${info.deviceMemory}`, 
-                        inline: true 
-                    },
-                    { 
-                        name: '🌐 Browser', 
-                        value: `${info.browser}\nLanguage: ${info.language}\nCookies: ${info.cookiesEnabled ? '✅' : '❌'}\nDNT: ${info.doNotTrack}`, 
-                        inline: true 
-                    },
-                    { 
-                        name: '🖥️ Display', 
-                        value: `Screen: ${info.screen}\nColor: ${info.colorDepth}\nTouch: ${info.touchSupport ? '✅' : '❌'}`, 
-                        inline: true 
-                    },
-                    { 
-                        name: '📊 Other', 
-                        value: `${info.batteryCharging || '🔋 N/A'}\nBattery: ${info.batteryLevel || 'N/A'}\nVisit #${info.visitCount}\nStatus: ${info.onlineStatus}`, 
+                        value: `${info.deviceType}\n${info.browser}`, 
                         inline: true 
                     }
                 ];
@@ -496,11 +834,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         embeds: [{
-                            title: '🐮 rugilė.exe Activity',
-                            description: message,
-                            color: 6003917, // Blue color
+                            title: `🐮 rugilė.exe Activity ${info.isBot ? '🤖' : '👤'}`,
+                            description: `${info.botType}\n\n${message}`,
+                            color: info.isBot ? 15158332 : 6003917, // Red for bots, blue for humans
                             fields: fields,
-                            footer: { text: `User Agent: ${info.device.substring(0, 100)} | Referrer: ${info.referrer.substring(0, 50)}` },
+                            footer: { text: `${info.browser} on ${info.platform}` },
                             timestamp: new Date().toISOString()
                         }]
                     })
@@ -525,6 +863,18 @@
         
         // Track page open
         sendDiscordNotification('✨ Page was opened!');
+
+        function resetInvitation() {
+            isSecondStage = false;
+            isNoButtonMoving = false;
+            mainWindow.style.display = 'block';
+            noWindow.style.display = 'none';
+            successWindow.style.display = 'none';
+            yesBtn.classList.add('hidden');
+            noBtn.classList.remove('moving');
+            noBtn.style.transform = 'translate(0, 0)';
+            stopMobileJumping();
+        }
 
         // Function to move the No button
         function moveNoButton() {
@@ -556,12 +906,12 @@
                 clearInterval(mobileJumpInterval);
             }
             
-            // Make button jump every 400ms
+            // Make button jump every 200ms
             mobileJumpInterval = setInterval(() => {
                 if (isSecondStage) {
                     moveNoButton();
                 }
-            }, 400);
+            }, 200);
         }
 
         // Stop mobile jumping
@@ -616,8 +966,6 @@
                     e.preventDefault();
                     moveNoButton();
                 });
-            stopMobileJumping();
-            
             }
         }
 
@@ -632,6 +980,7 @@
             successWindow.style.display = 'block';
             
             createConfetti();
+            stopMobileJumping();
         });
 
         // Create confetti with XP colors
