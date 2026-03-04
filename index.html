@@ -364,6 +364,36 @@
             background: #F5F5FF;
         }
 
+        .task-actions {
+            margin-top: 10px;
+            padding: 10px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            display: none;
+        }
+
+        .task-actions.visible {
+            display: block;
+        }
+
+        .task-actions-title {
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .task-actions-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        #deleteTaskBtn {
+            background: linear-gradient(180deg, #FFD6D6 0%, #FF9B9B 100%);
+            border-color: #FFFFFF #9B1C1C #9B1C1C #FFFFFF;
+        }
+
         .add-task-form {
             display: flex;
             gap: 10px;
@@ -415,6 +445,10 @@
             }
 
             .add-task-form button {
+                width: 100%;
+            }
+
+            .task-actions-buttons button {
                 width: 100%;
             }
         }
@@ -544,7 +578,7 @@
             </div>
         </div>
 
-        <!-- Todo List View -->
+        <!-- Task Planner View -->
         <div class="view" id="todoView">
             <button class="back-button" onclick="showView('homeView')">← Back</button>
             
@@ -565,19 +599,26 @@
                         <span>🐮</span>
                     </div>
                     <h1>Task Planner</h1>
-                    
-                    <div id="todoLoading" class="loading">Loading tasks...</div>
-                    
-                    <div id="todoContent" style="display: none;">
+
+                    <div id="todoContent">
                         <div class="todo-container" id="todoContainer">
                             <!-- Columns will be generated here -->
                         </div>
-                        
+
+                        <div id="taskActions" class="task-actions">
+                            <p class="task-actions-title" id="taskActionsTitle">Task actions</p>
+                            <div class="task-actions-buttons">
+                                <button type="button" id="moveTaskBtn">Move</button>
+                                <button type="button" id="deleteTaskBtn">Delete</button>
+                                <button type="button" id="cancelTaskActionBtn">Cancel</button>
+                            </div>
+                        </div>
+
                         <form class="add-task-form" id="addTaskForm">
-                            <input 
-                                type="text" 
-                                id="newTaskInput" 
-                                placeholder="Add a task" 
+                            <input
+                                type="text"
+                                id="newTaskInput"
+                                placeholder="Add a task"
                                 autocomplete="off"
                             />
                             <button type="submit">Add</button>
@@ -587,6 +628,9 @@
             </div>
         </div>
     </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
     <script>
         // ============================================
@@ -613,17 +657,80 @@
         }
 
         // ============================================
-        // TODO LIST FUNCTIONALITY
+        // TASK PLANNER FUNCTIONALITY
         // ============================================
         let tasks = [];
         let draggedTaskId = null;
         let selectedTaskId = null;
+        let activeTaskId = null;
         let todoInitialized = false;
+        let firebaseDbRef = null;
+        let firebaseUnsubscribe = null;
         const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
         const STORAGE_KEY = 'rugile_todo_tasks';
-        const isMobileDevice = /Mobile|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const FIREBASE_BOARD_ID = 'rugile-shared-board';
+
+        // Fill these values from your Firebase project settings to enable shared sync.
+        const FIREBASE_CONFIG = {
+            apiKey: 'AIzaSyD3Kj89hp5RpKWR4emTm3TxwDhpubb_oWs',
+            authDomain: 'rugile-48b1d.firebaseapp.com',
+            databaseURL: 'https://rugile-48b1d-default-rtdb.europe-west1.firebasedatabase.app',
+            projectId: 'rugile-48b1d',
+            storageBucket: 'rugile-48b1d.firebasestorage.app',
+            messagingSenderId: '492709842133',
+            appId: '1:492709842133:web:b76248bb0ef91ce606265c',
+            measurementId: 'G-X5XGMK76T6'
+        };
+
+        function hasFirebaseConfig() {
+            return Boolean(
+                FIREBASE_CONFIG.apiKey &&
+                FIREBASE_CONFIG.projectId &&
+                FIREBASE_CONFIG.databaseURL
+            );
+        }
+
+        function initFirebaseSync() {
+            if (!hasFirebaseConfig() || typeof firebase === 'undefined') {
+                return false;
+            }
+
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(FIREBASE_CONFIG);
+                }
+
+                const database = firebase.database();
+                firebaseDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/tasks`);
+
+                if (firebaseUnsubscribe) {
+                    firebaseUnsubscribe();
+                }
+
+                const listener = firebaseDbRef.on('value', (snapshot) => {
+                    const value = snapshot.val();
+                    tasks = Array.isArray(value) ? value : [];
+                    renderTodoList();
+                });
+
+                firebaseUnsubscribe = () => firebaseDbRef.off('value', listener);
+                return true;
+            } catch (error) {
+                console.error('Firebase init failed, using local storage fallback:', error);
+                firebaseDbRef = null;
+                return false;
+            }
+        }
 
         function saveTasks() {
+            if (firebaseDbRef) {
+                firebaseDbRef.set(tasks).catch((error) => {
+                    console.error('Firebase save failed, fallback to localStorage:', error);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+                });
+                return;
+            }
+
             localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
         }
 
@@ -643,11 +750,12 @@
                 renderTodoList();
                 return;
             }
-            
+
             todoInitialized = true;
-            loadTasks();
-            document.getElementById('todoLoading').style.display = 'none';
-            document.getElementById('todoContent').style.display = 'block';
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadTasks();
+            }
             renderTodoList();
         }
 
@@ -744,15 +852,13 @@
         function handleTaskClick(e) {
             e.stopPropagation();
             const taskId = parseInt(e.currentTarget.dataset.taskId);
-            
-            // Toggle selection
-            if (selectedTaskId === taskId) {
-                selectedTaskId = null;
-            } else {
-                selectedTaskId = taskId;
-            }
-            
+            const task = tasks.find((item) => item.id === taskId);
+            if (!task) return;
+
+            activeTaskId = taskId;
+            selectedTaskId = null;
             renderTodoList();
+            showTaskActions(task);
         }
 
         function handleColumnClick(e) {
@@ -769,11 +875,50 @@
                 }
                 return task;
             });
-            
+
             selectedTaskId = null;
+            activeTaskId = null;
+            hideTaskActions();
             saveTasks();
             renderTodoList();
         }
+
+        function showTaskActions(task) {
+            const panel = document.getElementById('taskActions');
+            const title = document.getElementById('taskActionsTitle');
+            title.textContent = `Task: ${task.title}`;
+            panel.classList.add('visible');
+        }
+
+        function hideTaskActions() {
+            const panel = document.getElementById('taskActions');
+            panel.classList.remove('visible');
+        }
+
+        document.getElementById('moveTaskBtn').addEventListener('click', () => {
+            if (activeTaskId === null) return;
+            selectedTaskId = activeTaskId;
+            hideTaskActions();
+            renderTodoList();
+        });
+
+        document.getElementById('deleteTaskBtn').addEventListener('click', () => {
+            if (activeTaskId === null) return;
+
+            tasks = tasks.filter((task) => task.id !== activeTaskId);
+            activeTaskId = null;
+            selectedTaskId = null;
+            hideTaskActions();
+            saveTasks();
+            renderTodoList();
+        });
+
+        document.getElementById('cancelTaskActionBtn').addEventListener('click', () => {
+            activeTaskId = null;
+            selectedTaskId = null;
+            hideTaskActions();
+            renderTodoList();
+        });
 
         // Add task form handler
         document.getElementById('addTaskForm').addEventListener('submit', (e) => {
@@ -793,8 +938,11 @@
                 title: title,
                 status: 'Todo'
             });
-            
+
             input.value = '';
+            activeTaskId = null;
+            selectedTaskId = null;
+            hideTaskActions();
             saveTasks();
             renderTodoList();
         });
