@@ -17,12 +17,20 @@
             font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
             min-height: 100vh;
             padding: 20px;
+            padding-bottom: 86px;
             background: #5B9BD5;
             background-image: 
                 repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px),
                 repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px);
             overflow-x: hidden;
             overflow-y: auto;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        input,
+        select,
+        textarea {
+            font-size: 16px;
         }
 
         .container {
@@ -869,6 +877,43 @@
             color: #003C74;
         }
 
+        .music-player {
+            position: fixed;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            z-index: 1000;
+            border: 2px solid #0054E3;
+            background: #ECE9D8;
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-title {
+            flex: 1;
+            min-width: 0;
+            font-size: 12px;
+            color: #003C74;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .music-btn {
+            min-width: auto;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
         @media (max-width: 768px) {
             .todo-container {
                 flex-direction: column;
@@ -929,6 +974,16 @@
             .chat-form button,
             .period-btn {
                 width: 100%;
+            }
+
+            .music-player {
+                left: 6px;
+                right: 6px;
+                bottom: 6px;
+            }
+
+            .music-title {
+                font-size: 11px;
             }
         }
     </style>
@@ -1287,6 +1342,15 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="music-player">
+        <span class="music-title" id="musicTitle">kanye_west_homecoming.mp3</span>
+        <div class="music-controls">
+            <button type="button" id="musicPrevBtn" class="music-btn">◀◀</button>
+            <button type="button" id="musicPlayPauseBtn" class="music-btn">▶</button>
+            <button type="button" id="musicNextBtn" class="music-btn">▶▶</button>
         </div>
     </div>
 
@@ -2327,6 +2391,112 @@
             saveChatMessages();
             renderChatMessages();
         });
+
+        // ============================================
+        // MUSIC PLAYER
+        // ============================================
+        const playlist = [
+            'kanye_west_homecoming.mp3'
+        ];
+
+        let currentTrackIndex = 0;
+        const playerAudio = new Audio();
+        playerAudio.preload = 'metadata';
+
+        const musicTitle = document.getElementById('musicTitle');
+        const musicPrevBtn = document.getElementById('musicPrevBtn');
+        const musicPlayPauseBtn = document.getElementById('musicPlayPauseBtn');
+        const musicNextBtn = document.getElementById('musicNextBtn');
+        let autoplayStarted = false;
+
+        function loadTrack(index) {
+            if (!playlist.length) return;
+            currentTrackIndex = (index + playlist.length) % playlist.length;
+            const src = playlist[currentTrackIndex];
+            playerAudio.src = src;
+            musicTitle.textContent = src;
+        }
+
+        async function togglePlayPause() {
+            if (playerAudio.paused) {
+                try {
+                    await playerAudio.play();
+                    autoplayStarted = true;
+                    musicPlayPauseBtn.textContent = '⏸';
+                } catch (error) {
+                    console.log('Playback requires user interaction first:', error);
+                }
+            } else {
+                playerAudio.pause();
+                musicPlayPauseBtn.textContent = '▶';
+            }
+        }
+
+        function nextTrack(autoplay = true) {
+            loadTrack(currentTrackIndex + 1);
+            if (autoplay) {
+                playerAudio.play().then(() => {
+                    musicPlayPauseBtn.textContent = '⏸';
+                }).catch(() => {
+                    musicPlayPauseBtn.textContent = '▶';
+                });
+            }
+        }
+
+        function prevTrack() {
+            loadTrack(currentTrackIndex - 1);
+            playerAudio.play().then(() => {
+                autoplayStarted = true;
+                musicPlayPauseBtn.textContent = '⏸';
+            }).catch(() => {
+                musicPlayPauseBtn.textContent = '▶';
+            });
+        }
+
+        function tryAutoplay() {
+            if (autoplayStarted) return;
+            playerAudio.play().then(() => {
+                autoplayStarted = true;
+                musicPlayPauseBtn.textContent = '⏸';
+            }).catch(() => {
+                musicPlayPauseBtn.textContent = '▶';
+            });
+        }
+
+        function setupAutoplayFallback() {
+            const unlockAutoplay = () => {
+                tryAutoplay();
+                if (autoplayStarted) {
+                    document.removeEventListener('pointerdown', unlockAutoplay);
+                    document.removeEventListener('touchstart', unlockAutoplay);
+                    document.removeEventListener('keydown', unlockAutoplay);
+                }
+            };
+
+            document.addEventListener('pointerdown', unlockAutoplay, { passive: true });
+            document.addEventListener('touchstart', unlockAutoplay, { passive: true });
+            document.addEventListener('keydown', unlockAutoplay);
+        }
+
+        playerAudio.addEventListener('ended', () => {
+            nextTrack(true);
+        });
+
+        playerAudio.addEventListener('pause', () => {
+            musicPlayPauseBtn.textContent = '▶';
+        });
+
+        playerAudio.addEventListener('play', () => {
+            musicPlayPauseBtn.textContent = '⏸';
+        });
+
+        musicPrevBtn.addEventListener('click', prevTrack);
+        musicNextBtn.addEventListener('click', () => nextTrack(true));
+        musicPlayPauseBtn.addEventListener('click', togglePlayPause);
+
+        loadTrack(0);
+        tryAutoplay();
+        setupAutoplayFallback();
 
         function renderWeeklyPlanner() {
             const grid = document.getElementById('weeklyPlannerGrid');
