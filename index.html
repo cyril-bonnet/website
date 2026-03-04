@@ -38,6 +38,33 @@
             display: block;
         }
 
+        .current-user-bar {
+            display: none;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            background: #ECE9D8;
+            border: 2px solid #808080;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .current-user-bar.visible {
+            display: flex;
+        }
+
+        .current-user-text {
+            color: #003C74;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #switchUserBtn {
+            min-width: auto;
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+
         /* Windows XP Window Style */
         .window {
             background: #ECE9D8;
@@ -304,6 +331,72 @@
             min-width: 100px;
         }
 
+        .user-pickers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .login-auth-panel {
+            margin-top: 16px;
+            padding: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            display: none;
+        }
+
+        .login-auth-panel.visible {
+            display: block;
+        }
+
+        .login-auth-text {
+            font-size: 13px;
+            color: #003C74;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .login-auth-input {
+            width: 100%;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 13px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            margin-bottom: 8px;
+        }
+
+        .login-auth-error {
+            color: #9B1C1C;
+            font-size: 12px;
+            min-height: 16px;
+            margin-bottom: 8px;
+        }
+
+        .login-auth-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .user-picker {
+            min-width: 0;
+            width: 100%;
+            padding: 14px 10px;
+        }
+
+        .user-emoji {
+            display: block;
+            font-size: 34px;
+            margin-bottom: 6px;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
         /* Todo List Styles */
         .todo-container {
             display: flex;
@@ -337,6 +430,9 @@
             cursor: move;
             word-wrap: break-word;
             font-size: 13px;
+            position: relative;
+            padding-right: 28px;
+            padding-bottom: 18px;
         }
 
         .task-item:active {
@@ -389,6 +485,64 @@
             flex-wrap: wrap;
         }
 
+        .task-priority-group {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #C0C0C0;
+        }
+
+        .task-priority-label {
+            font-size: 12px;
+            margin-bottom: 6px;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .task-priority {
+            display: block;
+            margin-top: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #003C74;
+        }
+
+        .task-meta {
+            display: block;
+            margin-top: 2px;
+            font-size: 11px;
+            color: #333;
+        }
+
+        .item-owner-icon {
+            position: absolute;
+            right: 6px;
+            bottom: 4px;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .priority-btn {
+            min-width: auto;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        #prioritySuperBtn {
+            background: linear-gradient(180deg, #D6FFE2 0%, #9BE7B2 100%);
+        }
+
+        #priorityWantBtn {
+            background: linear-gradient(180deg, #D6E9FF 0%, #A4C9FF 100%);
+        }
+
+        #priorityMehBtn {
+            background: linear-gradient(180deg, #F4F4F4 0%, #D9D9D9 100%);
+        }
+
+        #priorityDontBtn {
+            background: linear-gradient(180deg, #FFD6D6 0%, #FFADAD 100%);
+        }
+
         #deleteTaskBtn {
             background: linear-gradient(180deg, #FFD6D6 0%, #FF9B9B 100%);
             border-color: #FFFFFF #9B1C1C #9B1C1C #FFFFFF;
@@ -414,6 +568,101 @@
         .add-task-form input:focus {
             outline: 1px solid #0054E3;
         }
+
+        /* Weekly Planner Styles */
+        .weekly-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(120px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            padding-bottom: 6px;
+        }
+
+        .day-column {
+            background: #FFFFFF;
+            border: 2px solid #808080;
+            min-height: 200px;
+            padding: 8px;
+        }
+
+        .day-title {
+            color: #003C74;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #C0C0C0;
+            padding-bottom: 6px;
+        }
+
+        .weekly-item {
+            border: 2px solid #808080;
+            background: #ECE9D8;
+            padding: 6px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            position: relative;
+            padding-right: 28px;
+            padding-bottom: 18px;
+        }
+
+        .weekly-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .weekly-time {
+            font-weight: bold;
+            color: #003C74;
+            font-size: 12px;
+        }
+
+        .weekly-delete {
+            min-width: auto;
+            padding: 1px 6px;
+            font-size: 11px;
+            line-height: 1.2;
+            background: linear-gradient(180deg, #FFD6D6 0%, #FF9B9B 100%);
+            border-color: #FFFFFF #9B1C1C #9B1C1C #FFFFFF;
+        }
+
+        .weekly-text {
+            color: #000;
+            word-break: break-word;
+        }
+
+        .weekly-meta {
+            margin-top: 4px;
+            font-size: 11px;
+            color: #333;
+            font-style: italic;
+        }
+
+        .weekly-form {
+            display: grid;
+            grid-template-columns: 1fr 110px 110px 1fr 110px auto;
+            gap: 8px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .weekly-form select,
+        .weekly-form input {
+            width: 100%;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 13px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .color-blue { border-left: 8px solid #5B9BD5; }
+        .color-green { border-left: 8px solid #7CB342; }
+        .color-orange { border-left: 8px solid #FB8C00; }
+        .color-pink { border-left: 8px solid #EC407A; }
 
         .loading {
             text-align: center;
@@ -451,13 +700,75 @@
             .task-actions-buttons button {
                 width: 100%;
             }
+
+            .weekly-form {
+                grid-template-columns: 1fr;
+            }
+
+            .weekly-form button {
+                width: 100%;
+            }
+
+            .weekly-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-pickers {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="current-user-bar" id="currentUserBar">
+            <span class="current-user-text" id="currentUserText">Current user</span>
+            <button type="button" id="switchUserBtn">Switch user</button>
+        </div>
+
+        <!-- User Select View -->
+        <div class="view active" id="loginView">
+            <div class="window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🔐</span>
+                        <span>user_select.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Choose your user</h1>
+                    <p class="question">Only two users for now:</p>
+                    <div class="user-pickers">
+                        <button class="user-picker" onclick="selectUser('ru')">
+                            <span class="user-emoji">🧘‍♀️</span>
+                            <span class="user-name">Ru</span>
+                        </button>
+                        <button class="user-picker" onclick="selectUser('kiki')">
+                            <span class="user-emoji">🐧</span>
+                            <span class="user-name">Kiki</span>
+                        </button>
+                    </div>
+
+                    <div class="login-auth-panel" id="loginAuthPanel">
+                        <p class="login-auth-text" id="loginAuthText">Password</p>
+                        <input type="password" id="loginPasswordInput" class="login-auth-input" placeholder="Enter password" />
+                        <p class="login-auth-error" id="loginAuthError"></p>
+                        <div class="login-auth-buttons">
+                            <button type="button" id="loginAuthSubmitBtn">Continue</button>
+                            <button type="button" id="loginAuthCancelBtn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Home View -->
-        <div class="view active" id="homeView">
+        <div class="view" id="homeView">
             <div class="window">
                 <div class="window-header">
                     <div class="window-title">
@@ -484,6 +795,10 @@
                         <button class="option-button" onclick="showView('todoView')">
                             <span>📝</span>
                             <span>Todo List Planner</span>
+                        </button>
+                        <button class="option-button" onclick="showView('weeklyView')">
+                            <span>🦁</span>
+                            <span>Weekly Planner</span>
                         </button>
                     </div>
                 </div>
@@ -612,6 +927,15 @@
                                 <button type="button" id="deleteTaskBtn">Delete</button>
                                 <button type="button" id="cancelTaskActionBtn">Cancel</button>
                             </div>
+                            <div class="task-priority-group">
+                                <p class="task-priority-label">Set priority</p>
+                                <div class="task-actions-buttons">
+                                    <button type="button" id="prioritySuperBtn" class="priority-btn">Really really want to do it</button>
+                                    <button type="button" id="priorityWantBtn" class="priority-btn">Want to do</button>
+                                    <button type="button" id="priorityMehBtn" class="priority-btn">Meh</button>
+                                    <button type="button" id="priorityDontBtn" class="priority-btn">Don't want to do it</button>
+                                </div>
+                            </div>
                         </div>
 
                         <form class="add-task-form" id="addTaskForm">
@@ -624,6 +948,61 @@
                             <button type="submit">Add</button>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Planner View -->
+        <div class="view" id="weeklyView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🦁</span>
+                        <span>weekly_planner.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="animals">
+                        <span>🦁</span>
+                    </div>
+                    <h1>Weekly Planner</h1>
+
+                    <div id="weeklyPlannerGrid" class="weekly-grid"></div>
+
+                    <form id="weeklyEntryForm" class="weekly-form">
+                        <select id="weeklyDay" required>
+                            <option value="">Day</option>
+                            <option value="mon">Mon</option>
+                            <option value="tue">Tue</option>
+                            <option value="wed">Wed</option>
+                            <option value="thu">Thu</option>
+                            <option value="fri">Fri</option>
+                            <option value="sat">Sat</option>
+                            <option value="sun">Sun</option>
+                        </select>
+
+                        <input type="time" id="weeklyStartTime" required />
+
+                        <input type="time" id="weeklyEndTime" required />
+
+                        <input type="text" id="weeklyTask" placeholder="Work/task" required />
+
+                        <select id="weeklyColor">
+                            <option value="blue">Blue</option>
+                            <option value="green">Green</option>
+                            <option value="orange">Orange</option>
+                            <option value="pink">Pink</option>
+                        </select>
+
+                        <button type="submit">Add</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -649,6 +1028,10 @@
             if (viewId === 'todoView') {
                 initTodoList();
             }
+
+            if (viewId === 'weeklyView') {
+                initWeeklyPlanner();
+            }
             
             // Reset invitation view if going back
             if (viewId === 'invitationView') {
@@ -664,11 +1047,176 @@
         let selectedTaskId = null;
         let activeTaskId = null;
         let todoInitialized = false;
+        let weeklyInitialized = false;
         let firebaseDbRef = null;
+        let weeklyDbRef = null;
         let firebaseUnsubscribe = null;
+        let weeklyUnsubscribe = null;
+        let weeklyItems = [];
+        let currentUser = null;
+        let usersDbRef = null;
+        let pendingUserKey = null;
+        let pendingAuthMode = null;
         const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
+        const WEEK_DAYS = [
+            { key: 'mon', label: 'Mon' },
+            { key: 'tue', label: 'Tue' },
+            { key: 'wed', label: 'Wed' },
+            { key: 'thu', label: 'Thu' },
+            { key: 'fri', label: 'Fri' },
+            { key: 'sat', label: 'Sat' },
+            { key: 'sun', label: 'Sun' }
+        ];
         const STORAGE_KEY = 'rugile_todo_tasks';
+        const WEEKLY_STORAGE_KEY = 'rugile_weekly_items';
+        const USER_STORAGE_KEY = 'rugile_current_user';
         const FIREBASE_BOARD_ID = 'rugile-shared-board';
+        const PRIORITY_LABELS = {
+            super: 'Really really want to do it',
+            want: 'Want to do',
+            meh: 'Meh',
+            dont: "Don't want to do it"
+        };
+
+        const USER_MAP = {
+            ru: { key: 'ru', name: 'Ru', emoji: '🧘‍♀️' },
+            kiki: { key: 'kiki', name: 'Kiki', emoji: '🐧' }
+        };
+
+        function getTaskUserPriorities(task) {
+            const fallback = PRIORITY_LABELS[task?.priority] ? task.priority : 'meh';
+            const defaults = { ru: fallback, kiki: fallback };
+
+            if (!task?.userPriorities || typeof task.userPriorities !== 'object') {
+                return defaults;
+            }
+
+            return {
+                ru: PRIORITY_LABELS[task.userPriorities.ru] ? task.userPriorities.ru : defaults.ru,
+                kiki: PRIORITY_LABELS[task.userPriorities.kiki] ? task.userPriorities.kiki : defaults.kiki
+            };
+        }
+
+        function updateCurrentUserBar() {
+            const bar = document.getElementById('currentUserBar');
+            const text = document.getElementById('currentUserText');
+
+            if (!currentUser) {
+                bar.classList.remove('visible');
+                return;
+            }
+
+            text.textContent = `Current user: ${currentUser.emoji} ${currentUser.name}`;
+            bar.classList.add('visible');
+        }
+
+        function clearLoginAuthError() {
+            document.getElementById('loginAuthError').textContent = '';
+        }
+
+        function setLoginAuthError(message) {
+            document.getElementById('loginAuthError').textContent = message;
+        }
+
+        function showLoginAuthPanel() {
+            document.getElementById('loginAuthPanel').classList.add('visible');
+        }
+
+        function hideLoginAuthPanel() {
+            document.getElementById('loginAuthPanel').classList.remove('visible');
+            document.getElementById('loginPasswordInput').value = '';
+            clearLoginAuthError();
+            pendingUserKey = null;
+            pendingAuthMode = null;
+        }
+
+        async function hashPassword(password) {
+            const input = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', input);
+            return Array.from(new Uint8Array(hashBuffer))
+                .map((byte) => byte.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        function getFirebaseDatabase() {
+            if (!hasFirebaseConfig() || typeof firebase === 'undefined') {
+                return null;
+            }
+
+            if (!firebase.apps.length) {
+                firebase.initializeApp(FIREBASE_CONFIG);
+            }
+
+            return firebase.database();
+        }
+
+        async function getUserPasswordRecord(userKey) {
+            const database = getFirebaseDatabase();
+            if (!database) return null;
+            const ref = database.ref(`boards/${FIREBASE_BOARD_ID}/users/${userKey}`);
+            const snapshot = await ref.get();
+            return snapshot.exists() ? snapshot.val() : null;
+        }
+
+        async function saveUserPasswordRecord(userKey, payload) {
+            const database = getFirebaseDatabase();
+            if (!database) return false;
+            const ref = database.ref(`boards/${FIREBASE_BOARD_ID}/users/${userKey}`);
+            await ref.set(payload);
+            return true;
+        }
+
+        function completeUserLogin(userKey) {
+            const user = USER_MAP[userKey];
+            if (!user) return;
+            currentUser = user;
+            localStorage.setItem(USER_STORAGE_KEY, user.key);
+            updateCurrentUserBar();
+            hideLoginAuthPanel();
+            showView('homeView');
+        }
+
+        async function selectUser(userKey) {
+            const user = USER_MAP[userKey];
+            if (!user) return;
+
+            pendingUserKey = userKey;
+            clearLoginAuthError();
+            showLoginAuthPanel();
+
+            try {
+                const record = await getUserPasswordRecord(userKey);
+                const authText = document.getElementById('loginAuthText');
+                const passwordInput = document.getElementById('loginPasswordInput');
+
+                if (!record || !record.passwordHash) {
+                    pendingAuthMode = 'setup';
+                    authText.textContent = `First login for ${user.emoji} ${user.name}: set your password`;
+                    passwordInput.placeholder = 'Set password';
+                } else {
+                    pendingAuthMode = 'login';
+                    authText.textContent = `Enter password for ${user.emoji} ${user.name}`;
+                    passwordInput.placeholder = 'Enter password';
+                }
+
+                passwordInput.focus();
+            } catch (error) {
+                setLoginAuthError('Could not connect to Firebase.');
+                console.error(error);
+            }
+        }
+
+        function initUserSession() {
+            const savedUserKey = localStorage.getItem(USER_STORAGE_KEY);
+            if (savedUserKey && USER_MAP[savedUserKey]) {
+                currentUser = USER_MAP[savedUserKey];
+                updateCurrentUserBar();
+                showView('homeView');
+                return;
+            }
+            hideLoginAuthPanel();
+            showView('loginView');
+        }
 
         // Fill these values from your Firebase project settings to enable shared sync.
         const FIREBASE_CONFIG = {
@@ -691,17 +1239,15 @@
         }
 
         function initFirebaseSync() {
-            if (!hasFirebaseConfig() || typeof firebase === 'undefined') {
+            const database = getFirebaseDatabase();
+            if (!database) {
                 return false;
             }
 
             try {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(FIREBASE_CONFIG);
-                }
-
-                const database = firebase.database();
                 firebaseDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/tasks`);
+                weeklyDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/weekly`);
+                usersDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/users`);
 
                 if (firebaseUnsubscribe) {
                     firebaseUnsubscribe();
@@ -713,11 +1259,19 @@
                     renderTodoList();
                 });
 
+                const weeklyListener = weeklyDbRef.on('value', (snapshot) => {
+                    const value = snapshot.val();
+                    weeklyItems = Array.isArray(value) ? value : [];
+                    renderWeeklyPlanner();
+                });
+
                 firebaseUnsubscribe = () => firebaseDbRef.off('value', listener);
+                weeklyUnsubscribe = () => weeklyDbRef.off('value', weeklyListener);
                 return true;
             } catch (error) {
                 console.error('Firebase init failed, using local storage fallback:', error);
                 firebaseDbRef = null;
+                weeklyDbRef = null;
                 return false;
             }
         }
@@ -745,6 +1299,29 @@
             }
         }
 
+        function saveWeeklyItems() {
+            if (weeklyDbRef) {
+                weeklyDbRef.set(weeklyItems).catch((error) => {
+                    console.error('Firebase weekly save failed, fallback to localStorage:', error);
+                    localStorage.setItem(WEEKLY_STORAGE_KEY, JSON.stringify(weeklyItems));
+                });
+                return;
+            }
+
+            localStorage.setItem(WEEKLY_STORAGE_KEY, JSON.stringify(weeklyItems));
+        }
+
+        function loadWeeklyItems() {
+            const saved = localStorage.getItem(WEEKLY_STORAGE_KEY);
+            if (saved) {
+                try {
+                    weeklyItems = JSON.parse(saved);
+                } catch (e) {
+                    weeklyItems = [];
+                }
+            }
+        }
+
         function initTodoList() {
             if (todoInitialized) {
                 renderTodoList();
@@ -757,6 +1334,20 @@
                 loadTasks();
             }
             renderTodoList();
+        }
+
+        function initWeeklyPlanner() {
+            if (weeklyInitialized) {
+                renderWeeklyPlanner();
+                return;
+            }
+
+            weeklyInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadWeeklyItems();
+            }
+            renderWeeklyPlanner();
         }
 
         function renderTodoList() {
@@ -780,7 +1371,22 @@
                     if (selectedTaskId === task.id) {
                         taskButton.classList.add('selected');
                     }
-                    taskButton.textContent = task.title;
+
+                    const title = document.createElement('span');
+                    title.textContent = task.title;
+
+                    const priority = document.createElement('span');
+                    priority.className = 'task-priority';
+                    const taskPriorities = getTaskUserPriorities(task);
+                    priority.textContent = `🧘‍♀️: ${PRIORITY_LABELS[taskPriorities.ru]} | 🐧: ${PRIORITY_LABELS[taskPriorities.kiki]}`;
+
+                    const ownerIcon = document.createElement('span');
+                    ownerIcon.className = 'item-owner-icon';
+                    ownerIcon.textContent = task.addedByEmoji || '❓';
+
+                    taskButton.appendChild(title);
+                    taskButton.appendChild(priority);
+                    taskButton.appendChild(ownerIcon);
                     taskButton.draggable = true;
                     taskButton.dataset.taskId = task.id;
                     
@@ -886,7 +1492,9 @@
         function showTaskActions(task) {
             const panel = document.getElementById('taskActions');
             const title = document.getElementById('taskActionsTitle');
-            title.textContent = `Task: ${task.title}`;
+            const priorities = getTaskUserPriorities(task);
+            const myPriority = currentUser ? priorities[currentUser.key] : 'meh';
+            title.textContent = `Task: ${task.title} • Your status: ${PRIORITY_LABELS[myPriority]}`;
             panel.classList.add('visible');
         }
 
@@ -920,6 +1528,33 @@
             renderTodoList();
         });
 
+        function setTaskPriority(priority) {
+            if (activeTaskId === null || !currentUser) return;
+
+            tasks = tasks.map((task) => {
+                if (task.id === activeTaskId) {
+                    const taskPriorities = getTaskUserPriorities(task);
+                    return {
+                        ...task,
+                        userPriorities: {
+                            ...taskPriorities,
+                            [currentUser.key]: priority
+                        }
+                    };
+                }
+                return task;
+            });
+
+            hideTaskActions();
+            saveTasks();
+            renderTodoList();
+        }
+
+        document.getElementById('prioritySuperBtn').addEventListener('click', () => setTaskPriority('super'));
+        document.getElementById('priorityWantBtn').addEventListener('click', () => setTaskPriority('want'));
+        document.getElementById('priorityMehBtn').addEventListener('click', () => setTaskPriority('meh'));
+        document.getElementById('priorityDontBtn').addEventListener('click', () => setTaskPriority('dont'));
+
         // Add task form handler
         document.getElementById('addTaskForm').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -936,7 +1571,14 @@
             tasks.push({
                 id: nextId,
                 title: title,
-                status: 'Todo'
+                status: 'Todo',
+                priority: 'meh',
+                userPriorities: {
+                    ru: 'meh',
+                    kiki: 'meh'
+                },
+                addedByName: currentUser ? currentUser.name : 'Unknown',
+                addedByEmoji: currentUser ? currentUser.emoji : '❓'
             });
 
             input.value = '';
@@ -946,6 +1588,108 @@
             saveTasks();
             renderTodoList();
         });
+
+        function renderWeeklyPlanner() {
+            const grid = document.getElementById('weeklyPlannerGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            WEEK_DAYS.forEach((day) => {
+                const column = document.createElement('div');
+                column.className = 'day-column';
+
+                const title = document.createElement('p');
+                title.className = 'day-title';
+                title.textContent = day.label;
+                column.appendChild(title);
+
+                const items = weeklyItems
+                    .filter((item) => item.day === day.key)
+                    .sort((a, b) => (a.startTime || a.time || '').localeCompare(b.startTime || b.time || ''));
+
+                items.forEach((item) => {
+                    const card = document.createElement('div');
+                    card.className = `weekly-item color-${item.color || 'blue'}`;
+
+                    const header = document.createElement('div');
+                    header.className = 'weekly-item-header';
+
+                    const time = document.createElement('span');
+                    time.className = 'weekly-time';
+                    const start = item.startTime || item.time || '';
+                    const end = item.endTime || '';
+                    time.textContent = end ? `${start} - ${end}` : start;
+
+                    const del = document.createElement('button');
+                    del.type = 'button';
+                    del.className = 'weekly-delete';
+                    del.textContent = 'x';
+                    del.addEventListener('click', () => {
+                        weeklyItems = weeklyItems.filter((entry) => entry.id !== item.id);
+                        saveWeeklyItems();
+                        renderWeeklyPlanner();
+                    });
+
+                    header.appendChild(time);
+                    header.appendChild(del);
+
+                    const text = document.createElement('div');
+                    text.className = 'weekly-text';
+                    text.textContent = item.text;
+
+                    const ownerIcon = document.createElement('span');
+                    ownerIcon.className = 'item-owner-icon';
+                    ownerIcon.textContent = item.addedByEmoji || '❓';
+
+                    card.appendChild(header);
+                    card.appendChild(text);
+                    card.appendChild(ownerIcon);
+                    column.appendChild(card);
+                });
+
+                grid.appendChild(column);
+            });
+        }
+
+        document.getElementById('weeklyEntryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const day = document.getElementById('weeklyDay').value;
+            const startTime = document.getElementById('weeklyStartTime').value;
+            const endTime = document.getElementById('weeklyEndTime').value;
+            const text = document.getElementById('weeklyTask').value.trim();
+            const color = document.getElementById('weeklyColor').value;
+
+            if (!day || !startTime || !endTime || !text) return;
+            if (endTime <= startTime) return;
+
+            weeklyItems.push({
+                id: Date.now(),
+                day,
+                startTime,
+                endTime,
+                text,
+                color,
+                addedByName: currentUser ? currentUser.name : 'Unknown',
+                addedByEmoji: currentUser ? currentUser.emoji : '❓'
+            });
+
+            document.getElementById('weeklyTask').value = '';
+            document.getElementById('weeklyStartTime').value = '';
+            document.getElementById('weeklyEndTime').value = '';
+            saveWeeklyItems();
+            renderWeeklyPlanner();
+        });
+
+        document.getElementById('switchUserBtn').addEventListener('click', () => {
+            currentUser = null;
+            localStorage.removeItem(USER_STORAGE_KEY);
+            updateCurrentUserBar();
+            showView('loginView');
+        });
+
+        initUserSession();
 
         // ============================================
         // INVITATION PAGE FUNCTIONALITY
@@ -1156,6 +1900,69 @@
             // Start automatic jumping on mobile
             if (isMobile) {
                 startMobileJumping();
+            }
+        });
+
+        document.getElementById('loginAuthSubmitBtn').addEventListener('click', async () => {
+            if (!pendingUserKey || !pendingAuthMode) return;
+
+            clearLoginAuthError();
+            const rawPassword = document.getElementById('loginPasswordInput').value;
+            const password = rawPassword.trim();
+
+            if (!password) {
+                setLoginAuthError('Password is required.');
+                return;
+            }
+
+            try {
+                if (pendingAuthMode === 'setup') {
+                    const passwordHash = await hashPassword(password);
+                    const user = USER_MAP[pendingUserKey];
+                    const saved = await saveUserPasswordRecord(pendingUserKey, {
+                        passwordHash,
+                        name: user.name,
+                        emoji: user.emoji,
+                        updatedAt: new Date().toISOString()
+                    });
+
+                    if (!saved) {
+                        setLoginAuthError('Firebase is not available for password setup.');
+                        return;
+                    }
+
+                    completeUserLogin(pendingUserKey);
+                    return;
+                }
+
+                const record = await getUserPasswordRecord(pendingUserKey);
+                if (!record || !record.passwordHash) {
+                    pendingAuthMode = 'setup';
+                    setLoginAuthError('No password found. Please set a password.');
+                    return;
+                }
+
+                const enteredHash = await hashPassword(password);
+                if (enteredHash !== record.passwordHash) {
+                    setLoginAuthError('Wrong password.');
+                    return;
+                }
+
+                completeUserLogin(pendingUserKey);
+            } catch (error) {
+                setLoginAuthError('Authentication failed.');
+                console.error(error);
+            }
+        });
+
+        document.getElementById('loginAuthCancelBtn').addEventListener('click', () => {
+            hideLoginAuthPanel();
+        });
+
+        document.getElementById('loginPasswordInput').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('loginAuthSubmitBtn').click();
             }
         });
 
