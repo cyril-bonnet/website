@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="maroon.png">
+    <link rel="apple-touch-icon" href="maroon.png">
     <title>rugilė.exe</title>
     <style>
         * {
@@ -2396,7 +2398,13 @@
         // MUSIC PLAYER
         // ============================================
         const playlist = [
-            'kanye_west_homecoming.mp3'
+            'kanye_west_homecoming.mp3',
+            'kanye_west_gold_digger.mp3',
+            'red_hot_chilli_peppers_otherside.mp3',
+            'lou_reed_walk_on_the_wildside.mp3',
+            'outkast_ms_jackson.mp3',
+            'the_game_hate_it_or_love_it.mp3',
+            'tupac_hit_em_up.mp3'
         ];
 
         let currentTrackIndex = 0;
@@ -2494,7 +2502,10 @@
         musicNextBtn.addEventListener('click', () => nextTrack(true));
         musicPlayPauseBtn.addEventListener('click', togglePlayPause);
 
-        loadTrack(0);
+        const initialTrackIndex = playlist.length > 0
+            ? Math.floor(Math.random() * playlist.length)
+            : 0;
+        loadTrack(initialTrackIndex);
         tryAutoplay();
         setupAutoplayFallback();
 
