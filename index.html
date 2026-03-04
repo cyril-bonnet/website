@@ -347,8 +347,21 @@
             opacity: 0.5;
         }
 
+        .task-item.selected {
+            background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+            border-color: #FF8C00 #FFFFFF #FFFFFF #FF8C00;
+        }
+
         .todo-column.drag-over {
             background: #ECE9D8;
+        }
+
+        .todo-column.clickable {
+            cursor: pointer;
+            border: 3px solid #0054E3;
+            border-color: #0054E3 #0054E3 #0054E3 #0054E3;
+            box-shadow: 0 0 8px rgba(0, 84, 227, 0.6);
+            background: #F5F5FF;
         }
 
         .add-task-form {
@@ -604,9 +617,11 @@
         // ============================================
         let tasks = [];
         let draggedTaskId = null;
+        let selectedTaskId = null;
         let todoInitialized = false;
         const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
         const STORAGE_KEY = 'rugile_todo_tasks';
+        const isMobileDevice = /Mobile|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
         function saveTasks() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
@@ -654,12 +669,16 @@
                 columnTasks.forEach(task => {
                     const taskButton = document.createElement('button');
                     taskButton.className = 'task-item';
+                    if (selectedTaskId === task.id) {
+                        taskButton.classList.add('selected');
+                    }
                     taskButton.textContent = task.title;
                     taskButton.draggable = true;
                     taskButton.dataset.taskId = task.id;
                     
                     taskButton.addEventListener('dragstart', handleDragStart);
                     taskButton.addEventListener('dragend', handleDragEnd);
+                    taskButton.addEventListener('click', handleTaskClick);
                     
                     column.appendChild(taskButton);
                 });
@@ -668,6 +687,12 @@
                 column.addEventListener('dragover', handleDragOver);
                 column.addEventListener('drop', handleDrop);
                 column.addEventListener('dragleave', handleDragLeave);
+                
+                // Add click handler for mobile
+                if (selectedTaskId !== null) {
+                    column.classList.add('clickable');
+                    column.addEventListener('click', handleColumnClick);
+                }
                 
                 container.appendChild(column);
             });
@@ -712,6 +737,40 @@
             });
             
             draggedTaskId = null;
+            saveTasks();
+            renderTodoList();
+        }
+
+        function handleTaskClick(e) {
+            e.stopPropagation();
+            const taskId = parseInt(e.currentTarget.dataset.taskId);
+            
+            // Toggle selection
+            if (selectedTaskId === taskId) {
+                selectedTaskId = null;
+            } else {
+                selectedTaskId = taskId;
+            }
+            
+            renderTodoList();
+        }
+
+        function handleColumnClick(e) {
+            if (selectedTaskId === null) return;
+            
+            // Don't trigger if clicking on a task button
+            if (e.target.classList.contains('task-item')) return;
+            
+            const newStatus = e.currentTarget.dataset.status;
+            
+            tasks = tasks.map(task => {
+                if (task.id === selectedTaskId) {
+                    return { ...task, status: newStatus };
+                }
+                return task;
+            });
+            
+            selectedTaskId = null;
             saveTasks();
             renderTodoList();
         }
