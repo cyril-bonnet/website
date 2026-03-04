@@ -316,6 +316,204 @@
             margin-top: 20px;
         }
 
+        .mood-panel {
+            margin: 12px 0 0;
+            padding: 8px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .mood-title {
+            color: #003C74;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .mood-users {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .mood-user-card {
+            border: 2px solid #808080;
+            background: #ECE9D8;
+            padding: 6px;
+        }
+
+        .mood-user-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .mood-badge {
+            display: inline-block;
+            padding: 2px 7px;
+            border: 1px solid #808080;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .mood-happy { background: #D6FFE2; color: #1B5E20; }
+        .mood-normal { background: #D6E9FF; color: #0D47A1; }
+        .mood-meh { background: #F0F0F0; color: #424242; }
+        .mood-grumpy { background: #FFE7CC; color: #E65100; }
+        .mood-sad { background: #FFD6D6; color: #9B1C1C; }
+
+        .mood-choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .mood-btn {
+            min-width: auto;
+            padding: 3px 5px;
+            font-size: 11px;
+        }
+
+        .mood-note {
+            font-size: 11px;
+            color: #555;
+            margin-top: 6px;
+        }
+
+        .home-bottom-stack {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .period-status {
+            font-size: 11px;
+            color: #003C74;
+            margin: 2px 0 5px;
+            font-weight: bold;
+        }
+
+        .period-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .period-btn {
+            min-width: auto;
+            padding: 3px 7px;
+            font-size: 11px;
+        }
+
+        .quick-note-panel {
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 8px;
+        }
+
+        .panel-title {
+            color: #003C74;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .quick-note-inbox {
+            font-size: 12px;
+            color: #111;
+            background: #ECE9D8;
+            border: 1px solid #B0B0B0;
+            padding: 6px;
+            margin-bottom: 6px;
+            min-height: 28px;
+        }
+
+        .quick-note-form,
+        .chat-form {
+            display: flex;
+            gap: 6px;
+        }
+
+        .quick-note-form input,
+        .chat-form input {
+            flex: 1;
+            min-width: 0;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .quick-note-form button,
+        .chat-form button {
+            min-width: auto;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .chat-view-window {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .chat-messages {
+            background: #ECE9D8;
+            border: 1px solid #B0B0B0;
+            padding: 6px;
+            margin-bottom: 6px;
+            height: 360px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chat-line {
+            font-size: 12px;
+            line-height: 1.3;
+            color: #111;
+            word-break: break-word;
+            max-width: 85%;
+            padding: 6px 8px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .chat-line-me {
+            align-self: flex-end;
+            background: #D6E9FF;
+            border-color: #6699CC;
+        }
+
+        .chat-line-other {
+            align-self: flex-start;
+            background: #FFFFFF;
+            border-color: #808080;
+        }
+
+        .chat-line-empty {
+            align-self: center;
+            max-width: 100%;
+            background: #ECE9D8;
+            border-color: #C0C0C0;
+            color: #555;
+        }
+
+        .chat-author {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 2px;
+            color: #003C74;
+        }
+
         .option-button {
             width: 100%;
             padding: 20px;
@@ -716,6 +914,22 @@
             .user-pickers {
                 grid-template-columns: 1fr;
             }
+
+            .mood-users {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-note-form,
+            .chat-form,
+            .period-buttons {
+                flex-direction: column;
+            }
+
+            .quick-note-form button,
+            .chat-form button,
+            .period-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -786,6 +1000,7 @@
                         <span>🐮</span>
                     </div>
                     <h1>Welcome to rugilė.exe</h1>
+
                     <p class="question">Please choose an option:</p>
                     <div class="home-options">
                         <button class="option-button" onclick="showView('invitationView')">
@@ -800,6 +1015,46 @@
                             <span>🦁</span>
                             <span>Weekly Planner</span>
                         </button>
+                        <button class="option-button" onclick="showView('chatView')">
+                            <span>💬</span>
+                            <span>Chat</span>
+                        </button>
+                    </div>
+
+                    <div class="home-bottom-stack">
+                        <div class="mood-panel">
+                            <p class="mood-title">Status</p>
+                            <div class="mood-users">
+                                <div class="mood-user-card">
+                                    <div class="mood-user-head">
+                                        <span>🧘‍♀️ Ru</span>
+                                    </div>
+                                    <span class="mood-badge mood-normal" id="moodBadgeRu">😌 Normal</span>
+                                    <p class="period-status" id="periodStatusRu">🩸 Period: No</p>
+                                    <div class="period-buttons" id="periodButtonsRu"></div>
+                                    <div class="mood-choices" id="moodButtonsRu"></div>
+                                </div>
+
+                                <div class="mood-user-card">
+                                    <div class="mood-user-head">
+                                        <span>🐧 Kiki</span>
+                                    </div>
+                                    <span class="mood-badge mood-normal" id="moodBadgeKiki">😌 Normal</span>
+                                    <div class="mood-choices" id="moodButtonsKiki"></div>
+                                </div>
+                            </div>
+                            <p class="mood-note" id="moodNote">Select a user to set status.</p>
+                        </div>
+
+                        <div class="quick-note-panel">
+                            <p class="panel-title">Quick note to other person</p>
+                            <div class="quick-note-inbox" id="quickNoteInbox">No note yet.</div>
+                            <form class="quick-note-form" id="quickNoteForm">
+                                <input type="text" id="quickNoteInput" placeholder="Write a short note" maxlength="180" />
+                                <button type="submit">Send</button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -1006,6 +1261,33 @@
                 </div>
             </div>
         </div>
+
+        <!-- Chat View -->
+        <div class="view" id="chatView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>💬</span>
+                        <span>chat.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Chat</h1>
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <form class="chat-form" id="chatForm">
+                        <input type="text" id="chatInput" placeholder="Write a message" maxlength="220" />
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -1032,6 +1314,17 @@
             if (viewId === 'weeklyView') {
                 initWeeklyPlanner();
             }
+
+            if (viewId === 'homeView') {
+                initMoods();
+                initSocial();
+                renderMoods();
+            }
+
+            if (viewId === 'chatView') {
+                initSocial();
+                renderChatMessages();
+            }
             
             // Reset invitation view if going back
             if (viewId === 'invitationView') {
@@ -1048,11 +1341,25 @@
         let activeTaskId = null;
         let todoInitialized = false;
         let weeklyInitialized = false;
+        let moodsInitialized = false;
+        let socialInitialized = false;
         let firebaseDbRef = null;
         let weeklyDbRef = null;
+        let moodsDbRef = null;
+        let quickNoteDbRef = null;
+        let chatDbRef = null;
+        let userStatusDbRef = null;
         let firebaseUnsubscribe = null;
         let weeklyUnsubscribe = null;
+        let moodsUnsubscribe = null;
+        let quickNoteUnsubscribe = null;
+        let chatUnsubscribe = null;
+        let userStatusUnsubscribe = null;
         let weeklyItems = [];
+        let userMoods = { ru: 'normal', kiki: 'normal' };
+        let quickNotes = {};
+        let chatMessages = [];
+        let userStatus = { ru: { period: false }, kiki: { period: false } };
         let currentUser = null;
         let usersDbRef = null;
         let pendingUserKey = null;
@@ -1069,6 +1376,10 @@
         ];
         const STORAGE_KEY = 'rugile_todo_tasks';
         const WEEKLY_STORAGE_KEY = 'rugile_weekly_items';
+        const MOODS_STORAGE_KEY = 'rugile_user_moods';
+        const QUICK_NOTE_STORAGE_KEY = 'rugile_quick_notes';
+        const CHAT_STORAGE_KEY = 'rugile_chat_messages';
+        const USER_STATUS_STORAGE_KEY = 'rugile_user_status';
         const USER_STORAGE_KEY = 'rugile_current_user';
         const FIREBASE_BOARD_ID = 'rugile-shared-board';
         const PRIORITY_LABELS = {
@@ -1082,6 +1393,331 @@
             ru: { key: 'ru', name: 'Ru', emoji: '🧘‍♀️' },
             kiki: { key: 'kiki', name: 'Kiki', emoji: '🐧' }
         };
+
+        const MOOD_LABELS = {
+            happy: 'Happy',
+            normal: 'Normal',
+            meh: 'Meh',
+            grumpy: 'Grumpy',
+            sad: 'Sad'
+        };
+
+        const MOOD_SYMBOLS = {
+            happy: '😄',
+            normal: '😌',
+            meh: '😐',
+            grumpy: '😠',
+            sad: '😢'
+        };
+
+        const MOOD_OPTIONS = ['happy', 'normal', 'meh', 'grumpy', 'sad'];
+
+        function normalizeMoods(raw) {
+            const defaults = { ru: 'normal', kiki: 'normal' };
+            if (!raw || typeof raw !== 'object') return defaults;
+
+            const ruMood = MOOD_LABELS[raw.ru] ? raw.ru : defaults.ru;
+            const kikiMood = MOOD_LABELS[raw.kiki] ? raw.kiki : defaults.kiki;
+            return { ru: ruMood, kiki: kikiMood };
+        }
+
+        function moodClass(mood) {
+            return `mood-badge mood-${mood}`;
+        }
+
+        function getOtherUserKey() {
+            if (!currentUser) return null;
+            return currentUser.key === 'ru' ? 'kiki' : 'ru';
+        }
+
+        function normalizeUserStatus(raw) {
+            const defaults = { ru: { period: false }, kiki: { period: false } };
+            if (!raw || typeof raw !== 'object') return defaults;
+            return {
+                ru: { period: Boolean(raw.ru?.period) },
+                kiki: { period: Boolean(raw.kiki?.period) }
+            };
+        }
+
+        function saveUserStatus() {
+            if (userStatusDbRef) {
+                userStatusDbRef.set(userStatus).catch((error) => {
+                    console.error('Firebase user status save failed, fallback to localStorage:', error);
+                    localStorage.setItem(USER_STATUS_STORAGE_KEY, JSON.stringify(userStatus));
+                });
+                return;
+            }
+            localStorage.setItem(USER_STATUS_STORAGE_KEY, JSON.stringify(userStatus));
+        }
+
+        function loadUserStatus() {
+            const saved = localStorage.getItem(USER_STATUS_STORAGE_KEY);
+            if (!saved) {
+                userStatus = normalizeUserStatus(null);
+                return;
+            }
+            try {
+                userStatus = normalizeUserStatus(JSON.parse(saved));
+            } catch {
+                userStatus = normalizeUserStatus(null);
+            }
+        }
+
+        function renderPeriodControls() {
+            const periodStatusRu = document.getElementById('periodStatusRu');
+            const periodButtonsRu = document.getElementById('periodButtonsRu');
+            if (!periodStatusRu || !periodButtonsRu) return;
+
+            const onPeriod = Boolean(userStatus?.ru?.period);
+            periodStatusRu.textContent = onPeriod ? '🩸 Period: Yes' : '🩸 Period: No';
+
+            periodButtonsRu.innerHTML = '';
+            if (!currentUser || currentUser.key !== 'ru') return;
+
+            const yesBtn = document.createElement('button');
+            yesBtn.type = 'button';
+            yesBtn.className = 'period-btn';
+            yesBtn.textContent = 'Set Yes';
+            yesBtn.addEventListener('click', () => {
+                userStatus = { ...userStatus, ru: { period: true } };
+                saveUserStatus();
+                renderPeriodControls();
+            });
+
+            const noBtn = document.createElement('button');
+            noBtn.type = 'button';
+            noBtn.className = 'period-btn';
+            noBtn.textContent = 'Set No';
+            noBtn.addEventListener('click', () => {
+                userStatus = { ...userStatus, ru: { period: false } };
+                saveUserStatus();
+                renderPeriodControls();
+            });
+
+            periodButtonsRu.appendChild(yesBtn);
+            periodButtonsRu.appendChild(noBtn);
+        }
+
+        function saveQuickNotes() {
+            if (quickNoteDbRef) {
+                quickNoteDbRef.set(quickNotes).catch((error) => {
+                    console.error('Firebase quick note save failed, fallback to localStorage:', error);
+                    localStorage.setItem(QUICK_NOTE_STORAGE_KEY, JSON.stringify(quickNotes));
+                });
+                return;
+            }
+            localStorage.setItem(QUICK_NOTE_STORAGE_KEY, JSON.stringify(quickNotes));
+        }
+
+        function loadQuickNotes() {
+            const saved = localStorage.getItem(QUICK_NOTE_STORAGE_KEY);
+            if (!saved) {
+                quickNotes = {};
+                return;
+            }
+            try {
+                quickNotes = JSON.parse(saved) || {};
+            } catch {
+                quickNotes = {};
+            }
+        }
+
+        function renderQuickNoteInbox() {
+            const inbox = document.getElementById('quickNoteInbox');
+            if (!inbox) return;
+            if (!currentUser) {
+                inbox.textContent = 'Login to view notes.';
+                return;
+            }
+            const note = quickNotes[currentUser.key];
+            if (!note || !note.text) {
+                inbox.textContent = 'No note yet.';
+                return;
+            }
+            const fromUser = USER_MAP[note.from] || { emoji: '❓', name: 'Unknown' };
+            inbox.textContent = `${fromUser.emoji} ${fromUser.name}: ${note.text}`;
+        }
+
+        function saveChatMessages() {
+            if (chatDbRef) {
+                chatDbRef.set(chatMessages).catch((error) => {
+                    console.error('Firebase chat save failed, fallback to localStorage:', error);
+                    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chatMessages));
+                });
+                return;
+            }
+            localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chatMessages));
+        }
+
+        function loadChatMessages() {
+            const saved = localStorage.getItem(CHAT_STORAGE_KEY);
+            if (!saved) {
+                chatMessages = [];
+                return;
+            }
+            try {
+                chatMessages = JSON.parse(saved) || [];
+            } catch {
+                chatMessages = [];
+            }
+        }
+
+        function renderChatMessages() {
+            const list = document.getElementById('chatMessages');
+            if (!list) return;
+
+            list.innerHTML = '';
+            if (!chatMessages.length) {
+                const empty = document.createElement('div');
+                empty.className = 'chat-line chat-line-empty';
+                empty.textContent = 'No messages yet.';
+                list.appendChild(empty);
+                return;
+            }
+
+            const recent = chatMessages.slice(-40);
+            recent.forEach((msg) => {
+                const line = document.createElement('div');
+                line.className = 'chat-line';
+                if (currentUser && msg.from === currentUser.key) {
+                    line.classList.add('chat-line-me');
+                } else {
+                    line.classList.add('chat-line-other');
+                }
+
+                const author = USER_MAP[msg.from] || { emoji: '❓' };
+
+                const authorLine = document.createElement('span');
+                authorLine.className = 'chat-author';
+                authorLine.textContent = `${author.emoji}`;
+
+                const textLine = document.createElement('span');
+                textLine.textContent = msg.text;
+
+                line.appendChild(authorLine);
+                line.appendChild(textLine);
+                list.appendChild(line);
+            });
+
+            list.scrollTop = list.scrollHeight;
+        }
+
+        function renderMoodButtonsFor(userKey) {
+            const container = document.getElementById(userKey === 'ru' ? 'moodButtonsRu' : 'moodButtonsKiki');
+            if (!container) return;
+
+            container.innerHTML = '';
+            const canEdit = currentUser && currentUser.key === userKey;
+
+            if (!canEdit) return;
+
+            MOOD_OPTIONS.forEach((mood) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'mood-btn';
+                button.textContent = MOOD_LABELS[mood];
+                button.addEventListener('click', () => setMoodForCurrentUser(mood));
+                container.appendChild(button);
+            });
+        }
+
+        function renderMoods() {
+            const ruBadge = document.getElementById('moodBadgeRu');
+            const kikiBadge = document.getElementById('moodBadgeKiki');
+            const note = document.getElementById('moodNote');
+
+            if (!ruBadge || !kikiBadge || !note) return;
+
+            ruBadge.className = moodClass(userMoods.ru);
+            ruBadge.textContent = `${MOOD_SYMBOLS[userMoods.ru]} ${MOOD_LABELS[userMoods.ru]}`;
+
+            kikiBadge.className = moodClass(userMoods.kiki);
+            kikiBadge.textContent = `${MOOD_SYMBOLS[userMoods.kiki]} ${MOOD_LABELS[userMoods.kiki]}`;
+
+            renderMoodButtonsFor('ru');
+            renderMoodButtonsFor('kiki');
+
+            if (!currentUser) {
+                note.textContent = 'Select a user to set mood.';
+                renderPeriodControls();
+                renderQuickNoteInbox();
+                renderChatMessages();
+                return;
+            }
+
+            note.textContent = `Only your own mood is editable (${currentUser.emoji} ${currentUser.name}).`;
+            renderPeriodControls();
+            renderQuickNoteInbox();
+            renderChatMessages();
+        }
+
+        function saveMoods() {
+            if (moodsDbRef) {
+                moodsDbRef.set(userMoods).catch((error) => {
+                    console.error('Firebase mood save failed, fallback to localStorage:', error);
+                    localStorage.setItem(MOODS_STORAGE_KEY, JSON.stringify(userMoods));
+                });
+                return;
+            }
+            localStorage.setItem(MOODS_STORAGE_KEY, JSON.stringify(userMoods));
+        }
+
+        function loadMoods() {
+            const saved = localStorage.getItem(MOODS_STORAGE_KEY);
+            if (saved) {
+                try {
+                    userMoods = normalizeMoods(JSON.parse(saved));
+                } catch (e) {
+                    userMoods = normalizeMoods(null);
+                }
+                return;
+            }
+            userMoods = normalizeMoods(null);
+        }
+
+        function setMoodForCurrentUser(mood) {
+            if (!currentUser || !MOOD_LABELS[mood]) return;
+            userMoods = {
+                ...userMoods,
+                [currentUser.key]: mood
+            };
+            saveMoods();
+            renderMoods();
+        }
+
+        function initMoods() {
+            if (moodsInitialized) {
+                renderMoods();
+                return;
+            }
+
+            moodsInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadMoods();
+                renderMoods();
+            }
+        }
+
+        function initSocial() {
+            if (socialInitialized) {
+                renderQuickNoteInbox();
+                renderChatMessages();
+                renderPeriodControls();
+                return;
+            }
+
+            socialInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadQuickNotes();
+                loadChatMessages();
+                loadUserStatus();
+                renderQuickNoteInbox();
+                renderChatMessages();
+                renderPeriodControls();
+            }
+        }
 
         function getTaskUserPriorities(task) {
             const fallback = PRIORITY_LABELS[task?.priority] ? task.priority : 'meh';
@@ -1108,6 +1744,7 @@
 
             text.textContent = `Current user: ${currentUser.emoji} ${currentUser.name}`;
             bar.classList.add('visible');
+            renderMoods();
         }
 
         function clearLoginAuthError() {
@@ -1247,10 +1884,29 @@
             try {
                 firebaseDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/tasks`);
                 weeklyDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/weekly`);
+                moodsDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/moods`);
+                quickNoteDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/quickNotes`);
+                chatDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/chat`);
+                userStatusDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/userStatus`);
                 usersDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/users`);
 
                 if (firebaseUnsubscribe) {
                     firebaseUnsubscribe();
+                }
+                if (weeklyUnsubscribe) {
+                    weeklyUnsubscribe();
+                }
+                if (moodsUnsubscribe) {
+                    moodsUnsubscribe();
+                }
+                if (quickNoteUnsubscribe) {
+                    quickNoteUnsubscribe();
+                }
+                if (chatUnsubscribe) {
+                    chatUnsubscribe();
+                }
+                if (userStatusUnsubscribe) {
+                    userStatusUnsubscribe();
                 }
 
                 const listener = firebaseDbRef.on('value', (snapshot) => {
@@ -1265,13 +1921,43 @@
                     renderWeeklyPlanner();
                 });
 
+                const moodsListener = moodsDbRef.on('value', (snapshot) => {
+                    const value = snapshot.val();
+                    userMoods = normalizeMoods(value);
+                    renderMoods();
+                });
+
+                const quickNoteListener = quickNoteDbRef.on('value', (snapshot) => {
+                    quickNotes = snapshot.val() || {};
+                    renderQuickNoteInbox();
+                });
+
+                const chatListener = chatDbRef.on('value', (snapshot) => {
+                    const value = snapshot.val();
+                    chatMessages = Array.isArray(value) ? value : [];
+                    renderChatMessages();
+                });
+
+                const userStatusListener = userStatusDbRef.on('value', (snapshot) => {
+                    userStatus = normalizeUserStatus(snapshot.val());
+                    renderPeriodControls();
+                });
+
                 firebaseUnsubscribe = () => firebaseDbRef.off('value', listener);
                 weeklyUnsubscribe = () => weeklyDbRef.off('value', weeklyListener);
+                moodsUnsubscribe = () => moodsDbRef.off('value', moodsListener);
+                quickNoteUnsubscribe = () => quickNoteDbRef.off('value', quickNoteListener);
+                chatUnsubscribe = () => chatDbRef.off('value', chatListener);
+                userStatusUnsubscribe = () => userStatusDbRef.off('value', userStatusListener);
                 return true;
             } catch (error) {
                 console.error('Firebase init failed, using local storage fallback:', error);
                 firebaseDbRef = null;
                 weeklyDbRef = null;
+                moodsDbRef = null;
+                quickNoteDbRef = null;
+                chatDbRef = null;
+                userStatusDbRef = null;
                 return false;
             }
         }
@@ -1587,6 +2273,59 @@
             hideTaskActions();
             saveTasks();
             renderTodoList();
+        });
+
+        document.getElementById('quickNoteForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const input = document.getElementById('quickNoteInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const target = getOtherUserKey();
+            if (!target) return;
+
+            quickNotes = {
+                ...quickNotes,
+                [target]: {
+                    from: currentUser.key,
+                    to: target,
+                    text,
+                    timestamp: Date.now()
+                }
+            };
+
+            input.value = '';
+            saveQuickNotes();
+            renderQuickNoteInbox();
+        });
+
+        document.getElementById('chatForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            chatMessages = [
+                ...chatMessages,
+                {
+                    id: Date.now(),
+                    from: currentUser.key,
+                    text,
+                    timestamp: Date.now()
+                }
+            ];
+
+            if (chatMessages.length > 120) {
+                chatMessages = chatMessages.slice(-120);
+            }
+
+            input.value = '';
+            saveChatMessages();
+            renderChatMessages();
         });
 
         function renderWeeklyPlanner() {
