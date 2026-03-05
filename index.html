@@ -1207,6 +1207,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
+        }
+
+        .music-player.hidden {
+            display: none;
         }
 
         .music-title {
@@ -1229,6 +1234,167 @@
             min-width: auto;
             padding: 4px 8px;
             font-size: 12px;
+        }
+
+        .music-full-panel {
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        .music-full-now {
+            background: #ECE9D8;
+            border: 1px solid #B0B0B0;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .music-full-head {
+            color: #003C74;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .music-full-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #111;
+            word-break: break-word;
+            margin-bottom: 4px;
+        }
+
+        .music-full-status {
+            font-size: 12px;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .music-full-controls {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto;
+            border-radius: 50%;
+            border: 2px solid #B0B0B0;
+            background: radial-gradient(circle at 50% 45%, #FDFDFD 0%, #EFEFEF 55%, #DFDFDF 100%);
+            box-shadow: inset 1px 1px 0 #FFFFFF;
+            position: relative;
+        }
+
+        .music-full-btn {
+            min-width: auto;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+            position: absolute;
+            color: #5A5A5A;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .music-full-btn:hover {
+            background: transparent;
+            color: #2F2F2F;
+        }
+
+        .music-full-btn:active {
+            border: 0;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        #musicCloseBtn {
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            letter-spacing: 0.6px;
+        }
+
+        #musicFullPrevBtn {
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+
+        #musicFullNextBtn {
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+
+        #musicFullPlayPauseBtn {
+            left: 50%;
+            bottom: 16px;
+            transform: translateX(-50%);
+            font-size: 13px;
+        }
+
+        #musicFullCenterBtn {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            border: 2px solid #C8C8C8;
+            background: #F8F8F8;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            font-size: 12px;
+            color: #555;
+            font-weight: bold;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            padding: 0;
+        }
+
+        #musicFullCenterBtn:active {
+            background: #E8E8E8;
+            border: 2px solid #C8C8C8;
+        }
+
+        .music-track-picker {
+            margin-top: 12px;
+            border: 1px solid #B0B0B0;
+            background: #ECE9D8;
+            padding: 8px;
+            display: none;
+        }
+
+        .music-track-picker.visible {
+            display: block;
+        }
+
+        .music-track-picker-head {
+            color: #003C74;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .music-track-list {
+            max-height: 180px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .music-track-btn {
+            width: 100%;
+            text-align: left;
+            padding: 5px 8px;
+            min-width: 0;
+            font-size: 12px;
+        }
+
+        .music-track-btn.active {
+            background: linear-gradient(180deg, #D6E9FF 0%, #A4C9FF 100%);
+            border-color: #FFFFFF #003C74 #003C74 #FFFFFF;
         }
 
         @media (max-width: 768px) {
@@ -1329,6 +1495,16 @@
 
             .music-title {
                 font-size: 11px;
+            }
+
+            .music-full-controls {
+                width: 190px;
+                height: 190px;
+            }
+
+            #musicFullCenterBtn {
+                width: 76px;
+                height: 76px;
             }
         }
     </style>
@@ -1804,6 +1980,48 @@
                 </div>
             </div>
         </div>
+
+        <!-- Music View -->
+        <div class="view" id="musicView">
+            <button class="back-button" type="button" onclick="closeMusicView()">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🎵</span>
+                        <span>music_player.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Music Player</h1>
+                    <div class="music-full-panel">
+                        <div class="music-full-now">
+                            <div class="music-full-head">Now Playing</div>
+                            <div class="music-full-title" id="musicFullTitle">-</div>
+                            <div class="music-full-status" id="musicFullStatus">Paused</div>
+                        </div>
+
+                        <div class="music-full-controls">
+                            <button type="button" id="musicCloseBtn" class="music-full-btn">MENU</button>
+                            <button type="button" id="musicFullPrevBtn" class="music-full-btn">◀◀</button>
+                            <button type="button" id="musicFullNextBtn" class="music-full-btn">▶▶</button>
+                            <button type="button" id="musicFullPlayPauseBtn" class="music-full-btn">▶/⏸</button>
+                            <button type="button" id="musicFullCenterBtn" class="music-full-btn">SELECT</button>
+                        </div>
+
+                        <div class="music-track-picker" id="musicTrackPicker">
+                            <p class="music-track-picker-head">Pick a song</p>
+                            <div class="music-track-list" id="musicTrackList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="chess-modal" id="chessWinnerModal">
@@ -1814,12 +2032,12 @@
         </div>
     </div>
 
-    <div class="music-player">
+    <div class="music-player" id="musicPlayerBar" title="Open full music player">
         <span class="music-title" id="musicTitle">kanye_west_homecoming.mp3</span>
         <div class="music-controls">
-            <button type="button" id="musicPrevBtn" class="music-btn">◀◀</button>
-            <button type="button" id="musicPlayPauseBtn" class="music-btn">▶</button>
-            <button type="button" id="musicNextBtn" class="music-btn">▶▶</button>
+            <button type="button" id="musicPrevBtn" class="music-btn" title="Previous track">◀◀</button>
+            <button type="button" id="musicPlayPauseBtn" class="music-btn" title="Play or pause">▶</button>
+            <button type="button" id="musicNextBtn" class="music-btn" title="Next track">▶▶</button>
         </div>
     </div>
 
@@ -1831,6 +2049,10 @@
         // VIEW SWITCHING
         // ============================================
         function showView(viewId) {
+            if (viewId !== 'musicView') {
+                lastViewId = viewId;
+            }
+
             // Hide all views
             document.querySelectorAll('.view').forEach(view => {
                 view.classList.remove('active');
@@ -1874,6 +2096,15 @@
 
             if (viewId === 'chessView') {
                 initChess();
+            }
+
+            if (viewId === 'musicView') {
+                updateMusicUi();
+            }
+
+            const musicBar = document.getElementById('musicPlayerBar');
+            if (musicBar) {
+                musicBar.classList.toggle('hidden', viewId === 'musicView');
             }
             
             // Reset invitation view if going back
@@ -1932,6 +2163,7 @@
         let chessTurn = 'w';
         let chessSelectedSquare = null;
         let chessGameOver = false;
+        let lastViewId = 'loginView';
         const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
         const WEEK_DAYS = [
             { key: 'mon', label: 'Mon' },
@@ -3897,14 +4129,108 @@
         const musicPrevBtn = document.getElementById('musicPrevBtn');
         const musicPlayPauseBtn = document.getElementById('musicPlayPauseBtn');
         const musicNextBtn = document.getElementById('musicNextBtn');
+        const musicPlayerBar = document.getElementById('musicPlayerBar');
+        const musicFullTitle = document.getElementById('musicFullTitle');
+        const musicFullStatus = document.getElementById('musicFullStatus');
+        const musicFullPrevBtn = document.getElementById('musicFullPrevBtn');
+        const musicFullPlayPauseBtn = document.getElementById('musicFullPlayPauseBtn');
+        const musicFullNextBtn = document.getElementById('musicFullNextBtn');
+        const musicCloseBtn = document.getElementById('musicCloseBtn');
+        const musicFullCenterBtn = document.getElementById('musicFullCenterBtn');
+        const musicTrackPicker = document.getElementById('musicTrackPicker');
+        const musicTrackList = document.getElementById('musicTrackList');
         let autoplayStarted = false;
+        let musicPickerOpen = false;
+
+        function getMusicTrackLabel(src) {
+            if (!src) return 'Unknown track';
+            return src
+                .replace('.mp3', '')
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, (char) => char.toUpperCase());
+        }
+
+        function updateMusicUi() {
+            const src = playlist[currentTrackIndex] || '';
+            const title = getMusicTrackLabel(src);
+            const playing = !playerAudio.paused;
+
+            if (musicTitle) {
+                musicTitle.textContent = src || '-';
+            }
+            if (musicPlayPauseBtn) {
+                musicPlayPauseBtn.textContent = playing ? '⏸' : '▶';
+            }
+            if (musicFullTitle) {
+                musicFullTitle.textContent = title;
+            }
+            if (musicFullStatus) {
+                musicFullStatus.textContent = playing ? 'Playing' : 'Paused';
+            }
+            if (musicFullPlayPauseBtn) {
+                musicFullPlayPauseBtn.textContent = playing ? '⏸ Pause' : '▶ Play';
+            }
+
+            renderMusicTrackList();
+        }
+
+        function renderMusicTrackList() {
+            if (!musicTrackList) return;
+
+            musicTrackList.innerHTML = '';
+            playlist.forEach((src, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'music-track-btn';
+                if (index === currentTrackIndex) {
+                    button.classList.add('active');
+                }
+                button.textContent = getMusicTrackLabel(src);
+                button.addEventListener('click', () => playTrackByIndex(index));
+                musicTrackList.appendChild(button);
+            });
+        }
+
+        function setMusicPickerOpen(open) {
+            musicPickerOpen = Boolean(open);
+            if (musicTrackPicker) {
+                musicTrackPicker.classList.toggle('visible', musicPickerOpen);
+            }
+        }
+
+        function toggleMusicPicker() {
+            setMusicPickerOpen(!musicPickerOpen);
+            if (musicPickerOpen) {
+                renderMusicTrackList();
+            }
+        }
+
+        function playTrackByIndex(index) {
+            loadTrack(index);
+            playerAudio.play().then(() => {
+                autoplayStarted = true;
+                updateMusicUi();
+            }).catch(() => {
+                updateMusicUi();
+            });
+            setMusicPickerOpen(false);
+        }
+
+        function openMusicView() {
+            showView('musicView');
+            setMusicPickerOpen(false);
+        }
+
+        function closeMusicView() {
+            showView(lastViewId || 'homeView');
+        }
 
         function loadTrack(index) {
             if (!playlist.length) return;
             currentTrackIndex = (index + playlist.length) % playlist.length;
             const src = playlist[currentTrackIndex];
             playerAudio.src = src;
-            musicTitle.textContent = src;
+            updateMusicUi();
         }
 
         async function togglePlayPause() {
@@ -3912,13 +4238,13 @@
                 try {
                     await playerAudio.play();
                     autoplayStarted = true;
-                    musicPlayPauseBtn.textContent = '⏸';
+                    updateMusicUi();
                 } catch (error) {
                     console.log('Playback requires user interaction first:', error);
                 }
             } else {
                 playerAudio.pause();
-                musicPlayPauseBtn.textContent = '▶';
+                updateMusicUi();
             }
         }
 
@@ -3926,9 +4252,9 @@
             loadTrack(currentTrackIndex + 1);
             if (autoplay) {
                 playerAudio.play().then(() => {
-                    musicPlayPauseBtn.textContent = '⏸';
+                    updateMusicUi();
                 }).catch(() => {
-                    musicPlayPauseBtn.textContent = '▶';
+                    updateMusicUi();
                 });
             }
         }
@@ -3937,9 +4263,9 @@
             loadTrack(currentTrackIndex - 1);
             playerAudio.play().then(() => {
                 autoplayStarted = true;
-                musicPlayPauseBtn.textContent = '⏸';
+                updateMusicUi();
             }).catch(() => {
-                musicPlayPauseBtn.textContent = '▶';
+                updateMusicUi();
             });
         }
 
@@ -3947,9 +4273,9 @@
             if (autoplayStarted) return;
             playerAudio.play().then(() => {
                 autoplayStarted = true;
-                musicPlayPauseBtn.textContent = '⏸';
+                updateMusicUi();
             }).catch(() => {
-                musicPlayPauseBtn.textContent = '▶';
+                updateMusicUi();
             });
         }
 
@@ -3973,21 +4299,45 @@
         });
 
         playerAudio.addEventListener('pause', () => {
-            musicPlayPauseBtn.textContent = '▶';
+            updateMusicUi();
         });
 
         playerAudio.addEventListener('play', () => {
-            musicPlayPauseBtn.textContent = '⏸';
+            updateMusicUi();
         });
 
         musicPrevBtn.addEventListener('click', prevTrack);
         musicNextBtn.addEventListener('click', () => nextTrack(true));
         musicPlayPauseBtn.addEventListener('click', togglePlayPause);
+        musicFullPrevBtn.addEventListener('click', prevTrack);
+        musicFullNextBtn.addEventListener('click', () => nextTrack(true));
+        musicFullPlayPauseBtn.addEventListener('click', togglePlayPause);
+        musicFullCenterBtn.addEventListener('click', toggleMusicPicker);
+        musicCloseBtn.addEventListener('click', closeMusicView);
+
+        [musicPrevBtn, musicPlayPauseBtn, musicNextBtn].forEach((button) => {
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
+        });
+
+        if (musicPlayerBar) {
+            musicPlayerBar.addEventListener('click', () => {
+                openMusicView();
+            });
+            musicPlayerBar.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openMusicView();
+                }
+            });
+        }
 
         const initialTrackIndex = playlist.length > 0
             ? Math.floor(Math.random() * playlist.length)
             : 0;
         loadTrack(initialTrackIndex);
+        updateMusicUi();
         tryAutoplay();
         setupAutoplayFallback();
 
