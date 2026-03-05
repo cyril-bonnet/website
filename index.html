@@ -1411,10 +1411,12 @@
                         <button class="option-button" onclick="showView('todoView')">
                             <span>📝</span>
                             <span>Todo List Planner</span>
+                            <span class="chat-option-badge" id="todoUnreadBadge">NEW</span>
                         </button>
                         <button class="option-button" onclick="showView('weeklyView')">
                             <span>🦁</span>
                             <span>Weekly Planner</span>
+                            <span class="chat-option-badge" id="weeklyUnreadBadge">NEW</span>
                         </button>
                         <button class="option-button" onclick="showView('chatView')">
                             <span>💬</span>
@@ -1424,10 +1426,12 @@
                         <button class="option-button" onclick="showView('feedbackView')">
                             <span>💡</span>
                             <span>Feedback & Suggestions</span>
+                            <span class="chat-option-badge" id="feedbackUnreadBadge">NEW</span>
                         </button>
                         <button class="option-button" onclick="showView('tasteView')">
                             <span>🍽️</span>
                             <span>Restaurants & Food to Try</span>
+                            <span class="chat-option-badge" id="tasteUnreadBadge">NEW</span>
                         </button>
                         <button class="option-button" onclick="showView('chessView')">
                             <span>♟️</span>
@@ -1838,10 +1842,12 @@
             // Initialize todo list if switching to it
             if (viewId === 'todoView') {
                 initTodoList();
+                markSectionSeen('todo');
             }
 
             if (viewId === 'weeklyView') {
                 initWeeklyPlanner();
+                markSectionSeen('weekly');
             }
 
             if (viewId === 'homeView') {
@@ -1858,10 +1864,12 @@
 
             if (viewId === 'feedbackView') {
                 initFeedback();
+                markSectionSeen('feedback');
             }
 
             if (viewId === 'tasteView') {
                 initTaste();
+                markSectionSeen('taste');
             }
 
             if (viewId === 'chessView') {
@@ -1910,6 +1918,10 @@
         let feedbackItems = [];
         let tasteItems = [];
         let chatHasSyncedOnce = false;
+        let todoHasSyncedOnce = false;
+        let weeklyHasSyncedOnce = false;
+        let feedbackHasSyncedOnce = false;
+        let tasteHasSyncedOnce = false;
         let userStatus = { ru: { period: false }, kiki: { period: false } };
         let currentUser = null;
         let usersDbRef = null;
@@ -1940,6 +1952,7 @@
         const QUICK_NOTE_STORAGE_KEY = 'rugile_quick_notes';
         const CHAT_STORAGE_KEY = 'rugile_chat_messages';
         const CHAT_LAST_SEEN_STORAGE_KEY = 'rugile_chat_last_seen';
+        const SECTION_LAST_SEEN_STORAGE_KEY = 'rugile_section_last_seen';
         const FEEDBACK_STORAGE_KEY = 'rugile_feedback_items';
         const TASTE_STORAGE_KEY = 'rugile_taste_items';
         const USER_STATUS_STORAGE_KEY = 'rugile_user_status';
@@ -1977,8 +1990,144 @@
 
         const MOOD_OPTIONS = ['happy', 'normal', 'meh', 'grumpy', 'sad', 'excited'];
         let chatLastSeen = { ru: 0, kiki: 0 };
+        let sectionLastSeen = {
+            ru: { todo: 0, weekly: 0, feedback: 0, taste: 0 },
+            kiki: { todo: 0, weekly: 0, feedback: 0, taste: 0 }
+        };
         const notificationAudio = new Audio('notification.mp3');
         notificationAudio.preload = 'auto';
+
+        function latestIncomingTodoTimestamp(userKey, sourceTasks = tasks) {
+            if (!userKey || !Array.isArray(sourceTasks)) return 0;
+            return sourceTasks.reduce((latest, task) => {
+                const actor = task?.updatedBy || task?.addedByKey;
+                if (!actor || actor === userKey) return latest;
+                const timestamp = Number(task?.updatedAt || task?.createdAt) || 0;
+                return timestamp > latest ? timestamp : latest;
+            }, 0);
+        }
+
+        function latestIncomingWeeklyTimestamp(userKey, sourceItems = weeklyItems) {
+            if (!userKey || !Array.isArray(sourceItems)) return 0;
+            return sourceItems.reduce((latest, item) => {
+                const actor = item?.updatedBy || item?.addedByKey;
+                if (!actor || actor === userKey) return latest;
+                const timestamp = Number(item?.updatedAt || item?.createdAt || item?.timestamp || item?.id) || 0;
+                return timestamp > latest ? timestamp : latest;
+            }, 0);
+        }
+
+        function latestIncomingFeedbackTimestamp(userKey, sourceItems = feedbackItems) {
+            if (!userKey || !Array.isArray(sourceItems)) return 0;
+            return sourceItems.reduce((latest, item) => {
+                const actor = item?.from;
+                if (!actor || actor === userKey) return latest;
+                const timestamp = Number(item?.updatedAt || item?.timestamp || item?.id) || 0;
+                return timestamp > latest ? timestamp : latest;
+            }, 0);
+        }
+
+        function latestIncomingTasteTimestamp(userKey, sourceItems = tasteItems) {
+            if (!userKey || !Array.isArray(sourceItems)) return 0;
+            return sourceItems.reduce((latest, item) => {
+                const actor = item?.updatedBy || item?.from;
+                if (!actor || actor === userKey) return latest;
+                const timestamp = Number(item?.updatedAt || item?.timestamp || item?.id) || 0;
+                return timestamp > latest ? timestamp : latest;
+            }, 0);
+        }
+
+        function loadSectionLastSeen() {
+            const saved = localStorage.getItem(SECTION_LAST_SEEN_STORAGE_KEY);
+            if (!saved) {
+                sectionLastSeen = {
+                    ru: { todo: 0, weekly: 0, feedback: 0, taste: 0 },
+                    kiki: { todo: 0, weekly: 0, feedback: 0, taste: 0 }
+                };
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(saved) || {};
+                sectionLastSeen = {
+                    ru: {
+                        todo: Number(parsed.ru?.todo) || 0,
+                        weekly: Number(parsed.ru?.weekly) || 0,
+                        feedback: Number(parsed.ru?.feedback) || 0,
+                        taste: Number(parsed.ru?.taste) || 0
+                    },
+                    kiki: {
+                        todo: Number(parsed.kiki?.todo) || 0,
+                        weekly: Number(parsed.kiki?.weekly) || 0,
+                        feedback: Number(parsed.kiki?.feedback) || 0,
+                        taste: Number(parsed.kiki?.taste) || 0
+                    }
+                };
+            } catch {
+                sectionLastSeen = {
+                    ru: { todo: 0, weekly: 0, feedback: 0, taste: 0 },
+                    kiki: { todo: 0, weekly: 0, feedback: 0, taste: 0 }
+                };
+            }
+        }
+
+        function saveSectionLastSeen() {
+            localStorage.setItem(SECTION_LAST_SEEN_STORAGE_KEY, JSON.stringify(sectionLastSeen));
+        }
+
+        function markSectionSeen(section) {
+            if (!currentUser || !section) return;
+
+            let latestIncoming = 0;
+            if (section === 'todo') latestIncoming = latestIncomingTodoTimestamp(currentUser.key);
+            if (section === 'weekly') latestIncoming = latestIncomingWeeklyTimestamp(currentUser.key);
+            if (section === 'feedback') latestIncoming = latestIncomingFeedbackTimestamp(currentUser.key);
+            if (section === 'taste') latestIncoming = latestIncomingTasteTimestamp(currentUser.key);
+
+            const currentSeen = Number(sectionLastSeen[currentUser.key]?.[section]) || 0;
+            if (latestIncoming > currentSeen) {
+                sectionLastSeen = {
+                    ...sectionLastSeen,
+                    [currentUser.key]: {
+                        ...sectionLastSeen[currentUser.key],
+                        [section]: latestIncoming
+                    }
+                };
+                saveSectionLastSeen();
+            }
+
+            renderSectionUnreadBadges();
+        }
+
+        function setSimpleUnreadBadge(id, show) {
+            const badge = document.getElementById(id);
+            if (!badge) return;
+            badge.style.display = show ? 'inline-flex' : 'none';
+            if (show) {
+                badge.textContent = 'NEW';
+            }
+        }
+
+        function renderSectionUnreadBadges() {
+            if (!currentUser) {
+                setSimpleUnreadBadge('todoUnreadBadge', false);
+                setSimpleUnreadBadge('weeklyUnreadBadge', false);
+                setSimpleUnreadBadge('feedbackUnreadBadge', false);
+                setSimpleUnreadBadge('tasteUnreadBadge', false);
+                return;
+            }
+
+            const seen = sectionLastSeen[currentUser.key] || { todo: 0, weekly: 0, feedback: 0, taste: 0 };
+            const todoUnread = latestIncomingTodoTimestamp(currentUser.key) > (Number(seen.todo) || 0);
+            const weeklyUnread = latestIncomingWeeklyTimestamp(currentUser.key) > (Number(seen.weekly) || 0);
+            const feedbackUnread = latestIncomingFeedbackTimestamp(currentUser.key) > (Number(seen.feedback) || 0);
+            const tasteUnread = latestIncomingTasteTimestamp(currentUser.key) > (Number(seen.taste) || 0);
+
+            setSimpleUnreadBadge('todoUnreadBadge', todoUnread);
+            setSimpleUnreadBadge('weeklyUnreadBadge', weeklyUnread);
+            setSimpleUnreadBadge('feedbackUnreadBadge', feedbackUnread);
+            setSimpleUnreadBadge('tasteUnreadBadge', tasteUnread);
+        }
 
         function getLatestIncomingChatTimestamp(messages, userKey) {
             if (!Array.isArray(messages) || !messages.length || !userKey) return 0;
@@ -2317,6 +2466,14 @@
         function handleChessSquareClick(row, col) {
             if (chessGameOver) return;
 
+            if (!currentUser || (currentUser.key !== 'ru' && currentUser.key !== 'kiki')) return;
+            const currentSide = currentUser.key === 'ru' ? 'w' : 'b';
+            if (currentSide !== chessTurn) {
+                const waitingFor = chessTurn === 'w' ? 'Ru 🧘‍♀️' : 'Kiki 🐧';
+                updateChessStatus(`Waiting for ${waitingFor}`);
+                return;
+            }
+
             const clickedPiece = chessBoardState[row][col];
             const isTurnPiece = chessTurn === 'w' ? isWhiteChessPiece(clickedPiece) : isBlackChessPiece(clickedPiece);
 
@@ -2379,8 +2536,12 @@
 
         function handleChessResign() {
             if (chessGameOver) return;
-            const resigning = chessTurn === 'w' ? 'White ♔' : 'Black ♚';
-            const winner = chessTurn === 'w' ? 'Black ♚' : 'White ♔';
+
+            if (!currentUser || (currentUser.key !== 'ru' && currentUser.key !== 'kiki')) return;
+
+            const resigningSide = currentUser.key === 'ru' ? 'w' : 'b';
+            const resigning = resigningSide === 'w' ? 'White ♔' : 'Black ♚';
+            const winner = resigningSide === 'w' ? 'Black ♚' : 'White ♔';
             finishChessGame(`${winner} wins (${resigning} resigned).`);
         }
 
@@ -2721,7 +2882,12 @@
                 bubble.addEventListener('click', () => {
                     tasteItems = tasteItems.map((entry) => {
                         if (entry.id === item.id) {
-                            return { ...entry, tried: !entry.tried, updatedAt: Date.now() };
+                            return {
+                                ...entry,
+                                tried: !entry.tried,
+                                updatedAt: Date.now(),
+                                updatedBy: currentUser?.key || null
+                            };
                         }
                         return entry;
                     });
@@ -2762,7 +2928,12 @@
                         event.stopPropagation();
                         tasteItems = tasteItems.map((entry) => {
                             if (entry.id === item.id) {
-                                return { ...entry, rating: starIndex, updatedAt: Date.now() };
+                                return {
+                                    ...entry,
+                                    rating: starIndex,
+                                    updatedAt: Date.now(),
+                                    updatedBy: currentUser?.key || null
+                                };
                             }
                             return entry;
                         });
@@ -2941,6 +3112,7 @@
             if (!currentUser) {
                 bar.classList.remove('visible');
                 renderChatUnreadBadge();
+                renderSectionUnreadBadges();
                 return;
             }
 
@@ -2948,6 +3120,7 @@
             bar.classList.add('visible');
             renderMoods();
             renderChatUnreadBadge();
+            renderSectionUnreadBadges();
         }
 
         function clearLoginAuthError() {
@@ -3048,6 +3221,7 @@
 
         function initUserSession() {
             loadChatLastSeen();
+            loadSectionLastSeen();
             const savedUserKey = localStorage.getItem(USER_STORAGE_KEY);
             if (savedUserKey && USER_MAP[savedUserKey]) {
                 currentUser = USER_MAP[savedUserKey];
@@ -3122,15 +3296,39 @@
                 }
 
                 const listener = firebaseDbRef.on('value', (snapshot) => {
+                    const previousTasks = tasks;
                     const value = snapshot.val();
                     tasks = Array.isArray(value) ? value : [];
+
+                    if (currentUser) {
+                        const previousIncoming = latestIncomingTodoTimestamp(currentUser.key, previousTasks);
+                        const nextIncoming = latestIncomingTodoTimestamp(currentUser.key, tasks);
+                        if (todoHasSyncedOnce && nextIncoming > previousIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    todoHasSyncedOnce = true;
                     renderTodoList();
+                    renderSectionUnreadBadges();
                 });
 
                 const weeklyListener = weeklyDbRef.on('value', (snapshot) => {
+                    const previousWeeklyItems = weeklyItems;
                     const value = snapshot.val();
                     weeklyItems = Array.isArray(value) ? value : [];
+
+                    if (currentUser) {
+                        const previousIncoming = latestIncomingWeeklyTimestamp(currentUser.key, previousWeeklyItems);
+                        const nextIncoming = latestIncomingWeeklyTimestamp(currentUser.key, weeklyItems);
+                        if (weeklyHasSyncedOnce && nextIncoming > previousIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    weeklyHasSyncedOnce = true;
                     renderWeeklyPlanner();
+                    renderSectionUnreadBadges();
                 });
 
                 const moodsListener = moodsDbRef.on('value', (snapshot) => {
@@ -3166,15 +3364,39 @@
                 });
 
                 const feedbackListener = feedbackDbRef.on('value', (snapshot) => {
+                    const previousFeedbackItems = feedbackItems;
                     const value = snapshot.val();
                     feedbackItems = Array.isArray(value) ? value : [];
+
+                    if (currentUser) {
+                        const previousIncoming = latestIncomingFeedbackTimestamp(currentUser.key, previousFeedbackItems);
+                        const nextIncoming = latestIncomingFeedbackTimestamp(currentUser.key, feedbackItems);
+                        if (feedbackHasSyncedOnce && nextIncoming > previousIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    feedbackHasSyncedOnce = true;
                     renderFeedbackItems();
+                    renderSectionUnreadBadges();
                 });
 
                 const tasteListener = tasteDbRef.on('value', (snapshot) => {
+                    const previousTasteItems = tasteItems;
                     const value = snapshot.val();
                     tasteItems = Array.isArray(value) ? value : [];
+
+                    if (currentUser) {
+                        const previousIncoming = latestIncomingTasteTimestamp(currentUser.key, previousTasteItems);
+                        const nextIncoming = latestIncomingTasteTimestamp(currentUser.key, tasteItems);
+                        if (tasteHasSyncedOnce && nextIncoming > previousIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    tasteHasSyncedOnce = true;
                     renderTasteItems();
+                    renderSectionUnreadBadges();
                 });
 
                 const userStatusListener = userStatusDbRef.on('value', (snapshot) => {
@@ -3382,7 +3604,7 @@
             
             tasks = tasks.map(task => {
                 if (task.id === draggedTaskId) {
-                    return { ...task, status: newStatus, updatedAt: Date.now() };
+                    return { ...task, status: newStatus, updatedAt: Date.now(), updatedBy: currentUser?.key || null };
                 }
                 return task;
             });
@@ -3414,7 +3636,7 @@
             
             tasks = tasks.map(task => {
                 if (task.id === selectedTaskId) {
-                    return { ...task, status: newStatus, updatedAt: Date.now() };
+                    return { ...task, status: newStatus, updatedAt: Date.now(), updatedBy: currentUser?.key || null };
                 }
                 return task;
             });
@@ -3474,6 +3696,7 @@
                     return {
                         ...task,
                         updatedAt: Date.now(),
+                        updatedBy: currentUser?.key || null,
                         userPriorities: {
                             ...taskPriorities,
                             [currentUser.key]: priority
@@ -3517,6 +3740,8 @@
                 },
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
+                addedByKey: currentUser ? currentUser.key : null,
+                updatedBy: currentUser ? currentUser.key : null,
                 addedByName: currentUser ? currentUser.name : 'Unknown',
                 addedByEmoji: currentUser ? currentUser.emoji : '❓'
             });
@@ -3633,6 +3858,7 @@
                     tried: false,
                     rating: 0,
                     from: currentUser.key,
+                    updatedBy: currentUser.key,
                     addedByEmoji: currentUser.emoji,
                     timestamp: Date.now(),
                     updatedAt: Date.now()
@@ -3855,6 +4081,8 @@
                 color,
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
+                addedByKey: currentUser ? currentUser.key : null,
+                updatedBy: currentUser ? currentUser.key : null,
                 addedByName: currentUser ? currentUser.name : 'Unknown',
                 addedByEmoji: currentUser ? currentUser.emoji : '❓'
             });
