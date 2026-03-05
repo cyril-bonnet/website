@@ -376,6 +376,7 @@
         .mood-meh { background: #F0F0F0; color: #424242; }
         .mood-grumpy { background: #FFE7CC; color: #E65100; }
         .mood-sad { background: #FFD6D6; color: #9B1C1C; }
+        .mood-excited { background: #FFF4C2; color: #8A6D00; }
 
         .mood-choices {
             display: grid;
@@ -393,6 +394,14 @@
             font-size: 11px;
             color: #555;
             margin-top: 6px;
+        }
+
+        .tiny-meta {
+            display: block;
+            font-size: 10px;
+            color: #555;
+            margin-top: 3px;
+            line-height: 1.2;
         }
 
         .home-bottom-stack {
@@ -592,6 +601,120 @@
             font-size: 12px;
             color: #555;
             text-align: center;
+            padding: 8px;
+        }
+
+        .taste-panel {
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .taste-list {
+            background: #ECE9D8;
+            border: 1px solid #B0B0B0;
+            min-height: 220px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-content: flex-start;
+        }
+
+        .taste-bubble {
+            border: 2px solid #808080;
+            padding: 8px;
+            min-width: 180px;
+            max-width: 100%;
+            cursor: pointer;
+            user-select: none;
+            word-break: break-word;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .taste-bubble-restaurant {
+            background: #E9D6FF;
+        }
+
+        .taste-bubble-food {
+            background: #FFD6F2;
+        }
+
+        .taste-bubble-tried {
+            background: #CFF7D3;
+        }
+
+        .taste-bubble-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            color: #003C74;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .taste-label {
+            border: 1px solid #808080;
+            background: #FFFFFF;
+            padding: 1px 6px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .taste-name {
+            font-size: 13px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .taste-status {
+            font-size: 11px;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .taste-rating {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .taste-star {
+            min-width: auto;
+            padding: 2px 5px;
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        .taste-form {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: 130px 1fr auto;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .taste-form select,
+        .taste-form input {
+            width: 100%;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .taste-empty {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+            width: 100%;
             padding: 8px;
         }
 
@@ -1040,11 +1163,19 @@
                 grid-template-columns: 1fr;
             }
 
+            .taste-form {
+                grid-template-columns: 1fr;
+            }
+
             .weekly-form button {
                 width: 100%;
             }
 
             .feedback-form button {
+                width: 100%;
+            }
+
+            .taste-form button {
                 width: 100%;
             }
 
@@ -1175,6 +1306,10 @@
                         <button class="option-button" onclick="showView('feedbackView')">
                             <span>💡</span>
                             <span>Feedback & Suggestions</span>
+                        </button>
+                        <button class="option-button" onclick="showView('tasteView')">
+                            <span>🍽️</span>
+                            <span>Restaurants & Food to Try</span>
                         </button>
                     </div>
 
@@ -1471,9 +1606,43 @@
                                 <option value="Suggestion">Suggestion</option>
                                 <option value="Feedback">Feedback</option>
                                 <option value="Bug">Bug</option>
+                                <option value="Song">Song</option>
                             </select>
                             <input type="text" id="feedbackInput" placeholder="Share your idea or feedback" maxlength="280" required />
                             <button type="submit">Post</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Restaurants/Food View -->
+        <div class="view" id="tasteView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🍽️</span>
+                        <span>taste_tracker.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Restaurants & Food to Try</h1>
+                    <div class="taste-panel">
+                        <div class="taste-list" id="tasteList"></div>
+                        <form class="taste-form" id="tasteForm">
+                            <select id="tasteType" required>
+                                <option value="restaurant">Restaurant</option>
+                                <option value="food">Food</option>
+                            </select>
+                            <input type="text" id="tasteInput" placeholder="Add restaurant or food" maxlength="120" required />
+                            <button type="submit">Add</button>
                         </form>
                     </div>
                 </div>
@@ -1530,6 +1699,10 @@
             if (viewId === 'feedbackView') {
                 initFeedback();
             }
+
+            if (viewId === 'tasteView') {
+                initTaste();
+            }
             
             // Reset invitation view if going back
             if (viewId === 'invitationView') {
@@ -1549,12 +1722,14 @@
         let moodsInitialized = false;
         let socialInitialized = false;
         let feedbackInitialized = false;
+        let tasteInitialized = false;
         let firebaseDbRef = null;
         let weeklyDbRef = null;
         let moodsDbRef = null;
         let quickNoteDbRef = null;
         let chatDbRef = null;
         let feedbackDbRef = null;
+        let tasteDbRef = null;
         let userStatusDbRef = null;
         let firebaseUnsubscribe = null;
         let weeklyUnsubscribe = null;
@@ -1562,12 +1737,14 @@
         let quickNoteUnsubscribe = null;
         let chatUnsubscribe = null;
         let feedbackUnsubscribe = null;
+        let tasteUnsubscribe = null;
         let userStatusUnsubscribe = null;
         let weeklyItems = [];
         let userMoods = { ru: 'normal', kiki: 'normal' };
         let quickNotes = {};
         let chatMessages = [];
         let feedbackItems = [];
+        let tasteItems = [];
         let chatHasSyncedOnce = false;
         let userStatus = { ru: { period: false }, kiki: { period: false } };
         let currentUser = null;
@@ -1591,6 +1768,7 @@
         const CHAT_STORAGE_KEY = 'rugile_chat_messages';
         const CHAT_LAST_SEEN_STORAGE_KEY = 'rugile_chat_last_seen';
         const FEEDBACK_STORAGE_KEY = 'rugile_feedback_items';
+        const TASTE_STORAGE_KEY = 'rugile_taste_items';
         const USER_STATUS_STORAGE_KEY = 'rugile_user_status';
         const USER_STORAGE_KEY = 'rugile_current_user';
         const FIREBASE_BOARD_ID = 'rugile-shared-board';
@@ -1611,7 +1789,8 @@
             normal: 'Normal',
             meh: 'Meh',
             grumpy: 'Grumpy',
-            sad: 'Sad'
+            sad: 'Sad',
+            excited: 'Excited'
         };
 
         const MOOD_SYMBOLS = {
@@ -1619,10 +1798,11 @@
             normal: '😌',
             meh: '😐',
             grumpy: '😠',
-            sad: '😢'
+            sad: '😢',
+            excited: '🤩'
         };
 
-        const MOOD_OPTIONS = ['happy', 'normal', 'meh', 'grumpy', 'sad'];
+        const MOOD_OPTIONS = ['happy', 'normal', 'meh', 'grumpy', 'sad', 'excited'];
         let chatLastSeen = { ru: 0, kiki: 0 };
         const notificationAudio = new Audio('notification.mp3');
         notificationAudio.preload = 'auto';
@@ -1729,12 +1909,40 @@
         }
 
         function normalizeUserStatus(raw) {
-            const defaults = { ru: { period: false }, kiki: { period: false } };
+            const defaults = {
+                ru: { period: false, updatedAt: 0 },
+                kiki: { period: false, updatedAt: 0 }
+            };
             if (!raw || typeof raw !== 'object') return defaults;
             return {
-                ru: { period: Boolean(raw.ru?.period) },
-                kiki: { period: Boolean(raw.kiki?.period) }
+                ru: {
+                    period: Boolean(raw.ru?.period),
+                    updatedAt: Number(raw.ru?.updatedAt) || 0
+                },
+                kiki: {
+                    period: Boolean(raw.kiki?.period),
+                    updatedAt: Number(raw.kiki?.updatedAt) || 0
+                }
             };
+        }
+
+        function formatTinyTimestamp(timestamp) {
+            const value = Number(timestamp);
+            if (!value) return '';
+
+            const diffMs = Math.max(0, Date.now() - value);
+            const seconds = Math.floor(diffMs / 1000);
+            if (seconds < 60) return 'just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+            if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return '';
+            return new Intl.DateTimeFormat('en-GB', {
+                month: 'short',
+                day: 'numeric'
+            }).format(date);
         }
 
         function saveUserStatus() {
@@ -1768,6 +1976,10 @@
 
             const onPeriod = Boolean(userStatus?.ru?.period);
             periodStatusRu.textContent = onPeriod ? '🩸 Period: Yes' : '🩸 Period: No';
+            const periodUpdatedText = formatTinyTimestamp(userStatus?.ru?.updatedAt);
+            if (periodUpdatedText) {
+                periodStatusRu.textContent += ` • ${periodUpdatedText}`;
+            }
 
             periodButtonsRu.innerHTML = '';
             if (!currentUser || currentUser.key !== 'ru') return;
@@ -1777,7 +1989,7 @@
             toggleBtn.className = 'period-btn';
             toggleBtn.textContent = onPeriod ? 'Toggle to No' : 'Toggle to Yes';
             toggleBtn.addEventListener('click', () => {
-                userStatus = { ...userStatus, ru: { period: !onPeriod } };
+                userStatus = { ...userStatus, ru: { period: !onPeriod, updatedAt: Date.now() } };
                 saveUserStatus();
                 renderPeriodControls();
             });
@@ -1822,7 +2034,20 @@
                 return;
             }
             const fromUser = USER_MAP[note.from] || { emoji: '❓', name: 'Unknown' };
-            inbox.textContent = `${fromUser.emoji} ${fromUser.name}: ${note.text}`;
+            inbox.innerHTML = '';
+
+            const textLine = document.createElement('span');
+            textLine.textContent = `${fromUser.emoji} ${fromUser.name}: ${note.text}`;
+
+            const whenText = formatTinyTimestamp(note.timestamp);
+            const metaLine = document.createElement('span');
+            metaLine.className = 'tiny-meta';
+            metaLine.textContent = whenText ? `Updated ${whenText}` : '';
+
+            inbox.appendChild(textLine);
+            if (whenText) {
+                inbox.appendChild(metaLine);
+            }
         }
 
         function saveChatMessages() {
@@ -1881,8 +2106,16 @@
                 const textLine = document.createElement('span');
                 textLine.textContent = msg.text;
 
+                const whenText = formatTinyTimestamp(msg.timestamp);
+                const metaLine = document.createElement('span');
+                metaLine.className = 'tiny-meta';
+                metaLine.textContent = whenText;
+
                 line.appendChild(authorLine);
                 line.appendChild(textLine);
+                if (whenText) {
+                    line.appendChild(metaLine);
+                }
                 list.appendChild(line);
             });
 
@@ -1945,10 +2178,18 @@
                 const text = document.createElement('div');
                 text.textContent = item.text || '';
 
+                const whenText = formatTinyTimestamp(item.updatedAt || item.timestamp);
+                const meta = document.createElement('span');
+                meta.className = 'tiny-meta';
+                meta.textContent = whenText ? `Updated ${whenText}` : '';
+
                 head.appendChild(author);
                 head.appendChild(type);
                 row.appendChild(head);
                 row.appendChild(text);
+                if (whenText) {
+                    row.appendChild(meta);
+                }
                 list.appendChild(row);
             });
         }
@@ -1965,6 +2206,132 @@
                 loadFeedbackItems();
             }
             renderFeedbackItems();
+        }
+
+        function saveTasteItems() {
+            if (tasteDbRef) {
+                tasteDbRef.set(tasteItems).catch((error) => {
+                    console.error('Firebase taste save failed, fallback to localStorage:', error);
+                    localStorage.setItem(TASTE_STORAGE_KEY, JSON.stringify(tasteItems));
+                });
+                return;
+            }
+            localStorage.setItem(TASTE_STORAGE_KEY, JSON.stringify(tasteItems));
+        }
+
+        function loadTasteItems() {
+            const saved = localStorage.getItem(TASTE_STORAGE_KEY);
+            if (!saved) {
+                tasteItems = [];
+                return;
+            }
+            try {
+                tasteItems = JSON.parse(saved) || [];
+            } catch {
+                tasteItems = [];
+            }
+        }
+
+        function renderTasteItems() {
+            const list = document.getElementById('tasteList');
+            if (!list) return;
+
+            list.innerHTML = '';
+            if (!tasteItems.length) {
+                const empty = document.createElement('div');
+                empty.className = 'taste-empty';
+                empty.textContent = 'No items yet. Add restaurants or food to try.';
+                list.appendChild(empty);
+                return;
+            }
+
+            const recentFirst = [...tasteItems].slice(-300).reverse();
+            recentFirst.forEach((item) => {
+                const bubble = document.createElement('div');
+                const typeClass = item.type === 'food' ? 'taste-bubble-food' : 'taste-bubble-restaurant';
+                const statusClass = item.tried ? ' taste-bubble-tried' : '';
+                bubble.className = `taste-bubble ${typeClass}${statusClass}`;
+                bubble.addEventListener('click', () => {
+                    tasteItems = tasteItems.map((entry) => {
+                        if (entry.id === item.id) {
+                            return { ...entry, tried: !entry.tried, updatedAt: Date.now() };
+                        }
+                        return entry;
+                    });
+                    saveTasteItems();
+                    renderTasteItems();
+                });
+
+                const head = document.createElement('div');
+                head.className = 'taste-bubble-head';
+
+                const label = document.createElement('span');
+                label.className = 'taste-label';
+                label.textContent = item.type === 'food' ? '🍜 Food' : '🍽️ Restaurant';
+
+                const owner = document.createElement('span');
+                owner.textContent = item.addedByEmoji || '❓';
+
+                head.appendChild(label);
+                head.appendChild(owner);
+
+                const name = document.createElement('div');
+                name.className = 'taste-name';
+                name.textContent = item.name || '';
+
+                const status = document.createElement('div');
+                status.className = 'taste-status';
+                status.textContent = item.tried ? '✅ Tried / Went to' : '🕒 To try';
+
+                const ratingWrap = document.createElement('div');
+                ratingWrap.className = 'taste-rating';
+                const currentRating = Number(item.rating) || 0;
+                for (let starIndex = 1; starIndex <= 5; starIndex++) {
+                    const star = document.createElement('button');
+                    star.type = 'button';
+                    star.className = 'taste-star';
+                    star.textContent = starIndex <= currentRating ? '⭐' : '☆';
+                    star.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        tasteItems = tasteItems.map((entry) => {
+                            if (entry.id === item.id) {
+                                return { ...entry, rating: starIndex, updatedAt: Date.now() };
+                            }
+                            return entry;
+                        });
+                        saveTasteItems();
+                        renderTasteItems();
+                    });
+                    ratingWrap.appendChild(star);
+                }
+
+                bubble.appendChild(head);
+                bubble.appendChild(name);
+                bubble.appendChild(status);
+                bubble.appendChild(ratingWrap);
+                const whenText = formatTinyTimestamp(item.updatedAt || item.timestamp);
+                if (whenText) {
+                    const meta = document.createElement('span');
+                    meta.className = 'tiny-meta';
+                    meta.textContent = `Updated ${whenText}`;
+                    bubble.appendChild(meta);
+                }
+                list.appendChild(bubble);
+            });
+        }
+
+        function initTaste() {
+            if (tasteInitialized) {
+                renderTasteItems();
+                return;
+            }
+
+            tasteInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadTasteItems();
+            }
+            renderTasteItems();
         }
 
         function renderMoodButtonsFor(userKey) {
@@ -2258,6 +2625,7 @@
                 quickNoteDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/quickNotes`);
                 chatDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/chat`);
                 feedbackDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/feedback`);
+                tasteDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/taste`);
                 userStatusDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/userStatus`);
                 usersDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/users`);
 
@@ -2278,6 +2646,9 @@
                 }
                 if (feedbackUnsubscribe) {
                     feedbackUnsubscribe();
+                }
+                if (tasteUnsubscribe) {
+                    tasteUnsubscribe();
                 }
                 if (userStatusUnsubscribe) {
                     userStatusUnsubscribe();
@@ -2333,6 +2704,12 @@
                     renderFeedbackItems();
                 });
 
+                const tasteListener = tasteDbRef.on('value', (snapshot) => {
+                    const value = snapshot.val();
+                    tasteItems = Array.isArray(value) ? value : [];
+                    renderTasteItems();
+                });
+
                 const userStatusListener = userStatusDbRef.on('value', (snapshot) => {
                     userStatus = normalizeUserStatus(snapshot.val());
                     renderPeriodControls();
@@ -2344,6 +2721,7 @@
                 quickNoteUnsubscribe = () => quickNoteDbRef.off('value', quickNoteListener);
                 chatUnsubscribe = () => chatDbRef.off('value', chatListener);
                 feedbackUnsubscribe = () => feedbackDbRef.off('value', feedbackListener);
+                tasteUnsubscribe = () => tasteDbRef.off('value', tasteListener);
                 userStatusUnsubscribe = () => userStatusDbRef.off('value', userStatusListener);
                 return true;
             } catch (error) {
@@ -2354,6 +2732,7 @@
                 quickNoteDbRef = null;
                 chatDbRef = null;
                 feedbackDbRef = null;
+                tasteDbRef = null;
                 userStatusDbRef = null;
                 return false;
             }
@@ -2463,12 +2842,20 @@
                     const taskPriorities = getTaskUserPriorities(task);
                     priority.textContent = `🧘‍♀️: ${PRIORITY_LABELS[taskPriorities.ru]} | 🐧: ${PRIORITY_LABELS[taskPriorities.kiki]}`;
 
+                    const whenText = formatTinyTimestamp(task.updatedAt || task.createdAt);
+                    const meta = document.createElement('span');
+                    meta.className = 'task-meta';
+                    meta.textContent = whenText ? `Updated ${whenText}` : '';
+
                     const ownerIcon = document.createElement('span');
                     ownerIcon.className = 'item-owner-icon';
                     ownerIcon.textContent = task.addedByEmoji || '❓';
 
                     taskButton.appendChild(title);
                     taskButton.appendChild(priority);
+                    if (whenText) {
+                        taskButton.appendChild(meta);
+                    }
                     taskButton.appendChild(ownerIcon);
                     taskButton.draggable = true;
                     taskButton.dataset.taskId = task.id;
@@ -2528,7 +2915,7 @@
             
             tasks = tasks.map(task => {
                 if (task.id === draggedTaskId) {
-                    return { ...task, status: newStatus };
+                    return { ...task, status: newStatus, updatedAt: Date.now() };
                 }
                 return task;
             });
@@ -2560,7 +2947,7 @@
             
             tasks = tasks.map(task => {
                 if (task.id === selectedTaskId) {
-                    return { ...task, status: newStatus };
+                    return { ...task, status: newStatus, updatedAt: Date.now() };
                 }
                 return task;
             });
@@ -2619,6 +3006,7 @@
                     const taskPriorities = getTaskUserPriorities(task);
                     return {
                         ...task,
+                        updatedAt: Date.now(),
                         userPriorities: {
                             ...taskPriorities,
                             [currentUser.key]: priority
@@ -2660,6 +3048,8 @@
                     ru: 'meh',
                     kiki: 'meh'
                 },
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
                 addedByName: currentUser ? currentUser.name : 'Unknown',
                 addedByEmoji: currentUser ? currentUser.emoji : '❓'
             });
@@ -2743,7 +3133,8 @@
                     text,
                     from: currentUser.key,
                     addedByEmoji: currentUser.emoji,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    updatedAt: Date.now()
                 }
             ];
 
@@ -2754,6 +3145,40 @@
             input.value = '';
             saveFeedbackItems();
             renderFeedbackItems();
+        });
+
+        document.getElementById('tasteForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const typeValue = document.getElementById('tasteType').value;
+            const type = typeValue === 'food' ? 'food' : 'restaurant';
+            const input = document.getElementById('tasteInput');
+            const name = input.value.trim();
+            if (!name) return;
+
+            tasteItems = [
+                ...tasteItems,
+                {
+                    id: Date.now(),
+                    type,
+                    name,
+                    tried: false,
+                    rating: 0,
+                    from: currentUser.key,
+                    addedByEmoji: currentUser.emoji,
+                    timestamp: Date.now(),
+                    updatedAt: Date.now()
+                }
+            ];
+
+            if (tasteItems.length > 300) {
+                tasteItems = tasteItems.slice(-300);
+            }
+
+            input.value = '';
+            saveTasteItems();
+            renderTasteItems();
         });
 
         // ============================================
@@ -2920,12 +3345,20 @@
                     text.className = 'weekly-text';
                     text.textContent = item.text;
 
+                    const whenText = formatTinyTimestamp(item.updatedAt || item.createdAt || item.timestamp || item.id);
+                    const meta = document.createElement('div');
+                    meta.className = 'weekly-meta';
+                    meta.textContent = whenText ? `Updated ${whenText}` : '';
+
                     const ownerIcon = document.createElement('span');
                     ownerIcon.className = 'item-owner-icon';
                     ownerIcon.textContent = item.addedByEmoji || '❓';
 
                     card.appendChild(header);
                     card.appendChild(text);
+                    if (whenText) {
+                        card.appendChild(meta);
+                    }
                     card.appendChild(ownerIcon);
                     column.appendChild(card);
                 });
@@ -2953,6 +3386,8 @@
                 endTime,
                 text,
                 color,
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
                 addedByName: currentUser ? currentUser.name : 'Unknown',
                 addedByEmoji: currentUser ? currentUser.emoji : '❓'
             });
