@@ -718,6 +718,112 @@
             padding: 8px;
         }
 
+        .chess-panel {
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .chess-status {
+            font-size: 12px;
+            color: #003C74;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .chess-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .chess-controls button {
+            min-width: auto;
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+
+        .chess-board {
+            width: min(100%, 420px);
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            border: 2px solid #808080;
+            margin: 0 auto;
+            background: #808080;
+            gap: 1px;
+        }
+
+        .chess-square {
+            aspect-ratio: 1 / 1;
+            border: 0;
+            min-width: 0;
+            min-height: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            line-height: 1;
+            box-shadow: none;
+            cursor: pointer;
+        }
+
+        .chess-square-light {
+            background: #F2E6D9;
+        }
+
+        .chess-square-dark {
+            background: #C39A6B;
+        }
+
+        .chess-square-selected {
+            outline: 3px solid #0054E3;
+            outline-offset: -3px;
+        }
+
+        .chess-square-legal {
+            box-shadow: inset 0 0 0 3px #2E7D32;
+        }
+
+        .chess-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .chess-modal.visible {
+            display: flex;
+        }
+
+        .chess-modal-card {
+            width: min(100%, 360px);
+            border: 3px solid #0054E3;
+            background: #ECE9D8;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+            padding: 14px;
+            text-align: center;
+        }
+
+        .chess-modal-title {
+            color: #003C74;
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .chess-modal-text {
+            color: #000;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
         .option-button {
             width: 100%;
             padding: 20px;
@@ -1167,6 +1273,18 @@
                 grid-template-columns: 1fr;
             }
 
+            .chess-controls {
+                flex-direction: column;
+            }
+
+            .chess-controls button {
+                width: 100%;
+            }
+
+            .chess-square {
+                font-size: 24px;
+            }
+
             .weekly-form button {
                 width: 100%;
             }
@@ -1310,6 +1428,10 @@
                         <button class="option-button" onclick="showView('tasteView')">
                             <span>🍽️</span>
                             <span>Restaurants & Food to Try</span>
+                        </button>
+                        <button class="option-button" onclick="showView('chessView')">
+                            <span>♟️</span>
+                            <span>Chess</span>
                         </button>
                     </div>
 
@@ -1648,6 +1770,44 @@
                 </div>
             </div>
         </div>
+
+        <!-- Chess View -->
+        <div class="view" id="chessView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>♟️</span>
+                        <span>chess.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Chess</h1>
+                    <div class="chess-panel">
+                        <p class="chess-status" id="chessStatus">Turn: White</p>
+                        <div class="chess-controls">
+                            <button type="button" id="chessPlayAgainBtn">Play Again</button>
+                            <button type="button" id="chessResignBtn">Resign</button>
+                        </div>
+                        <div class="chess-board" id="chessBoard"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chess-modal" id="chessWinnerModal">
+        <div class="chess-modal-card">
+            <p class="chess-modal-title">Game Over</p>
+            <p class="chess-modal-text" id="chessWinnerText">Winner</p>
+            <button type="button" id="chessWinnerPlayAgainBtn">Play Again</button>
+        </div>
     </div>
 
     <div class="music-player">
@@ -1703,6 +1863,10 @@
             if (viewId === 'tasteView') {
                 initTaste();
             }
+
+            if (viewId === 'chessView') {
+                initChess();
+            }
             
             // Reset invitation view if going back
             if (viewId === 'invitationView') {
@@ -1751,6 +1915,11 @@
         let usersDbRef = null;
         let pendingUserKey = null;
         let pendingAuthMode = null;
+        let chessInitialized = false;
+        let chessBoardState = [];
+        let chessTurn = 'w';
+        let chessSelectedSquare = null;
+        let chessGameOver = false;
         const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
         const WEEK_DAYS = [
             { key: 'mon', label: 'Mon' },
@@ -1761,6 +1930,10 @@
             { key: 'sat', label: 'Sat' },
             { key: 'sun', label: 'Sun' }
         ];
+        const CHESS_PIECES = {
+            wK: '♔', wQ: '♕', wR: '♖', wB: '♗', wN: '♘', wP: '♙',
+            bK: '♚', bQ: '♛', bR: '♜', bB: '♝', bN: '♞', bP: '♟'
+        };
         const STORAGE_KEY = 'rugile_todo_tasks';
         const WEEKLY_STORAGE_KEY = 'rugile_weekly_items';
         const MOODS_STORAGE_KEY = 'rugile_user_moods';
@@ -1943,6 +2116,300 @@
                 month: 'short',
                 day: 'numeric'
             }).format(date);
+        }
+
+        function createInitialChessBoard() {
+            return [
+                ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+                ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+                [null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null],
+                ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+                ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
+            ];
+        }
+
+        function isInsideChessBoard(row, col) {
+            return row >= 0 && row < 8 && col >= 0 && col < 8;
+        }
+
+        function isWhiteChessPiece(piece) {
+            return Boolean(piece && piece[0] === 'w');
+        }
+
+        function isBlackChessPiece(piece) {
+            return Boolean(piece && piece[0] === 'b');
+        }
+
+        function getChessTurnLabel() {
+            return chessTurn === 'w' ? 'White ♔' : 'Black ♚';
+        }
+
+        function updateChessStatus(text) {
+            const status = document.getElementById('chessStatus');
+            if (!status) return;
+            status.textContent = text;
+        }
+
+        function getChessLegalMoves(row, col) {
+            const piece = chessBoardState[row]?.[col];
+            if (!piece) return [];
+
+            const color = piece[0];
+            const kind = piece[1];
+            const moves = [];
+
+            const tryAddMove = (targetRow, targetCol) => {
+                if (!isInsideChessBoard(targetRow, targetCol)) return;
+                const targetPiece = chessBoardState[targetRow][targetCol];
+                if (!targetPiece) {
+                    moves.push([targetRow, targetCol]);
+                    return;
+                }
+                if (targetPiece[0] !== color) {
+                    moves.push([targetRow, targetCol]);
+                }
+            };
+
+            const walkLine = (deltaRow, deltaCol) => {
+                let nextRow = row + deltaRow;
+                let nextCol = col + deltaCol;
+                while (isInsideChessBoard(nextRow, nextCol)) {
+                    const targetPiece = chessBoardState[nextRow][nextCol];
+                    if (!targetPiece) {
+                        moves.push([nextRow, nextCol]);
+                    } else {
+                        if (targetPiece[0] !== color) {
+                            moves.push([nextRow, nextCol]);
+                        }
+                        break;
+                    }
+                    nextRow += deltaRow;
+                    nextCol += deltaCol;
+                }
+            };
+
+            if (kind === 'P') {
+                const direction = color === 'w' ? -1 : 1;
+                const startRow = color === 'w' ? 6 : 1;
+                const oneStepRow = row + direction;
+
+                if (isInsideChessBoard(oneStepRow, col) && !chessBoardState[oneStepRow][col]) {
+                    moves.push([oneStepRow, col]);
+                    const twoStepRow = row + direction * 2;
+                    if (row === startRow && !chessBoardState[twoStepRow][col]) {
+                        moves.push([twoStepRow, col]);
+                    }
+                }
+
+                [[direction, -1], [direction, 1]].forEach(([deltaRow, deltaCol]) => {
+                    const targetRow = row + deltaRow;
+                    const targetCol = col + deltaCol;
+                    if (!isInsideChessBoard(targetRow, targetCol)) return;
+                    const targetPiece = chessBoardState[targetRow][targetCol];
+                    if (targetPiece && targetPiece[0] !== color) {
+                        moves.push([targetRow, targetCol]);
+                    }
+                });
+            }
+
+            if (kind === 'N') {
+                [
+                    [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+                    [1, -2], [1, 2], [2, -1], [2, 1]
+                ].forEach(([deltaRow, deltaCol]) => {
+                    tryAddMove(row + deltaRow, col + deltaCol);
+                });
+            }
+
+            if (kind === 'B' || kind === 'Q') {
+                [[-1, -1], [-1, 1], [1, -1], [1, 1]].forEach(([deltaRow, deltaCol]) => {
+                    walkLine(deltaRow, deltaCol);
+                });
+            }
+
+            if (kind === 'R' || kind === 'Q') {
+                [[-1, 0], [1, 0], [0, -1], [0, 1]].forEach(([deltaRow, deltaCol]) => {
+                    walkLine(deltaRow, deltaCol);
+                });
+            }
+
+            if (kind === 'K') {
+                for (let deltaRow = -1; deltaRow <= 1; deltaRow++) {
+                    for (let deltaCol = -1; deltaCol <= 1; deltaCol++) {
+                        if (!deltaRow && !deltaCol) continue;
+                        tryAddMove(row + deltaRow, col + deltaCol);
+                    }
+                }
+            }
+
+            return moves;
+        }
+
+        function isChessMoveLegal(fromRow, fromCol, toRow, toCol) {
+            const legalMoves = getChessLegalMoves(fromRow, fromCol);
+            return legalMoves.some(([row, col]) => row === toRow && col === toCol);
+        }
+
+        function getSelectedChessLegalSet() {
+            if (!chessSelectedSquare) return new Set();
+            const [row, col] = chessSelectedSquare;
+            const legalMoves = getChessLegalMoves(row, col);
+            return new Set(legalMoves.map(([targetRow, targetCol]) => `${targetRow},${targetCol}`));
+        }
+
+        function renderChessBoard() {
+            const board = document.getElementById('chessBoard');
+            if (!board) return;
+
+            board.innerHTML = '';
+            const legalMoveSet = getSelectedChessLegalSet();
+
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('button');
+                    square.type = 'button';
+                    square.className = 'chess-square';
+                    const isLightSquare = (row + col) % 2 === 0;
+                    square.classList.add(isLightSquare ? 'chess-square-light' : 'chess-square-dark');
+
+                    if (chessSelectedSquare && chessSelectedSquare[0] === row && chessSelectedSquare[1] === col) {
+                        square.classList.add('chess-square-selected');
+                    }
+
+                    if (legalMoveSet.has(`${row},${col}`)) {
+                        square.classList.add('chess-square-legal');
+                    }
+
+                    const piece = chessBoardState[row][col];
+                    square.textContent = piece ? CHESS_PIECES[piece] : '';
+                    square.addEventListener('click', () => handleChessSquareClick(row, col));
+                    board.appendChild(square);
+                }
+            }
+        }
+
+        function showChessWinnerPopup(message) {
+            const modal = document.getElementById('chessWinnerModal');
+            const text = document.getElementById('chessWinnerText');
+            if (!modal || !text) return;
+            text.textContent = message;
+            modal.classList.add('visible');
+        }
+
+        function hideChessWinnerPopup() {
+            const modal = document.getElementById('chessWinnerModal');
+            if (!modal) return;
+            modal.classList.remove('visible');
+        }
+
+        function finishChessGame(message) {
+            chessGameOver = true;
+            chessSelectedSquare = null;
+            updateChessStatus(`🏁 ${message}`);
+            renderChessBoard();
+            showChessWinnerPopup(message);
+            createConfetti();
+        }
+
+        function handleChessSquareClick(row, col) {
+            if (chessGameOver) return;
+
+            const clickedPiece = chessBoardState[row][col];
+            const isTurnPiece = chessTurn === 'w' ? isWhiteChessPiece(clickedPiece) : isBlackChessPiece(clickedPiece);
+
+            if (!chessSelectedSquare) {
+                if (!isTurnPiece) return;
+                chessSelectedSquare = [row, col];
+                renderChessBoard();
+                return;
+            }
+
+            const [fromRow, fromCol] = chessSelectedSquare;
+            if (fromRow === row && fromCol === col) {
+                chessSelectedSquare = null;
+                renderChessBoard();
+                return;
+            }
+
+            if (isTurnPiece) {
+                chessSelectedSquare = [row, col];
+                renderChessBoard();
+                return;
+            }
+
+            if (!isChessMoveLegal(fromRow, fromCol, row, col)) return;
+
+            const movingPiece = chessBoardState[fromRow][fromCol];
+            const capturedPiece = chessBoardState[row][col];
+            chessBoardState[row][col] = movingPiece;
+            chessBoardState[fromRow][fromCol] = null;
+
+            if (movingPiece === 'wP' && row === 0) {
+                chessBoardState[row][col] = 'wQ';
+            }
+            if (movingPiece === 'bP' && row === 7) {
+                chessBoardState[row][col] = 'bQ';
+            }
+
+            chessSelectedSquare = null;
+
+            if (capturedPiece === 'wK' || capturedPiece === 'bK') {
+                const winner = chessTurn === 'w' ? 'White ♔' : 'Black ♚';
+                finishChessGame(`${winner} wins!`);
+                return;
+            }
+
+            chessTurn = chessTurn === 'w' ? 'b' : 'w';
+            updateChessStatus(`Turn: ${getChessTurnLabel()}`);
+            renderChessBoard();
+        }
+
+        function resetChessGame() {
+            chessBoardState = createInitialChessBoard();
+            chessTurn = 'w';
+            chessSelectedSquare = null;
+            chessGameOver = false;
+            hideChessWinnerPopup();
+            updateChessStatus(`Turn: ${getChessTurnLabel()}`);
+            renderChessBoard();
+        }
+
+        function handleChessResign() {
+            if (chessGameOver) return;
+            const resigning = chessTurn === 'w' ? 'White ♔' : 'Black ♚';
+            const winner = chessTurn === 'w' ? 'Black ♚' : 'White ♔';
+            finishChessGame(`${winner} wins (${resigning} resigned).`);
+        }
+
+        function initChess() {
+            if (!chessInitialized) {
+                const playAgainBtn = document.getElementById('chessPlayAgainBtn');
+                const resignBtn = document.getElementById('chessResignBtn');
+                const modalPlayAgainBtn = document.getElementById('chessWinnerPlayAgainBtn');
+
+                if (playAgainBtn) {
+                    playAgainBtn.addEventListener('click', resetChessGame);
+                }
+                if (resignBtn) {
+                    resignBtn.addEventListener('click', handleChessResign);
+                }
+                if (modalPlayAgainBtn) {
+                    modalPlayAgainBtn.addEventListener('click', resetChessGame);
+                }
+
+                chessInitialized = true;
+            }
+
+            if (!chessBoardState.length) {
+                resetChessGame();
+                return;
+            }
+
+            updateChessStatus(chessGameOver ? '🏁 Game finished' : `Turn: ${getChessTurnLabel()}`);
+            renderChessBoard();
         }
 
         function saveUserStatus() {
