@@ -1225,6 +1225,17 @@
             text-overflow: ellipsis;
         }
 
+        .music-open-indicator {
+            font-size: 12px;
+            color: #003C74;
+            font-weight: bold;
+            border: 1px solid #808080;
+            background: #FFFFFF;
+            padding: 2px 6px;
+            line-height: 1;
+            user-select: none;
+        }
+
         .music-controls {
             display: flex;
             gap: 6px;
@@ -1276,9 +1287,9 @@
             height: 220px;
             margin: 0 auto;
             border-radius: 50%;
-            border: 2px solid #B0B0B0;
-            background: radial-gradient(circle at 50% 45%, #FDFDFD 0%, #EFEFEF 55%, #DFDFDF 100%);
-            box-shadow: inset 1px 1px 0 #FFFFFF;
+            border: 2px solid #808080;
+            background: #ECE9D8;
+            box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #FFFFFF;
             position: relative;
         }
 
@@ -1289,14 +1300,15 @@
             background: transparent;
             box-shadow: none;
             position: absolute;
-            color: #5A5A5A;
+            color: #003C74;
             font-size: 14px;
             font-weight: bold;
+            text-shadow: none;
         }
 
         .music-full-btn:hover {
             background: transparent;
-            color: #2F2F2F;
+            color: #0054E3;
         }
 
         .music-full-btn:active {
@@ -1338,23 +1350,25 @@
             width: 82px;
             height: 82px;
             border-radius: 50%;
-            border: 2px solid #C8C8C8;
-            background: #F8F8F8;
+            border: 3px solid;
+            border-color: #FFFFFF #808080 #808080 #FFFFFF;
+            background: linear-gradient(180deg, #FFFFFF 0%, #ECE9D8 100%);
+            box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #FFFFFF;
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
             cursor: pointer;
             font-size: 12px;
-            color: #555;
+            color: #003C74;
             font-weight: bold;
             font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
             padding: 0;
         }
 
         #musicFullCenterBtn:active {
-            background: #E8E8E8;
-            border: 2px solid #C8C8C8;
+            border-color: #808080 #FFFFFF #FFFFFF #808080;
+            box-shadow: inset 1px 1px 0 #808080;
         }
 
         .music-track-picker {
@@ -1495,6 +1509,11 @@
 
             .music-title {
                 font-size: 11px;
+            }
+
+            .music-open-indicator {
+                font-size: 11px;
+                padding: 2px 5px;
             }
 
             .music-full-controls {
@@ -2034,6 +2053,7 @@
 
     <div class="music-player" id="musicPlayerBar" title="Open full music player">
         <span class="music-title" id="musicTitle">kanye_west_homecoming.mp3</span>
+        <span class="music-open-indicator" aria-hidden="true">▴ Open</span>
         <div class="music-controls">
             <button type="button" id="musicPrevBtn" class="music-btn" title="Previous track">◀◀</button>
             <button type="button" id="musicPlayPauseBtn" class="music-btn" title="Play or pause">▶</button>
@@ -4120,7 +4140,8 @@
             'janis_joplin_piece_of_my_heart.mp3',
             'rodriguez_i_think_of_you.mp3',
             'belinda_carlisle_heaven_is_a_place_on_earth.mp3',
-            'pulp_disco_2000.mp3'
+            'pulp_disco_2000.mp3',
+            'the_cure_friday_im_in_love.mp3',
         ];
 
         let currentTrackIndex = 0;
