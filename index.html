@@ -1473,6 +1473,25 @@
             min-height: 28px;
         }
 
+        .photo-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .photo-delete-btn {
+            min-width: 0;
+            padding: 2px 8px;
+            font-size: 11px;
+        }
+
+        .photo-pending {
+            font-size: 10px;
+            font-weight: bold;
+            color: #0054E3;
+        }
+
         .photo-empty {
             grid-column: 1 / -1;
             font-size: 12px;
@@ -3388,7 +3407,23 @@
         }
 
         function savePhotoItems() {
-            localStorage.setItem(PHOTO_STORAGE_KEY, JSON.stringify(photoItems));
+            const persistableItems = photoItems
+                .filter((photo) => Boolean(photo?.imageData) && !photo?.isPending)
+                .map(({ id, imageData, description, timestamp, addedByEmoji, addedByName, addedByKey }) => ({
+                    id,
+                    imageData,
+                    description,
+                    timestamp,
+                    addedByEmoji,
+                    addedByName,
+                    addedByKey
+                }));
+
+            try {
+                localStorage.setItem(PHOTO_STORAGE_KEY, JSON.stringify(persistableItems));
+            } catch (error) {
+                console.error('Photo save failed:', error);
+            }
         }
 
         function loadPhotoItems() {
@@ -3398,10 +3433,31 @@
                 return;
             }
             try {
-                photoItems = JSON.parse(saved) || [];
+                const parsed = JSON.parse(saved) || [];
+                photoItems = Array.isArray(parsed)
+                    ? parsed
+                        .filter((item) => item?.imageData)
+                        .map((item) => {
+                            const uploaderByKey = item?.addedByKey ? USER_MAP[item.addedByKey] : null;
+                            const uploaderByEmoji = Object.values(USER_MAP).find((user) => user.emoji === item?.addedByEmoji) || null;
+                            const resolvedUploader = uploaderByKey || uploaderByEmoji;
+                            return {
+                                ...item,
+                                addedByEmoji: item?.addedByEmoji || resolvedUploader?.emoji || '❓',
+                                addedByName: item?.addedByName || resolvedUploader?.name || 'Unknown',
+                                addedByKey: item?.addedByKey || resolvedUploader?.key || null
+                            };
+                        })
+                    : [];
             } catch {
                 photoItems = [];
             }
+        }
+
+        function getPhotoUploaderLabel(photo) {
+            const emoji = photo?.addedByEmoji || '❓';
+            const name = photo?.addedByName || 'Unknown';
+            return `${emoji} ${name}`;
         }
 
         function openPhotoModal(photo) {
@@ -3441,7 +3497,7 @@
 
                 const image = document.createElement('img');
                 image.className = 'photo-thumb';
-                image.src = photo.imageData;
+                image.src = photo.imageData || photo.previewUrl || '';
                 image.alt = photo.description || 'Photo';
                 image.addEventListener('click', () => openPhotoModal(photo));
 
@@ -3449,17 +3505,47 @@
                 description.className = 'photo-description';
                 description.textContent = photo.description || 'No description';
 
+                const uploader = document.createElement('span');
+                uploader.className = 'tiny-meta';
+                uploader.textContent = `By ${getPhotoUploaderLabel(photo)}`;
+
+                const actions = document.createElement('div');
+                actions.className = 'photo-actions';
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'photo-delete-btn';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.dataset.photoId = String(photo.id);
+
+                actions.appendChild(uploader);
+                actions.appendChild(deleteBtn);
+
                 const whenText = formatTinyTimestamp(photo.timestamp);
+                if (photo.isPending) {
+                    const pending = document.createElement('span');
+                    pending.className = 'photo-pending';
+                    pending.textContent = 'Uploading...';
+                    card.appendChild(image);
+                    card.appendChild(description);
+                    card.appendChild(actions);
+                    card.appendChild(pending);
+                    grid.appendChild(card);
+                    return;
+                }
+
                 if (whenText) {
                     const meta = document.createElement('span');
                     meta.className = 'tiny-meta';
                     meta.textContent = `Added ${whenText}`;
                     card.appendChild(image);
                     card.appendChild(description);
+                    card.appendChild(actions);
                     card.appendChild(meta);
                 } else {
                     card.appendChild(image);
                     card.appendChild(description);
+                    card.appendChild(actions);
                 }
 
                 grid.appendChild(card);
@@ -4387,33 +4473,81 @@
             const file = fileInput.files && fileInput.files[0];
             if (!file) return;
 
+            const now = Date.now();
+            const tempId = `temp-${now}-${Math.random().toString(36).slice(2, 7)}`;
+            const previewUrl = URL.createObjectURL(file);
+
+            photoItems = [
+                ...photoItems,
+                {
+                    id: tempId,
+                    imageData: '',
+                    previewUrl,
+                    description: descriptionInput.value.trim(),
+                    timestamp: now,
+                    addedByEmoji: currentUser?.emoji || '❓',
+                    addedByName: currentUser?.name || 'Unknown',
+                    addedByKey: currentUser?.key || null,
+                    isPending: true
+                }
+            ];
+
+            fileInput.value = '';
+            descriptionInput.value = '';
+            renderPhotoAlbum();
+
             const reader = new FileReader();
             reader.onload = () => {
                 const imageData = typeof reader.result === 'string' ? reader.result : '';
-                if (!imageData) return;
+                if (!imageData) {
+                    photoItems = photoItems.filter((item) => item.id !== tempId);
+                    URL.revokeObjectURL(previewUrl);
+                    renderPhotoAlbum();
+                    return;
+                }
 
-                photoItems = [
-                    ...photoItems,
-                    {
+                photoItems = photoItems.map((item) => {
+                    if (item.id !== tempId) return item;
+                    return {
                         id: Date.now(),
                         imageData,
-                        description: descriptionInput.value.trim(),
-                        timestamp: Date.now(),
-                        addedByEmoji: currentUser?.emoji || '❓'
-                    }
-                ];
+                        description: item.description,
+                        timestamp: item.timestamp,
+                        addedByEmoji: item.addedByEmoji,
+                        addedByName: item.addedByName,
+                        addedByKey: item.addedByKey
+                    };
+                });
+
+                URL.revokeObjectURL(previewUrl);
 
                 if (photoItems.length > 200) {
                     photoItems = photoItems.slice(-200);
                 }
 
-                fileInput.value = '';
-                descriptionInput.value = '';
                 savePhotoItems();
                 renderPhotoAlbum();
             };
 
+            reader.onerror = () => {
+                photoItems = photoItems.filter((item) => item.id !== tempId);
+                URL.revokeObjectURL(previewUrl);
+                renderPhotoAlbum();
+            };
+
             reader.readAsDataURL(file);
+        });
+
+        document.getElementById('photoGrid').addEventListener('click', (event) => {
+            const deleteButton = event.target.closest('.photo-delete-btn');
+            if (!deleteButton) return;
+
+            const photoId = deleteButton.dataset.photoId;
+            if (!photoId) return;
+
+            photoItems = photoItems.filter((item) => String(item.id) !== photoId);
+            savePhotoItems();
+            renderPhotoAlbum();
         });
 
         document.getElementById('photoModalCloseBtn').addEventListener('click', closePhotoModal);
