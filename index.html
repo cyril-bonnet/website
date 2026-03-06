@@ -8,6 +8,7 @@
     <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
     <link rel="icon" type="image/png" href="maroon.png">
     <link rel="apple-touch-icon" href="maroon.png">
+    <link rel="manifest" href="manifest.webmanifest">
     <title>rugilė.exe</title>
     <style>
         * {
@@ -3423,6 +3424,8 @@
         const USER_STORAGE_KEY = 'rugile_current_user';
         const THEME_STORAGE_KEY = 'rugile_app_theme';
         const FIREBASE_BOARD_ID = 'rugile-shared-board';
+        const PUSH_BACKEND_BASE_URL = 'https://push-notif-521j.onrender.com';
+        const PUSH_BACKEND_API_KEY = 'xeZYEdRynoBhFKnpNpisOku5JfslqKlC';
         const PRIORITY_LABELS = {
             super: 'Really really want to do it',
             want: 'Want to do',
@@ -3467,6 +3470,9 @@
         };
         const notificationAudio = new Audio('notification.mp3');
         notificationAudio.preload = 'auto';
+        let pushWorkerRegistration = null;
+        let pushBoundUser = null;
+        let pushPermissionRequested = false;
 
         function normalizeTheme(themeId) {
             return THEME_LABELS[themeId] ? themeId : 'y2k';
@@ -3511,6 +3517,110 @@
                     const nextTheme = button.dataset.themeId;
                 applyTheme(nextTheme, { persist: true });
                 });
+            });
+        }
+
+        function getPushBackendUrl() {
+            return (PUSH_BACKEND_BASE_URL || '').replace(/\/+$/, '');
+        }
+
+        function isPushBackendConfigured() {
+            return Boolean(getPushBackendUrl()) && PUSH_BACKEND_BASE_URL !== 'https://YOUR-RENDERER-BACKEND.onrender.com';
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padded = `${base64String}${'='.repeat((4 - (base64String.length % 4)) % 4)}`;
+            const base64 = padded.replace(/-/g, '+').replace(/_/g, '/');
+            const rawData = atob(base64);
+            return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+        }
+
+        async function fetchPushBackendJson(endpointPath, options = {}) {
+            const baseUrl = getPushBackendUrl();
+            if (!baseUrl) return null;
+
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            };
+
+            if (PUSH_BACKEND_API_KEY && PUSH_BACKEND_API_KEY !== 'change-me') {
+                headers['x-api-key'] = PUSH_BACKEND_API_KEY;
+            }
+
+            const response = await fetch(`${baseUrl}${endpointPath}`, {
+                ...options,
+                headers
+            });
+
+            if (!response.ok) {
+                throw new Error(`Push backend request failed (${response.status})`);
+            }
+
+            if (response.status === 204) return null;
+            return response.json();
+        }
+
+        async function ensurePushWorkerRegistration() {
+            if (pushWorkerRegistration) return pushWorkerRegistration;
+            if (!('serviceWorker' in navigator) || !('PushManager' in window)) return null;
+
+            pushWorkerRegistration = await navigator.serviceWorker.register('./service-worker.js');
+            return pushWorkerRegistration;
+        }
+
+        async function ensurePushSubscriptionForCurrentUser({ forcePermissionPrompt = false } = {}) {
+            if (!currentUser || !isPushBackendConfigured()) return;
+            if (!('Notification' in window)) return;
+            if (pushBoundUser === currentUser.key) return;
+
+            let permission = Notification.permission;
+            if (permission === 'default' && (forcePermissionPrompt || !pushPermissionRequested)) {
+                pushPermissionRequested = true;
+                permission = await Notification.requestPermission();
+            }
+
+            if (permission !== 'granted') return;
+
+            const registration = await ensurePushWorkerRegistration();
+            if (!registration) return;
+
+            const vapidInfo = await fetchPushBackendJson('/api/push/public-key');
+            if (!vapidInfo?.publicKey) return;
+
+            let subscription = await registration.pushManager.getSubscription();
+            if (!subscription) {
+                subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(vapidInfo.publicKey)
+                });
+            }
+
+            if (!subscription) return;
+
+            await fetchPushBackendJson('/api/push/subscribe', {
+                method: 'POST',
+                body: JSON.stringify({
+                    userKey: currentUser.key,
+                    subscription
+                })
+            });
+
+            pushBoundUser = currentUser.key;
+        }
+
+        async function notifyBackendAboutChatMessage(message) {
+            if (!isPushBackendConfigured()) return;
+            if (!message?.text || !message?.from || !message?.to) return;
+
+            await fetchPushBackendJson('/api/chat/notify', {
+                method: 'POST',
+                body: JSON.stringify({
+                    from: message.from,
+                    to: message.to,
+                    text: message.text,
+                    timestamp: Number(message.timestamp) || Date.now()
+                })
             });
         }
 
@@ -5239,6 +5349,9 @@
             updateCurrentUserBar();
             hideLoginAuthPanel();
             showView('homeView');
+            ensurePushSubscriptionForCurrentUser({ forcePermissionPrompt: true }).catch((error) => {
+                console.warn('Push subscription setup failed after login.', error);
+            });
         }
 
         async function selectUser(userKey) {
@@ -5280,6 +5393,9 @@
                 currentUser = USER_MAP[savedUserKey];
                 updateCurrentUserBar();
                 showView('homeView');
+                ensurePushSubscriptionForCurrentUser().catch((error) => {
+                    console.warn('Push subscription restore failed.', error);
+                });
                 return;
             }
             hideLoginAuthPanel();
@@ -5872,14 +5988,17 @@
             const text = input.value.trim();
             if (!text) return;
 
+            const outgoingMessage = {
+                id: Date.now(),
+                from: currentUser.key,
+                to: getOtherUserKey(),
+                text,
+                timestamp: Date.now()
+            };
+
             chatMessages = [
                 ...chatMessages,
-                {
-                    id: Date.now(),
-                    from: currentUser.key,
-                    text,
-                    timestamp: Date.now()
-                }
+                outgoingMessage
             ];
 
             if (chatMessages.length > 120) {
@@ -5891,6 +6010,9 @@
             saveChatMessages();
             renderChatMessages();
             markChatAsSeen();
+            notifyBackendAboutChatMessage(outgoingMessage).catch((error) => {
+                console.warn('Chat push notify failed.', error);
+            });
         });
 
         const chatInput = document.getElementById('chatInput');
@@ -6556,6 +6678,7 @@
 
         document.getElementById('switchUserBtn').addEventListener('click', () => {
             currentUser = null;
+            pushBoundUser = null;
             localStorage.removeItem(USER_STORAGE_KEY);
             updateCurrentUserBar();
             showView('loginView');
