@@ -329,6 +329,41 @@
             display: flex;
         }
 
+        .current-user-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+        }
+
+        .dev-mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: #003C74;
+            font-weight: bold;
+            border: 1px solid #B0B0B0;
+            background: #ECE9D8;
+            padding: 4px 6px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .dev-mode-toggle input {
+            width: auto;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            flex: 0 0 auto;
+            min-width: 0;
+        }
+
+        .dev-only[hidden] {
+            display: none !important;
+        }
+
         #switchUserBtn {
             min-width: auto;
             width: 30px;
@@ -2078,7 +2113,13 @@
                 <button type="button" class="theme-icon-btn" data-theme-id="minimal" title="Minimal Modern">⚪</button>
                 <button type="button" class="theme-icon-btn" data-theme-id="nokia" title="Nokia Pixel">📟</button>
             </fieldset>
-            <button type="button" id="switchUserBtn">👤</button>
+            <div class="current-user-actions">
+                <label class="dev-mode-toggle" for="appDevModeToggle">
+                    <input type="checkbox" id="appDevModeToggle" />
+                    Dev Mode
+                </label>
+                <button type="button" id="switchUserBtn">👤</button>
+            </div>
         </div>
 
         <!-- User Select View -->
@@ -2211,7 +2252,7 @@
                             <div class="quick-note-inbox" id="quickNoteInbox">No note yet.</div>
                             <form class="quick-note-form" id="quickNoteForm">
                                 <input type="text" id="quickNoteInput" placeholder="Write a short note" maxlength="180" />
-                                <label class="quick-note-test-toggle" for="quickNoteSelfToggle">
+                                <label class="quick-note-test-toggle dev-only" id="quickNoteSelfLabel" for="quickNoteSelfToggle" hidden>
                                     <input type="checkbox" id="quickNoteSelfToggle" />
                                     Send to me (test)
                                 </label>
@@ -2761,6 +2802,7 @@
         let tasteHasSyncedOnce = false;
         let userStatus = { ru: { period: false }, kiki: { period: false } };
         let currentUser = null;
+        let appDevModeEnabled = false;
         let usersDbRef = null;
         let pendingUserKey = null;
         let pendingAuthMode = null;
@@ -2788,6 +2830,7 @@
         const WEEKLY_STORAGE_KEY = 'rugile_weekly_items';
         const MOODS_STORAGE_KEY = 'rugile_user_moods';
         const QUICK_NOTE_STORAGE_KEY = 'rugile_quick_notes';
+        const APP_DEV_MODE_STORAGE_KEY = 'rugile_app_dev_mode';
         const CHAT_STORAGE_KEY = 'rugile_chat_messages';
         const CHAT_LAST_SEEN_STORAGE_KEY = 'rugile_chat_last_seen';
         const SECTION_LAST_SEEN_STORAGE_KEY = 'rugile_section_last_seen';
@@ -3537,6 +3580,42 @@
                 quickNotes = JSON.parse(saved) || {};
             } catch {
                 quickNotes = {};
+            }
+        }
+
+        function loadAppDevMode() {
+            const saved = localStorage.getItem(APP_DEV_MODE_STORAGE_KEY);
+            appDevModeEnabled = saved === '1';
+            syncAppDevModeGlobal();
+        }
+
+        function saveAppDevMode() {
+            localStorage.setItem(APP_DEV_MODE_STORAGE_KEY, appDevModeEnabled ? '1' : '0');
+            syncAppDevModeGlobal();
+        }
+
+        function syncAppDevModeGlobal() {
+            window.appDevModeEnabled = appDevModeEnabled;
+        }
+
+        function renderDevOnlyElements() {
+            document.querySelectorAll('.dev-only').forEach((element) => {
+                element.hidden = !appDevModeEnabled;
+            });
+        }
+
+        function renderAppDevUi() {
+            const devToggle = document.getElementById('appDevModeToggle');
+            const selfToggle = document.getElementById('quickNoteSelfToggle');
+
+            if (devToggle) {
+                devToggle.checked = appDevModeEnabled;
+            }
+
+            renderDevOnlyElements();
+
+            if (!appDevModeEnabled && selfToggle) {
+                selfToggle.checked = false;
             }
         }
 
@@ -4435,6 +4514,7 @@
 
         function initSocial() {
             if (socialInitialized) {
+                renderAppDevUi();
                 renderQuickNoteInbox();
                 renderChatMessages();
                 renderPeriodControls();
@@ -4448,6 +4528,7 @@
                 loadQuickNotes();
                 loadChatMessages();
                 loadUserStatus();
+                renderAppDevUi();
                 renderQuickNoteInbox();
                 renderChatMessages();
                 renderPeriodControls();
@@ -4475,6 +4556,7 @@
 
             if (!currentUser) {
                 bar.classList.remove('visible');
+                renderAppDevUi();
                 renderChatUnreadBadge();
                 renderSectionUnreadBadges();
                 return;
@@ -4486,6 +4568,7 @@
                 switchUserBtn.title = `Switch user (current: ${currentUser.name})`;
             }
             bar.classList.add('visible');
+            renderAppDevUi();
             renderMoods();
             renderChatUnreadBadge();
             renderSectionUnreadBadges();
@@ -4588,6 +4671,7 @@
         }
 
         function initUserSession() {
+            loadAppDevMode();
             loadChatLastSeen();
             loadSectionLastSeen();
             const savedUserKey = localStorage.getItem(USER_STORAGE_KEY);
@@ -5131,7 +5215,8 @@
             const text = input.value.trim();
             if (!text) return;
 
-            const target = selfToggle?.checked ? currentUser.key : getOtherUserKey();
+            const canSelfSend = appDevModeEnabled;
+            const target = canSelfSend && selfToggle?.checked ? currentUser.key : getOtherUserKey();
             if (!target) return;
 
             const existingTargetValue = quickNotes[target];
@@ -5163,6 +5248,12 @@
             input.value = '';
             saveQuickNotes();
             renderQuickNoteInbox();
+        });
+
+        document.getElementById('appDevModeToggle').addEventListener('change', (event) => {
+            appDevModeEnabled = Boolean(event.target.checked);
+            saveAppDevMode();
+            renderAppDevUi();
         });
 
         document.getElementById('chatForm').addEventListener('submit', (e) => {
