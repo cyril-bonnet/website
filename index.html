@@ -675,9 +675,9 @@
 
         /* Home Page Styles */
         .home-options {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
             margin-top: 20px;
         }
 
@@ -686,6 +686,77 @@
             padding: 8px;
             border: 2px solid #808080;
             background: #FFFFFF;
+        }
+
+        .status-strip {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 6px;
+            flex: 1 1 220px;
+            min-width: 220px;
+        }
+
+        .status-glance {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 0;
+            min-height: 30px;
+        }
+
+        .status-user {
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        .status-mood-icon.mood-badge {
+            margin: 0;
+            padding: 1px 6px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .status-period-icon {
+            font-size: 11px;
+            line-height: 1;
+            color: #003C74;
+            min-width: 12px;
+            text-align: center;
+        }
+
+        .status-updated {
+            font-size: 9px;
+            color: #555;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .status-actions {
+            display: inline-flex;
+            margin-left: auto;
+        }
+
+        .status-toggle-btn {
+            min-width: auto;
+            padding: 2px 5px;
+            font-size: 10px;
+            line-height: 1;
+        }
+
+        .status-toggle-btn:active {
+            padding: 2px 5px;
+        }
+
+        .status-note {
+            margin-top: 1px;
+            margin-bottom: 4px;
+            font-size: 10px;
         }
 
         .mood-title {
@@ -1377,12 +1448,38 @@
 
         .option-button {
             width: 100%;
-            padding: 20px;
-            font-size: 16px;
+            min-width: 0;
+            aspect-ratio: 1 / 1;
+            padding: 8px 6px;
+            font-size: 12px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            gap: 10px;
+            align-items: center;
+            gap: 6px;
+            text-align: center;
+            position: relative;
+            background: rgba(255, 255, 255, 0.72);
+            border: 2px solid #6f86aa;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 1px 1px 0 rgba(0, 0, 0, 0.18);
+        }
+
+        .option-button > span:first-child {
+            font-size: clamp(38px, 5.2vw, 48px);
+            line-height: 1;
+        }
+
+        .option-button > span:nth-child(2) {
+            font-size: 10px;
+            line-height: 1.2;
+            font-weight: bold;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        .option-button:active {
+            padding: 8px 6px;
+            background: rgba(255, 255, 255, 0.65);
         }
 
         .chat-option-badge {
@@ -1392,12 +1489,16 @@
             min-width: 18px;
             height: 18px;
             padding: 0 5px;
+            border-radius: 999px;
             border: 1px solid #9B1C1C;
             background: #FF4D4D;
             color: #FFFFFF;
             font-size: 11px;
             line-height: 1;
             font-weight: bold;
+            position: absolute;
+            top: 6px;
+            right: 6px;
         }
 
         .back-button {
@@ -1855,136 +1956,401 @@
             text-overflow: ellipsis;
         }
 
+        .chat-launcher {
+            position: fixed;
+            right: 12px;
+            bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+            z-index: 1000;
+            width: 54px;
+            height: 54px;
+            min-width: 54px;
+            min-height: 54px;
+            aspect-ratio: 1 / 1;
+            border-radius: 999px;
+            border: 2px solid #0a4ca8;
+            background: radial-gradient(circle at 30% 26%, #71b7ff 0%, #3f8ef0 44%, #266ecb 100%);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .chat-launcher.hidden {
+            display: none;
+        }
+
+        .chat-launcher:active {
+            width: 54px;
+            height: 54px;
+            min-width: 54px;
+            min-height: 54px;
+            padding: 0;
+        }
+
+        .chat-launcher-icon {
+            font-size: 22px;
+            line-height: 1;
+            transform: translateY(-1px);
+            filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.2));
+            user-select: none;
+        }
+
+        .chat-launcher-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 999px;
+            border: 1px solid #7d0f0f;
+            background: #ff2a2a;
+            color: #ffffff;
+            font-size: 11px;
+            line-height: 1;
+            font-weight: bold;
+            box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.22);
+            pointer-events: none;
+        }
+
         .music-full-panel {
             border: 2px solid #808080;
-            background: #FFFFFF;
-            padding: 12px;
+            background: linear-gradient(180deg, #d9ddd2 0%, #c7ccbe 100%);
+            padding: 10px;
             margin-top: 8px;
         }
 
         .music-full-now {
-            background: #ECE9D8;
-            border: 1px solid #B0B0B0;
-            padding: 10px;
-            margin-bottom: 10px;
+            background: #b8c9a4;
+            border: 2px solid #4f5f43;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+            padding: 8px;
+            margin-bottom: 8px;
         }
 
         .music-full-head {
-            color: #003C74;
-            font-size: 13px;
+            color: #2d3a28;
+            font-size: 11px;
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
 
         .music-full-title {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
-            color: #111;
+            color: #1f2b18;
             word-break: break-word;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            font-family: 'Courier New', monospace;
         }
 
         .music-full-status {
-            font-size: 12px;
-            color: #003C74;
-            font-weight: bold;
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 12px;
+            margin-top: 2px;
+            color: #2f4521;
+        }
+
+        .music-full-status .eq-bar {
+            width: 3px;
+            height: 10px;
+            background: currentColor;
+            border-radius: 1px;
+            transform-origin: center bottom;
+            transform: scaleY(0.22);
+            opacity: 0.8;
+        }
+
+        .music-full-status.playing .eq-bar {
+            animation: music-eq-bounce 900ms ease-in-out infinite;
+            opacity: 1;
+        }
+
+        .music-full-status.playing .eq-bar:nth-child(1) { animation-duration: 820ms; animation-delay: -0.20s; }
+        .music-full-status.playing .eq-bar:nth-child(2) { animation-duration: 690ms; animation-delay: -0.45s; }
+        .music-full-status.playing .eq-bar:nth-child(3) { animation-duration: 980ms; animation-delay: -0.12s; }
+        .music-full-status.playing .eq-bar:nth-child(4) { animation-duration: 760ms; animation-delay: -0.34s; }
+        .music-full-status.playing .eq-bar:nth-child(5) { animation-duration: 910ms; animation-delay: -0.28s; }
+
+        .music-progress-wrap {
+            margin-top: 5px;
+        }
+
+        .music-progress-track {
+            width: 100%;
+            height: 8px;
+            border: 1px solid #4f5f43;
+            background: #d6e1c8;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+            overflow: hidden;
+        }
+
+        .music-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(180deg, #5f7e3d 0%, #3a5522 100%);
+            transition: width 120ms linear;
+        }
+
+        .music-progress-time {
+            margin-top: 3px;
+            font-size: 10px;
+            color: #2f4521;
+            font-family: 'Courier New', monospace;
+            text-align: right;
+            line-height: 1;
+        }
+
+        @keyframes music-eq-bounce {
+            0%, 100% { transform: scaleY(0.2); }
+            35% { transform: scaleY(0.95); }
+            70% { transform: scaleY(0.45); }
         }
 
         .music-full-controls {
-            width: 220px;
-            height: 220px;
-            margin: 0 auto;
-            border-radius: 50%;
-            border: 2px solid #808080;
-            background: #ECE9D8;
-            box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #FFFFFF;
-            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-rows: repeat(3, auto);
+            gap: 6px;
+            margin: 0;
+            border: 2px solid #6f7864;
+            background: #d5d8cc;
+            padding: 8px;
         }
 
         .music-full-btn {
-            min-width: auto;
-            padding: 0;
-            border: 0;
-            background: transparent;
-            box-shadow: none;
-            position: absolute;
-            color: #003C74;
-            font-size: 14px;
+            min-width: 0;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: 2px solid;
+            border-color: #ffffff #6f7864 #6f7864 #ffffff;
+            background: linear-gradient(180deg, #f4f6ee 0%, #c8ccbf 100%);
+            box-shadow: inset -1px -1px 0 #6f7864, inset 1px 1px 0 #ffffff;
+            position: static;
+            color: #23351e;
+            font-size: 12px;
             font-weight: bold;
             text-shadow: none;
+            padding: 8px 4px;
+            letter-spacing: 0.02em;
+        }
+
+        .music-full-btn-text {
+            font-size: 11px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .music-full-btn-icon {
+            display: inline-block;
+            position: relative;
+            width: 12px;
+            height: 12px;
+            flex: 0 0 12px;
+            color: currentColor;
+        }
+
+        .icon-menu::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 1px;
+            height: 2px;
+            background: currentColor;
+            box-shadow: 0 4px 0 currentColor, 0 8px 0 currentColor;
+        }
+
+        .icon-prev::before,
+        .icon-prev::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-right: 5px solid currentColor;
+            top: 1px;
+        }
+
+        .icon-prev::before {
+            left: 0;
+        }
+
+        .icon-prev::after {
+            left: 5px;
+        }
+
+        .icon-next::before,
+        .icon-next::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 5px solid currentColor;
+            top: 1px;
+        }
+
+        .icon-next::before {
+            left: 0;
+        }
+
+        .icon-next::after {
+            left: 5px;
+        }
+
+        .icon-play::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 8px solid currentColor;
+            left: 2px;
+            top: 0;
+        }
+
+        .icon-pause::before,
+        .icon-pause::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            width: 3px;
+            height: 10px;
+            background: currentColor;
+        }
+
+        .icon-pause::before {
+            left: 2px;
+        }
+
+        .icon-pause::after {
+            right: 2px;
+        }
+
+        .icon-select::before {
+            content: '';
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid currentColor;
+            border-radius: 2px;
+            box-sizing: border-box;
+        }
+
+        .icon-select::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 2px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 999px;
         }
 
         .music-full-btn:hover {
-            background: transparent;
-            color: #0054E3;
+            background: linear-gradient(180deg, #ffffff 0%, #d6dacd 100%);
+            color: #172112;
         }
 
         .music-full-btn:active {
-            border: 0;
-            box-shadow: none;
-            padding: 0;
+            border-color: #6f7864 #ffffff #ffffff #6f7864;
+            box-shadow: inset 1px 1px 0 #6f7864;
+            padding: 8px 4px;
         }
 
         #musicCloseBtn {
-            top: 14px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 13px;
-            letter-spacing: 0.6px;
+            grid-column: 2;
+            grid-row: 1;
         }
 
         #musicFullPrevBtn {
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
+            grid-column: 1;
+            grid-row: 2;
         }
 
         #musicFullNextBtn {
-            right: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
+            grid-column: 3;
+            grid-row: 2;
         }
 
         #musicFullPlayPauseBtn {
-            left: 50%;
-            bottom: 16px;
-            transform: translateX(-50%);
-            font-size: 13px;
+            grid-column: 2;
+            grid-row: 2;
         }
 
         #musicFullCenterBtn {
-            width: 82px;
-            height: 82px;
-            border-radius: 50%;
-            border: 3px solid;
-            border-color: #FFFFFF #808080 #808080 #FFFFFF;
-            background: linear-gradient(180deg, #FFFFFF 0%, #ECE9D8 100%);
-            box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #FFFFFF;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-            font-size: 12px;
-            color: #003C74;
+            width: 100%;
+            height: auto;
+            border-radius: 0;
+            position: static;
+            transform: none;
+            font-size: 11px;
+            color: #23351e;
             font-weight: bold;
             font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
-            padding: 0;
+            padding: 8px 4px;
+            grid-column: 2;
+            grid-row: 3;
         }
 
         #musicFullCenterBtn:active {
-            border-color: #808080 #FFFFFF #FFFFFF #808080;
-            box-shadow: inset 1px 1px 0 #808080;
+            border-color: #6f7864 #ffffff #ffffff #6f7864;
+            box-shadow: inset 1px 1px 0 #6f7864;
+            padding: 8px 4px;
         }
 
         .music-track-picker {
-            margin-top: 12px;
-            border: 1px solid #B0B0B0;
-            background: #ECE9D8;
+            margin-top: 8px;
+            border: 2px solid #6f7864;
+            background: #e3e6dc;
             padding: 8px;
             display: none;
+        }
+
+        .music-action-menu {
+            margin-top: 8px;
+            border: 2px solid #6f7864;
+            background: #e3e6dc;
+            padding: 8px;
+            display: none;
+        }
+
+        .music-action-menu.visible {
+            display: block;
+        }
+
+        .music-action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .music-action-btn {
+            width: 100%;
+            text-align: left;
+            min-width: 0;
+            padding: 5px 8px;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
         }
 
         .music-track-picker.visible {
@@ -1992,10 +2358,12 @@
         }
 
         .music-track-picker-head {
-            color: #003C74;
-            font-size: 12px;
+            color: #23351e;
+            font-size: 11px;
             font-weight: bold;
             margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         .music-track-list {
@@ -2009,14 +2377,15 @@
         .music-track-btn {
             width: 100%;
             text-align: left;
-            padding: 5px 8px;
+            padding: 4px 7px;
             min-width: 0;
-            font-size: 12px;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
         }
 
         .music-track-btn.active {
-            background: linear-gradient(180deg, #D6E9FF 0%, #A4C9FF 100%);
-            border-color: #FFFFFF #003C74 #003C74 #FFFFFF;
+            background: linear-gradient(180deg, #cad6b9 0%, #aab997 100%);
+            border-color: #ffffff #4f5f43 #4f5f43 #ffffff;
         }
 
         @media (max-width: 768px) {
@@ -2029,8 +2398,17 @@
             }
 
             .option-button {
-                font-size: 14px;
-                padding: 15px;
+                font-size: 12px;
+                padding: 8px 6px;
+            }
+
+            .option-button:active {
+                padding: 8px 6px;
+            }
+
+            .home-options {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
             }
 
             .add-task-form {
@@ -2152,6 +2530,33 @@
                 padding: 6px 8px;
             }
 
+            .chat-launcher {
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+                right: 8px;
+                bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+            }
+
+            .chat-launcher:active {
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+                padding: 0;
+            }
+
+            .chat-launcher-icon {
+                font-size: 20px;
+            }
+
+            .chat-launcher-badge {
+                min-width: 18px;
+                height: 18px;
+                font-size: 10px;
+            }
+
             .theme-icon-btn {
                 width: 26px;
                 height: 26px;
@@ -2168,14 +2573,56 @@
                 height: 110px;
             }
 
+            .status-strip {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+
+            .status-glance {
+                min-height: 28px;
+                padding: 4px;
+            }
+
+            .status-note {
+                margin-bottom: 3px;
+            }
+
             .music-full-controls {
-                width: 190px;
-                height: 190px;
+                width: 100%;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-rows: repeat(3, auto);
+                gap: 5px;
+                padding: 6px;
+            }
+
+            #musicCloseBtn {
+                grid-column: 2;
+                grid-row: 1;
+                font-size: 10px;
             }
 
             #musicFullCenterBtn {
-                width: 76px;
-                height: 76px;
+                grid-column: 2;
+                grid-row: 3;
+                font-size: 10px;
+            }
+
+            #musicFullPrevBtn {
+                grid-column: 1;
+                grid-row: 2;
+                font-size: 12px;
+            }
+
+            #musicFullPlayPauseBtn {
+                grid-column: 2;
+                grid-row: 2;
+                font-size: 10px;
+            }
+
+            #musicFullNextBtn {
+                grid-column: 3;
+                grid-row: 2;
+                font-size: 11px;
             }
         }
     </style>
@@ -2191,7 +2638,7 @@
                 <button type="button" class="theme-icon-btn" data-theme-id="nokia" title="Nokia Pixel">📟</button>
             </fieldset>
             <div class="current-user-actions">
-                <label class="dev-mode-toggle" for="appDevModeToggle">
+                <label class="dev-mode-toggle" id="appDevModeLabel" for="appDevModeToggle">
                     <input type="checkbox" id="appDevModeToggle" />
                     Dev Mode
                 </label>
@@ -2277,11 +2724,6 @@
                             <span>🦁</span>
                             <span>Weekly Planner</span>
                             <span class="chat-option-badge" id="weeklyUnreadBadge">NEW</span>
-                        </button>
-                        <button class="option-button" onclick="showView('chatView')">
-                            <span>💬</span>
-                            <span>Chat</span>
-                            <span class="chat-option-badge" id="chatUnreadBadge">NEW</span>
                         </button>
                         <button class="option-button" onclick="showView('feedbackView')">
                             <span>💡</span>
@@ -2694,15 +3136,51 @@
                         <div class="music-full-now">
                             <div class="music-full-head">Now Playing</div>
                             <div class="music-full-title" id="musicFullTitle">-</div>
-                            <div class="music-full-status" id="musicFullStatus">Paused</div>
+                            <div class="music-full-status" id="musicFullStatus" aria-label="Paused">
+                                <span class="eq-bar" aria-hidden="true"></span>
+                                <span class="eq-bar" aria-hidden="true"></span>
+                                <span class="eq-bar" aria-hidden="true"></span>
+                                <span class="eq-bar" aria-hidden="true"></span>
+                                <span class="eq-bar" aria-hidden="true"></span>
+                                <span class="sr-only" id="musicFullStatusText">Paused</span>
+                            </div>
+                            <div class="music-progress-wrap" aria-hidden="true">
+                                <div class="music-progress-track">
+                                    <div class="music-progress-fill" id="musicProgressFill"></div>
+                                </div>
+                                <div class="music-progress-time" id="musicProgressTime">0:00 / 0:00</div>
+                            </div>
                         </div>
 
                         <div class="music-full-controls">
-                            <button type="button" id="musicCloseBtn" class="music-full-btn">MENU</button>
-                            <button type="button" id="musicFullPrevBtn" class="music-full-btn">◀◀</button>
-                            <button type="button" id="musicFullNextBtn" class="music-full-btn">▶▶</button>
-                            <button type="button" id="musicFullPlayPauseBtn" class="music-full-btn">▶/⏸</button>
-                            <button type="button" id="musicFullCenterBtn" class="music-full-btn">SELECT</button>
+                            <button type="button" id="musicCloseBtn" class="music-full-btn">
+                                <span class="music-full-btn-icon icon-menu" aria-hidden="true"></span>
+                                <span class="music-full-btn-text">Menu</span>
+                            </button>
+                            <button type="button" id="musicFullPrevBtn" class="music-full-btn">
+                                <span class="music-full-btn-icon icon-prev" aria-hidden="true"></span>
+                                <span class="music-full-btn-text">Prev</span>
+                            </button>
+                            <button type="button" id="musicFullNextBtn" class="music-full-btn">
+                                <span class="music-full-btn-icon icon-next" aria-hidden="true"></span>
+                                <span class="music-full-btn-text">Next</span>
+                            </button>
+                            <button type="button" id="musicFullPlayPauseBtn" class="music-full-btn">
+                                <span class="music-full-btn-icon icon-play" id="musicFullPlayPauseIcon" aria-hidden="true"></span>
+                                <span class="music-full-btn-text" id="musicFullPlayPauseLabel">Play</span>
+                            </button>
+                            <button type="button" id="musicFullCenterBtn" class="music-full-btn">
+                                <span class="music-full-btn-icon icon-select" aria-hidden="true"></span>
+                                <span class="music-full-btn-text">Select</span>
+                            </button>
+                        </div>
+
+                        <div class="music-action-menu" id="musicActionMenu">
+                            <div class="music-action-list">
+                                <button type="button" id="musicActionBackBtn" class="music-action-btn">Back</button>
+                                <button type="button" id="musicActionShuffleBtn" class="music-action-btn">Shuffle: Off</button>
+                                <button type="button" id="musicActionLoopBtn" class="music-action-btn">Loop: Off</button>
+                            </div>
                         </div>
 
                         <div class="music-track-picker" id="musicTrackPicker">
@@ -2749,6 +3227,10 @@
 
     <button type="button" class="music-player" id="musicPlayerBar" title="Open full music player" aria-label="Open music player">
         <span class="music-vinyl" aria-hidden="true"></span>
+    </button>
+    <button type="button" class="chat-launcher" id="chatLauncherBtn" title="Open chat" aria-label="Open chat">
+        <span class="chat-launcher-icon" aria-hidden="true">💬</span>
+        <span class="chat-launcher-badge" id="chatUnreadBadge">0</span>
     </button>
     <div class="music-now-bubble" id="musicNowBubble" aria-live="polite" aria-atomic="true" hidden>
         <span class="music-now-label">Now Playing</span>
@@ -2819,15 +3301,27 @@
                 updateMusicUi();
             }
 
-            const musicBar = document.getElementById('musicPlayerBar');
-            if (musicBar) {
-                musicBar.classList.toggle('hidden', viewId === 'musicView');
-            }
+            updateFloatingLaunchers(viewId);
             updateBottomClearanceForMusicBar();
             
             // Reset invitation view if going back
             if (viewId === 'invitationView') {
                 resetInvitation();
+            }
+        }
+
+        function updateFloatingLaunchers(viewId = null) {
+            const activeViewId = viewId || document.querySelector('.view.active')?.id || 'loginView';
+            const musicBar = document.getElementById('musicPlayerBar');
+            const chatLauncherBtn = document.getElementById('chatLauncherBtn');
+            const hasUser = Boolean(currentUser);
+
+            if (musicBar) {
+                musicBar.classList.toggle('hidden', !hasUser || activeViewId === 'musicView');
+            }
+
+            if (chatLauncherBtn) {
+                chatLauncherBtn.classList.toggle('hidden', !hasUser || activeViewId === 'chatView');
             }
         }
 
@@ -3255,18 +3749,20 @@
 
         function normalizeUserStatus(raw) {
             const defaults = {
-                ru: { period: false, updatedAt: 0 },
-                kiki: { period: false, updatedAt: 0 }
+                ru: { period: false, updatedAt: 0, moodUpdatedAt: 0 },
+                kiki: { period: false, updatedAt: 0, moodUpdatedAt: 0 }
             };
             if (!raw || typeof raw !== 'object') return defaults;
             return {
                 ru: {
                     period: Boolean(raw.ru?.period),
-                    updatedAt: Number(raw.ru?.updatedAt) || 0
+                    updatedAt: Number(raw.ru?.updatedAt) || 0,
+                    moodUpdatedAt: Number(raw.ru?.moodUpdatedAt) || 0
                 },
                 kiki: {
                     period: Boolean(raw.kiki?.period),
-                    updatedAt: Number(raw.kiki?.updatedAt) || 0
+                    updatedAt: Number(raw.kiki?.updatedAt) || 0,
+                    moodUpdatedAt: Number(raw.kiki?.moodUpdatedAt) || 0
                 }
             };
         }
@@ -3694,11 +4190,23 @@
         }
 
         function renderAppDevUi() {
+            const devToggleLabel = document.getElementById('appDevModeLabel');
             const devToggle = document.getElementById('appDevModeToggle');
             const selfToggle = document.getElementById('quickNoteSelfToggle');
+            const isKiki = currentUser?.key === 'kiki';
+
+            if (!isKiki && appDevModeEnabled) {
+                appDevModeEnabled = false;
+                saveAppDevMode();
+            }
+
+            if (devToggleLabel) {
+                devToggleLabel.style.display = isKiki ? 'inline-flex' : 'none';
+            }
 
             if (devToggle) {
                 devToggle.checked = appDevModeEnabled;
+                devToggle.disabled = !isKiki;
             }
 
             renderDevOnlyElements();
@@ -4532,9 +5040,11 @@
 
             ruBadge.className = moodClass(userMoods.ru);
             ruBadge.textContent = `${MOOD_SYMBOLS[userMoods.ru]} ${MOOD_LABELS[userMoods.ru]}`;
+            ruBadge.title = `Ru mood: ${MOOD_LABELS[userMoods.ru]}`;
 
             kikiBadge.className = moodClass(userMoods.kiki);
             kikiBadge.textContent = `${MOOD_SYMBOLS[userMoods.kiki]} ${MOOD_LABELS[userMoods.kiki]}`;
+            kikiBadge.title = `Kiki mood: ${MOOD_LABELS[userMoods.kiki]}`;
 
             renderMoodButtonsFor('ru');
             renderMoodButtonsFor('kiki');
@@ -4645,6 +5155,7 @@
 
             if (!currentUser) {
                 bar.classList.remove('visible');
+                updateFloatingLaunchers();
                 renderAppDevUi();
                 renderChatUnreadBadge();
                 renderSectionUnreadBadges();
@@ -4657,6 +5168,7 @@
                 switchUserBtn.title = `Switch user (current: ${currentUser.name})`;
             }
             bar.classList.add('visible');
+            updateFloatingLaunchers();
             renderAppDevUi();
             renderMoods();
             renderChatUnreadBadge();
@@ -5340,6 +5852,13 @@
         });
 
         document.getElementById('appDevModeToggle').addEventListener('change', (event) => {
+            if (currentUser?.key !== 'kiki') {
+                event.target.checked = false;
+                appDevModeEnabled = false;
+                saveAppDevMode();
+                renderAppDevUi();
+                return;
+            }
             appDevModeEnabled = Boolean(event.target.checked);
             saveAppDevMode();
             renderAppDevUi();
@@ -5547,19 +6066,32 @@
         playerAudio.preload = 'metadata';
 
         const musicPlayerBar = document.getElementById('musicPlayerBar');
+        const chatLauncherBtn = document.getElementById('chatLauncherBtn');
         const musicNowBubble = document.getElementById('musicNowBubble');
         const musicNowTitle = document.getElementById('musicNowTitle');
         const musicFullTitle = document.getElementById('musicFullTitle');
         const musicFullStatus = document.getElementById('musicFullStatus');
+        const musicFullStatusText = document.getElementById('musicFullStatusText');
+        const musicProgressFill = document.getElementById('musicProgressFill');
+        const musicProgressTime = document.getElementById('musicProgressTime');
         const musicFullPrevBtn = document.getElementById('musicFullPrevBtn');
         const musicFullPlayPauseBtn = document.getElementById('musicFullPlayPauseBtn');
+        const musicFullPlayPauseIcon = document.getElementById('musicFullPlayPauseIcon');
+        const musicFullPlayPauseLabel = document.getElementById('musicFullPlayPauseLabel');
         const musicFullNextBtn = document.getElementById('musicFullNextBtn');
         const musicCloseBtn = document.getElementById('musicCloseBtn');
         const musicFullCenterBtn = document.getElementById('musicFullCenterBtn');
+        const musicActionMenu = document.getElementById('musicActionMenu');
+        const musicActionBackBtn = document.getElementById('musicActionBackBtn');
+        const musicActionShuffleBtn = document.getElementById('musicActionShuffleBtn');
+        const musicActionLoopBtn = document.getElementById('musicActionLoopBtn');
         const musicTrackPicker = document.getElementById('musicTrackPicker');
         const musicTrackList = document.getElementById('musicTrackList');
         let autoplayStarted = false;
         let musicPickerOpen = false;
+        let musicActionMenuOpen = false;
+        let shuffleEnabled = false;
+        let loopEnabled = false;
         let musicNowBubbleTimeoutId = null;
 
         function getMusicTrackLabel(src) {
@@ -5568,6 +6100,29 @@
                 .replace('.mp3', '')
                 .replace(/_/g, ' ')
                 .replace(/\b\w/g, (char) => char.toUpperCase());
+        }
+
+        function formatMusicTime(secondsRaw) {
+            const seconds = Math.max(0, Math.floor(Number(secondsRaw) || 0));
+            const minutes = Math.floor(seconds / 60);
+            const rest = seconds % 60;
+            return `${minutes}:${String(rest).padStart(2, '0')}`;
+        }
+
+        function updateMusicProgress() {
+            const duration = Number(playerAudio.duration);
+            const current = Number(playerAudio.currentTime) || 0;
+            const hasDuration = Number.isFinite(duration) && duration > 0;
+            const ratio = hasDuration ? Math.max(0, Math.min(1, current / duration)) : 0;
+
+            if (musicProgressFill) {
+                musicProgressFill.style.width = `${ratio * 100}%`;
+            }
+
+            if (musicProgressTime) {
+                const totalText = hasDuration ? formatMusicTime(duration) : '0:00';
+                musicProgressTime.textContent = `${formatMusicTime(current)} / ${totalText}`;
+            }
         }
 
         function updateMusicUi() {
@@ -5582,11 +6137,20 @@
                 musicFullTitle.textContent = title;
             }
             if (musicFullStatus) {
-                musicFullStatus.textContent = playing ? 'Playing' : 'Paused';
+                musicFullStatus.classList.toggle('playing', playing);
+                musicFullStatus.setAttribute('aria-label', playing ? 'Playing' : 'Paused');
             }
-            if (musicFullPlayPauseBtn) {
-                musicFullPlayPauseBtn.textContent = playing ? '⏸ Pause' : '▶ Play';
+            if (musicFullStatusText) {
+                musicFullStatusText.textContent = playing ? 'Playing' : 'Paused';
             }
+            if (musicFullPlayPauseIcon) {
+                musicFullPlayPauseIcon.className = `music-full-btn-icon ${playing ? 'icon-pause' : 'icon-play'}`;
+            }
+            if (musicFullPlayPauseLabel) {
+                musicFullPlayPauseLabel.textContent = playing ? 'Pause' : 'Play';
+            }
+
+            updateMusicProgress();
 
             renderMusicTrackList();
         }
@@ -5632,10 +6196,32 @@
             });
         }
 
+        function updateMusicActionMenuUi() {
+            if (musicActionShuffleBtn) {
+                musicActionShuffleBtn.textContent = `Shuffle: ${shuffleEnabled ? 'On' : 'Off'}`;
+            }
+            if (musicActionLoopBtn) {
+                musicActionLoopBtn.textContent = `Loop: ${loopEnabled ? 'On' : 'Off'}`;
+            }
+        }
+
+        function setMusicActionMenuOpen(open) {
+            musicActionMenuOpen = Boolean(open);
+            if (musicActionMenu) {
+                musicActionMenu.classList.toggle('visible', musicActionMenuOpen);
+            }
+            if (musicActionMenuOpen) {
+                updateMusicActionMenuUi();
+            }
+        }
+
         function setMusicPickerOpen(open) {
             musicPickerOpen = Boolean(open);
             if (musicTrackPicker) {
                 musicTrackPicker.classList.toggle('visible', musicPickerOpen);
+            }
+            if (musicPickerOpen) {
+                setMusicActionMenuOpen(false);
             }
         }
 
@@ -5644,6 +6230,21 @@
             if (musicPickerOpen) {
                 renderMusicTrackList();
             }
+        }
+
+        function toggleMusicActionMenu() {
+            setMusicPickerOpen(false);
+            setMusicActionMenuOpen(!musicActionMenuOpen);
+        }
+
+        function getRandomTrackIndex(excludeIndex = -1) {
+            if (!playlist.length) return -1;
+            if (playlist.length === 1) return 0;
+            let index = Math.floor(Math.random() * playlist.length);
+            while (index === excludeIndex) {
+                index = Math.floor(Math.random() * playlist.length);
+            }
+            return index;
         }
 
         function playTrackByIndex(index) {
@@ -5660,19 +6261,30 @@
         function openMusicView() {
             showView('musicView');
             setMusicPickerOpen(false);
+            setMusicActionMenuOpen(false);
         }
 
         function closeMusicView() {
             showView(lastViewId || 'homeView');
         }
 
-        function loadTrack(index) {
+        function loadTrack(index, options = {}) {
             if (!playlist.length) return;
-            currentTrackIndex = (index + playlist.length) % playlist.length;
+            const { wrap = true } = options;
+            let nextIndex = index;
+
+            if (wrap) {
+                nextIndex = (index + playlist.length) % playlist.length;
+            } else if (index < 0 || index >= playlist.length) {
+                return false;
+            }
+
+            currentTrackIndex = nextIndex;
             const src = playlist[currentTrackIndex];
             playerAudio.src = src;
             updateMusicUi();
             showNowPlayingBubble(src);
+            return true;
         }
 
         async function togglePlayPause() {
@@ -5690,8 +6302,21 @@
             }
         }
 
-        function nextTrack(autoplay = true) {
-            loadTrack(currentTrackIndex + 1);
+        function nextTrack(autoplay = true, options = {}) {
+            const { allowWrap = true, useShuffle = false } = options;
+            const nextIndex = useShuffle
+                ? getRandomTrackIndex(currentTrackIndex)
+                : currentTrackIndex + 1;
+
+            const loaded = useShuffle
+                ? loadTrack(nextIndex, { wrap: false })
+                : loadTrack(nextIndex, { wrap: allowWrap });
+
+            if (!loaded) {
+                updateMusicUi();
+                return false;
+            }
+
             if (autoplay) {
                 playerAudio.play().then(() => {
                     updateMusicUi();
@@ -5699,10 +6324,16 @@
                     updateMusicUi();
                 });
             }
+
+            return true;
         }
 
         function prevTrack() {
-            loadTrack(currentTrackIndex - 1);
+            const prevIndex = shuffleEnabled
+                ? getRandomTrackIndex(currentTrackIndex)
+                : currentTrackIndex - 1;
+
+            loadTrack(prevIndex, { wrap: !shuffleEnabled });
             playerAudio.play().then(() => {
                 autoplayStarted = true;
                 updateMusicUi();
@@ -5737,7 +6368,22 @@
         }
 
         playerAudio.addEventListener('ended', () => {
-            nextTrack(true);
+            if (shuffleEnabled) {
+                nextTrack(true, { allowWrap: true, useShuffle: true });
+                return;
+            }
+
+            if (loopEnabled) {
+                nextTrack(true, { allowWrap: true, useShuffle: false });
+                return;
+            }
+
+            const advanced = nextTrack(true, { allowWrap: false, useShuffle: false });
+            if (!advanced) {
+                playerAudio.pause();
+                playerAudio.currentTime = Number(playerAudio.duration) || 0;
+                updateMusicUi();
+            }
         });
 
         playerAudio.addEventListener('pause', () => {
@@ -5748,15 +6394,49 @@
             updateMusicUi();
         });
 
+        playerAudio.addEventListener('timeupdate', updateMusicProgress);
+        playerAudio.addEventListener('loadedmetadata', updateMusicProgress);
+        playerAudio.addEventListener('durationchange', updateMusicProgress);
+
         musicFullPrevBtn.addEventListener('click', prevTrack);
-        musicFullNextBtn.addEventListener('click', () => nextTrack(true));
+        musicFullNextBtn.addEventListener('click', () => nextTrack(true, {
+            allowWrap: true,
+            useShuffle: shuffleEnabled
+        }));
         musicFullPlayPauseBtn.addEventListener('click', togglePlayPause);
         musicFullCenterBtn.addEventListener('click', toggleMusicPicker);
-        musicCloseBtn.addEventListener('click', closeMusicView);
+        musicCloseBtn.addEventListener('click', toggleMusicActionMenu);
+
+        if (musicActionBackBtn) {
+            musicActionBackBtn.addEventListener('click', () => {
+                setMusicActionMenuOpen(false);
+                closeMusicView();
+            });
+        }
+
+        if (musicActionShuffleBtn) {
+            musicActionShuffleBtn.addEventListener('click', () => {
+                shuffleEnabled = !shuffleEnabled;
+                updateMusicActionMenuUi();
+            });
+        }
+
+        if (musicActionLoopBtn) {
+            musicActionLoopBtn.addEventListener('click', () => {
+                loopEnabled = !loopEnabled;
+                updateMusicActionMenuUi();
+            });
+        }
 
         if (musicPlayerBar) {
             musicPlayerBar.addEventListener('click', () => {
                 openMusicView();
+            });
+        }
+
+        if (chatLauncherBtn) {
+            chatLauncherBtn.addEventListener('click', () => {
+                showView('chatView');
             });
         }
 
