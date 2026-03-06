@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex, nofollow">
     <link rel="icon" type="image/png" href="maroon.png">
@@ -27,6 +27,11 @@
             overflow-x: hidden;
             overflow-y: auto;
             -webkit-text-size-adjust: 100%;
+        }
+
+        html,
+        body {
+            touch-action: manipulation;
         }
 
         input,
@@ -459,6 +464,11 @@
             gap: 6px;
         }
 
+        .chat-form {
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
         .quick-note-form input,
         .chat-form input {
             flex: 1;
@@ -470,11 +480,31 @@
             background: #FFFFFF;
         }
 
+        .chat-form textarea {
+            flex: 1;
+            min-width: 0;
+            min-height: 46px;
+            max-height: 120px;
+            resize: none;
+            overflow-y: auto;
+            line-height: 1.3;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            width: 100%;
+        }
+
         .quick-note-form button,
         .chat-form button {
             min-width: auto;
             padding: 5px 10px;
             font-size: 12px;
+        }
+
+        .chat-form button {
+            width: 100%;
         }
 
         .chat-view-window {
@@ -494,27 +524,81 @@
             gap: 6px;
         }
 
+        .chat-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            max-width: 100%;
+        }
+
+        .chat-row-me {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .chat-row-other {
+            align-self: flex-start;
+        }
+
+        .chat-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid #808080;
+            background: linear-gradient(180deg, #FFFFFF 0%, #E6E6E6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
         .chat-line {
             font-size: 12px;
             line-height: 1.3;
             color: #111;
             word-break: break-word;
-            max-width: 85%;
+            max-width: min(85%, 520px);
             padding: 6px 8px;
             border: 2px solid #808080;
             background: #FFFFFF;
+            border-radius: 12px;
+            position: relative;
         }
 
         .chat-line-me {
-            align-self: flex-end;
             background: #D6E9FF;
             border-color: #6699CC;
         }
 
         .chat-line-other {
-            align-self: flex-start;
             background: #FFFFFF;
             border-color: #808080;
+        }
+
+        .chat-line-other::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            bottom: 7px;
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-right: 10px solid #808080;
+        }
+
+        .chat-line-me::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            bottom: 8px;
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-left: 10px solid #6699CC;
         }
 
         .chat-line-empty {
@@ -533,11 +617,21 @@
             color: #003C74;
         }
 
+        .chat-message-text {
+            white-space: pre-wrap;
+        }
+
         .feedback-panel {
             border: 2px solid #808080;
             background: #FFFFFF;
             padding: 10px;
             margin-top: 10px;
+        }
+
+        .feedback-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 6px;
         }
 
         .feedback-list {
@@ -561,6 +655,11 @@
             word-break: break-word;
         }
 
+        .feedback-item-done {
+            background: #F2F2F2;
+            border-color: #B0B0B0;
+        }
+
         .feedback-item-head {
             display: flex;
             justify-content: space-between;
@@ -570,6 +669,32 @@
             font-weight: bold;
             font-size: 11px;
             gap: 8px;
+        }
+
+        .feedback-item-head-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-item-head-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-section-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #003C74;
+            margin-top: 4px;
+            margin-bottom: 2px;
+        }
+
+        .feedback-action-btn {
+            min-width: auto;
+            padding: 2px 7px;
+            font-size: 11px;
         }
 
         .feedback-type {
@@ -614,75 +739,67 @@
         .taste-list {
             background: #ECE9D8;
             border: 1px solid #B0B0B0;
-            min-height: 220px;
+            min-height: 260px;
+            height: min(52vh, 420px);
             max-height: 420px;
-            overflow-y: auto;
+            overflow: hidden;
             padding: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-content: flex-start;
+            position: relative;
         }
 
         .taste-bubble {
-            border: 2px solid #808080;
-            padding: 8px;
-            min-width: 180px;
+            border: 1px solid #7EA8CF;
+            padding: 6px;
+            min-width: 92px;
+            width: min(118px, calc(100% - 12px));
             max-width: 100%;
             cursor: pointer;
             user-select: none;
             word-break: break-word;
             display: flex;
-            flex-direction: column;
-            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            will-change: transform;
+            border-radius: 50%;
+            aspect-ratio: 1 / 1;
+            min-height: 92px;
+            box-shadow: inset 0 10px 16px rgba(255, 255, 255, 0.45), 0 2px 8px rgba(0, 60, 116, 0.2);
         }
 
         .taste-bubble-restaurant {
-            background: #E9D6FF;
+            background: radial-gradient(circle at 32% 28%, #FFFFFF 0%, #F4E7FF 36%, #DCC5F5 100%);
         }
 
         .taste-bubble-food {
-            background: #FFD6F2;
+            background: radial-gradient(circle at 32% 28%, #FFFFFF 0%, #FFEAF8 36%, #F8CFEA 100%);
         }
 
         .taste-bubble-tried {
-            background: #CFF7D3;
+            background: radial-gradient(circle at 32% 28%, #FFFFFF 0%, #E8FFE8 36%, #BFEAC5 100%);
         }
 
-        .taste-bubble-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 6px;
-            color: #003C74;
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        .taste-label {
-            border: 1px solid #808080;
-            background: #FFFFFF;
-            padding: 1px 6px;
+        .taste-bubble-name {
             font-size: 11px;
-            font-weight: bold;
-        }
-
-        .taste-name {
-            font-size: 13px;
             font-weight: bold;
             color: #111;
         }
 
-        .taste-status {
+        .taste-summary {
             font-size: 11px;
             color: #003C74;
             font-weight: bold;
+            margin-top: 8px;
         }
 
-        .taste-rating {
+        .taste-rating-row {
             display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            margin-top: 8px;
         }
 
         .taste-star {
@@ -690,6 +807,62 @@
             padding: 2px 5px;
             font-size: 13px;
             line-height: 1;
+        }
+
+        .taste-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2050;
+            padding: 20px;
+        }
+
+        .taste-modal.visible {
+            display: flex;
+        }
+
+        .taste-modal-card {
+            width: min(100%, 460px);
+            border: 3px solid #0054E3;
+            background: #ECE9D8;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+            padding: 12px;
+        }
+
+        .taste-modal-title {
+            color: #003C74;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .taste-modal-meta {
+            color: #003C74;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .taste-modal-review {
+            width: 100%;
+            min-height: 92px;
+            resize: vertical;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            margin-top: 6px;
+        }
+
+        .taste-modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .taste-form {
@@ -1490,15 +1663,23 @@
             }
 
             .quick-note-form,
-            .chat-form,
             .period-buttons {
                 flex-direction: column;
             }
 
+            .chat-form {
+                flex-direction: row;
+                align-items: flex-end;
+            }
+
             .quick-note-form button,
-            .chat-form button,
             .period-btn {
                 width: 100%;
+            }
+
+            .chat-form button {
+                width: auto;
+                white-space: nowrap;
             }
 
             .music-player {
@@ -1895,7 +2076,7 @@
                     <h1>Chat</h1>
                     <div class="chat-messages" id="chatMessages"></div>
                     <form class="chat-form" id="chatForm">
-                        <input type="text" id="chatInput" placeholder="Write a message" maxlength="220" />
+                        <textarea id="chatInput" placeholder="Write a message" maxlength="220" rows="1"></textarea>
                         <button type="submit">Send</button>
                     </form>
                 </div>
@@ -1921,6 +2102,9 @@
                 <div class="window-content">
                     <h1>Feature Feedback</h1>
                     <div class="feedback-panel">
+                        <div class="feedback-toolbar">
+                            <button type="button" id="feedbackDoneToggleBtn" class="feedback-action-btn">Hide Done</button>
+                        </div>
                         <div class="feedback-list" id="feedbackList"></div>
                         <form class="feedback-form" id="feedbackForm">
                             <select id="feedbackType">
@@ -2051,6 +2235,30 @@
         </div>
     </div>
 
+    <div class="taste-modal" id="tasteModal">
+        <div class="taste-modal-card">
+            <p class="taste-modal-title" id="tasteModalTitle">Taste Item</p>
+            <p class="taste-modal-meta" id="tasteModalMeta"></p>
+
+            <button type="button" id="tasteModalTriedBtn">Mark as tried</button>
+
+            <div class="taste-rating-row">
+                <span class="tiny-meta">Your rating:</span>
+                <div id="tasteModalRating"></div>
+            </div>
+
+            <div class="taste-summary" id="tasteModalRatingSummary"></div>
+
+            <label class="tiny-meta" for="tasteModalReviewInput">Your review:</label>
+            <textarea id="tasteModalReviewInput" class="taste-modal-review" maxlength="280" placeholder="Write your thoughts..."></textarea>
+
+            <div class="taste-modal-actions">
+                <button type="button" id="tasteModalSaveBtn">Save Review</button>
+                <button type="button" id="tasteModalCloseBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
     <div class="music-player" id="musicPlayerBar" title="Open full music player">
         <span class="music-title" id="musicTitle">kanye_west_homecoming.mp3</span>
         <span class="music-open-indicator" aria-hidden="true">▴ Open</span>
@@ -2112,6 +2320,9 @@
             if (viewId === 'tasteView') {
                 initTaste();
                 markSectionSeen('taste');
+            } else {
+                stopTasteBubbleAnimation();
+                closeTasteModal();
             }
 
             if (viewId === 'chessView') {
@@ -2167,7 +2378,12 @@
         let quickNotes = {};
         let chatMessages = [];
         let feedbackItems = [];
+        let feedbackDoneCollapsed = true;
         let tasteItems = [];
+        let tasteBubbleAnimationId = null;
+        let tasteBubbleBodies = [];
+        let tasteBubbleLastTick = 0;
+        let activeTasteItemId = null;
         let chatHasSyncedOnce = false;
         let todoHasSyncedOnce = false;
         let weeklyHasSyncedOnce = false;
@@ -2969,21 +3185,32 @@
 
             const recent = chatMessages.slice(-40);
             recent.forEach((msg) => {
+                const row = document.createElement('div');
+                row.className = 'chat-row';
+
                 const line = document.createElement('div');
                 line.className = 'chat-line';
-                if (currentUser && msg.from === currentUser.key) {
+                const isMine = Boolean(currentUser && msg.from === currentUser.key);
+                if (isMine) {
+                    row.classList.add('chat-row-me');
                     line.classList.add('chat-line-me');
                 } else {
+                    row.classList.add('chat-row-other');
                     line.classList.add('chat-line-other');
                 }
 
                 const author = USER_MAP[msg.from] || { emoji: '❓' };
 
+                const avatar = document.createElement('span');
+                avatar.className = 'chat-avatar';
+                avatar.textContent = `${author.emoji}`;
+
                 const authorLine = document.createElement('span');
                 authorLine.className = 'chat-author';
-                authorLine.textContent = `${author.emoji}`;
+                authorLine.textContent = isMine ? 'You' : (author.name || 'Unknown');
 
                 const textLine = document.createElement('span');
+                textLine.className = 'chat-message-text';
                 textLine.textContent = msg.text;
 
                 const whenText = formatTinyTimestamp(msg.timestamp);
@@ -2996,7 +3223,10 @@
                 if (whenText) {
                     line.appendChild(metaLine);
                 }
-                list.appendChild(line);
+
+                row.appendChild(avatar);
+                row.appendChild(line);
+                list.appendChild(row);
             });
 
             list.scrollTop = list.scrollHeight;
@@ -3021,18 +3251,51 @@
                 return;
             }
             try {
-                feedbackItems = JSON.parse(saved) || [];
+                const parsed = JSON.parse(saved) || [];
+                feedbackItems = Array.isArray(parsed)
+                    ? parsed.map((item) => ({
+                        ...item,
+                        done: Boolean(item?.done)
+                    }))
+                    : [];
             } catch {
                 feedbackItems = [];
             }
+        }
+
+        function setFeedbackDone(itemId, done) {
+            feedbackItems = feedbackItems.map((item) => {
+                if (item.id !== itemId) return item;
+                return {
+                    ...item,
+                    done,
+                    doneAt: done ? Date.now() : null,
+                    doneBy: done ? (currentUser?.key || null) : null,
+                    updatedAt: Date.now()
+                };
+            });
+
+            saveFeedbackItems();
+            renderFeedbackItems();
+        }
+
+        function toggleFeedbackDoneSection() {
+            feedbackDoneCollapsed = !feedbackDoneCollapsed;
+            renderFeedbackItems();
         }
 
         function renderFeedbackItems() {
             const list = document.getElementById('feedbackList');
             if (!list) return;
 
+            const doneToggleBtn = document.getElementById('feedbackDoneToggleBtn');
+
             list.innerHTML = '';
             if (!feedbackItems.length) {
+                if (doneToggleBtn) {
+                    doneToggleBtn.textContent = 'Hide Done';
+                    doneToggleBtn.disabled = true;
+                }
                 const empty = document.createElement('div');
                 empty.className = 'feedback-empty';
                 empty.textContent = 'No feedback yet. Add the first one.';
@@ -3041,12 +3304,44 @@
             }
 
             const latestFirst = [...feedbackItems].slice(-120).reverse();
-            latestFirst.forEach((item) => {
+            const openItems = latestFirst.filter((item) => !item.done);
+            const doneItems = latestFirst.filter((item) => item.done);
+
+            if (doneToggleBtn) {
+                if (doneItems.length) {
+                    doneToggleBtn.disabled = false;
+                    doneToggleBtn.textContent = feedbackDoneCollapsed
+                        ? `Show Done (${doneItems.length})`
+                        : `Hide Done (${doneItems.length})`;
+                } else {
+                    doneToggleBtn.disabled = true;
+                    doneToggleBtn.textContent = 'Hide Done';
+                }
+            }
+
+            const renderSection = (titleText, items, isDoneSection) => {
+                if (!items.length) return;
+
+                const title = document.createElement('div');
+                title.className = 'feedback-section-title';
+                title.textContent = titleText;
+                list.appendChild(title);
+
+                items.forEach((item) => {
                 const row = document.createElement('div');
                 row.className = 'feedback-item';
+                if (isDoneSection) {
+                    row.classList.add('feedback-item-done');
+                }
 
                 const head = document.createElement('div');
                 head.className = 'feedback-item-head';
+
+                const headLeft = document.createElement('div');
+                headLeft.className = 'feedback-item-head-left';
+
+                const headRight = document.createElement('div');
+                headRight.className = 'feedback-item-head-right';
 
                 const author = document.createElement('span');
                 author.textContent = `${item.addedByEmoji || '❓'}`;
@@ -3055,23 +3350,38 @@
                 type.className = 'feedback-type';
                 type.textContent = item.type || 'Feedback';
 
+                const actionBtn = document.createElement('button');
+                actionBtn.type = 'button';
+                actionBtn.className = 'feedback-action-btn';
+                actionBtn.textContent = isDoneSection ? 'Reopen' : 'Done';
+                actionBtn.addEventListener('click', () => setFeedbackDone(item.id, !isDoneSection));
+
                 const text = document.createElement('div');
                 text.textContent = item.text || '';
 
-                const whenText = formatTinyTimestamp(item.updatedAt || item.timestamp);
+                const whenText = formatTinyTimestamp((isDoneSection ? item.doneAt : item.updatedAt) || item.timestamp);
                 const meta = document.createElement('span');
                 meta.className = 'tiny-meta';
-                meta.textContent = whenText ? `Updated ${whenText}` : '';
+                meta.textContent = whenText
+                    ? `${isDoneSection ? 'Done' : 'Updated'} ${whenText}`
+                    : '';
 
-                head.appendChild(author);
-                head.appendChild(type);
+                headLeft.appendChild(author);
+                headLeft.appendChild(type);
+                headRight.appendChild(meta);
+                headRight.appendChild(actionBtn);
+                head.appendChild(headLeft);
+                head.appendChild(headRight);
                 row.appendChild(head);
                 row.appendChild(text);
-                if (whenText) {
-                    row.appendChild(meta);
-                }
                 list.appendChild(row);
-            });
+                });
+            };
+
+            renderSection('Open', openItems, false);
+            if (!feedbackDoneCollapsed) {
+                renderSection('Done', doneItems, true);
+            }
         }
 
         function initFeedback() {
@@ -3106,16 +3416,338 @@
                 return;
             }
             try {
-                tasteItems = JSON.parse(saved) || [];
+                const parsed = JSON.parse(saved) || [];
+                tasteItems = Array.isArray(parsed)
+                    ? parsed.map((item) => {
+                        const legacyRating = Number(item?.rating) || 0;
+                        const normalizedRatings = {
+                            ru: Number(item?.userRatings?.ru) || 0,
+                            kiki: Number(item?.userRatings?.kiki) || 0
+                        };
+                        if (!item?.userRatings && legacyRating > 0) {
+                            if (item?.from && USER_MAP[item.from]) {
+                                normalizedRatings[item.from] = legacyRating;
+                            } else {
+                                normalizedRatings.ru = legacyRating;
+                            }
+                        }
+
+                        return {
+                            ...item,
+                            userRatings: normalizedRatings,
+                            userReviews: {
+                                ru: typeof item?.userReviews?.ru === 'string' ? item.userReviews.ru : '',
+                                kiki: typeof item?.userReviews?.kiki === 'string' ? item.userReviews.kiki : ''
+                            }
+                        };
+                    })
+                    : [];
             } catch {
                 tasteItems = [];
             }
+        }
+
+        function getTasteItemById(itemId) {
+            return tasteItems.find((entry) => String(entry.id) === String(itemId)) || null;
+        }
+
+        function getTasteUserRating(item, userKey) {
+            if (!item || !userKey) return 0;
+            return Number(item.userRatings?.[userKey]) || 0;
+        }
+
+        function ratingStarsText(value) {
+            const count = Math.max(0, Math.min(5, Number(value) || 0));
+            if (!count) return 'No rating';
+            return '⭐'.repeat(count);
+        }
+
+        function closeTasteModal() {
+            const modal = document.getElementById('tasteModal');
+            if (!modal) return;
+            modal.classList.remove('visible');
+            activeTasteItemId = null;
+        }
+
+        function renderTasteModal() {
+            const item = getTasteItemById(activeTasteItemId);
+            if (!item) {
+                closeTasteModal();
+                return;
+            }
+
+            const title = document.getElementById('tasteModalTitle');
+            const meta = document.getElementById('tasteModalMeta');
+            const triedBtn = document.getElementById('tasteModalTriedBtn');
+            const ratingWrap = document.getElementById('tasteModalRating');
+            const summary = document.getElementById('tasteModalRatingSummary');
+            const reviewInput = document.getElementById('tasteModalReviewInput');
+            const saveBtn = document.getElementById('tasteModalSaveBtn');
+
+            if (!title || !meta || !triedBtn || !ratingWrap || !summary || !reviewInput || !saveBtn) return;
+
+            title.textContent = item.name || 'Taste Item';
+            const kind = item.type === 'food' ? 'Food' : 'Restaurant';
+            const owner = item.addedByEmoji || '❓';
+            meta.textContent = `${owner} • ${kind} • ${item.tried ? '✅ Tried / Went to' : '🕒 To try'}`;
+
+            const userKey = currentUser?.key || null;
+            const canEdit = Boolean(userKey);
+            const myRating = canEdit ? getTasteUserRating(item, userKey) : 0;
+
+            triedBtn.disabled = !canEdit;
+            triedBtn.textContent = item.tried ? 'Mark as not tried' : 'Mark as tried';
+
+            ratingWrap.innerHTML = '';
+            for (let starIndex = 1; starIndex <= 5; starIndex++) {
+                const star = document.createElement('button');
+                star.type = 'button';
+                star.className = 'taste-star';
+                star.textContent = starIndex <= myRating ? '⭐' : '☆';
+                star.disabled = !canEdit;
+                star.addEventListener('click', () => {
+                    if (!currentUser) return;
+                    tasteItems = tasteItems.map((entry) => {
+                        if (entry.id !== item.id) return entry;
+                        return {
+                            ...entry,
+                            userRatings: {
+                                ru: Number(entry.userRatings?.ru) || 0,
+                                kiki: Number(entry.userRatings?.kiki) || 0,
+                                [currentUser.key]: starIndex
+                            },
+                            updatedAt: Date.now(),
+                            updatedBy: currentUser.key
+                        };
+                    });
+                    saveTasteItems();
+                    renderTasteItems();
+                    renderTasteModal();
+                });
+                ratingWrap.appendChild(star);
+            }
+
+            const ruRating = ratingStarsText(getTasteUserRating(item, 'ru'));
+            const kikiRating = ratingStarsText(getTasteUserRating(item, 'kiki'));
+            summary.textContent = `Ru: ${ruRating} • Kiki: ${kikiRating}`;
+
+            const ruReview = (item.userReviews?.ru || '').trim();
+            const kikiReview = (item.userReviews?.kiki || '').trim();
+            const reviewSummaryParts = [];
+            if (ruReview) reviewSummaryParts.push(`Ru: “${ruReview}”`);
+            if (kikiReview) reviewSummaryParts.push(`Kiki: “${kikiReview}”`);
+            if (reviewSummaryParts.length) {
+                summary.textContent = `${summary.textContent} • ${reviewSummaryParts.join(' • ')}`;
+            }
+
+            reviewInput.disabled = !canEdit;
+            saveBtn.disabled = !canEdit;
+            reviewInput.value = canEdit
+                ? (item.userReviews?.[userKey] || '')
+                : '';
+            reviewInput.placeholder = canEdit
+                ? 'Write your thoughts...'
+                : 'Pick a user to leave a review';
+        }
+
+        function openTasteModal(itemId) {
+            const modal = document.getElementById('tasteModal');
+            if (!modal) return;
+
+            activeTasteItemId = itemId;
+            renderTasteModal();
+            modal.classList.add('visible');
+        }
+
+        function stopTasteBubbleAnimation() {
+            if (tasteBubbleAnimationId) {
+                cancelAnimationFrame(tasteBubbleAnimationId);
+                tasteBubbleAnimationId = null;
+            }
+            tasteBubbleBodies = [];
+            tasteBubbleLastTick = 0;
+        }
+
+        function startTasteBubbleAnimation() {
+            const list = document.getElementById('tasteList');
+            if (!list) return;
+
+            const bubbles = Array.from(list.querySelectorAll('.taste-bubble'));
+            if (!bubbles.length) {
+                stopTasteBubbleAnimation();
+                return;
+            }
+
+            stopTasteBubbleAnimation();
+
+            const innerWidth = Math.max(1, list.clientWidth - 16);
+            const innerHeight = Math.max(1, list.clientHeight - 16);
+            const bubbleSize = Math.max(92, Math.min(118, Math.floor(innerWidth * 0.22)));
+
+            bubbles.forEach((bubble) => {
+                bubble.style.width = `${bubbleSize}px`;
+            });
+
+            const placedRects = [];
+            tasteBubbleBodies = bubbles.map((bubble, index) => {
+                const width = Math.min(innerWidth, bubble.offsetWidth || bubbleSize);
+                const height = Math.min(innerHeight, bubble.offsetHeight || bubbleSize);
+                const maxX = Math.max(0, innerWidth - width);
+                const maxY = Math.max(0, innerHeight - height);
+
+                let x = maxX ? Math.random() * maxX : 0;
+                let y = maxY ? Math.random() * maxY : 0;
+                const minGap = 16;
+                for (let attempt = 0; attempt < 48; attempt++) {
+                    const overlaps = placedRects.some((rect) => {
+                        return !(
+                            x + width + minGap < rect.x ||
+                            rect.x + rect.width + minGap < x ||
+                            y + height + minGap < rect.y ||
+                            rect.y + rect.height + minGap < y
+                        );
+                    });
+                    if (!overlaps) break;
+                    x = maxX ? Math.random() * maxX : 0;
+                    y = maxY ? Math.random() * maxY : 0;
+                }
+
+                placedRects.push({ x, y, width, height });
+                const speed = 8 + (index % 4) * 1.7 + Math.random() * 2;
+                const angle = Math.random() * Math.PI * 2;
+                const wobbleAmplitude = 2 + Math.random() * 3;
+                const wobbleSpeed = 1.1 + Math.random() * 1.2;
+                const wobblePhase = Math.random() * Math.PI * 2;
+
+                bubble.style.transform = `translate(${x}px, ${y}px)`;
+
+                return {
+                    bubble,
+                    x,
+                    y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    wobbleAmplitude,
+                    wobbleSpeed,
+                    wobblePhase,
+                    width,
+                    height
+                };
+            });
+
+            const tick = (timestamp) => {
+                const listNode = document.getElementById('tasteList');
+                if (!listNode || !tasteBubbleBodies.length) {
+                    stopTasteBubbleAnimation();
+                    return;
+                }
+
+                if (!tasteBubbleLastTick) {
+                    tasteBubbleLastTick = timestamp;
+                }
+
+                const deltaSeconds = Math.min(0.05, (timestamp - tasteBubbleLastTick) / 1000);
+                tasteBubbleLastTick = timestamp;
+
+                const maxX = Math.max(0, listNode.clientWidth - 16);
+                const maxY = Math.max(0, listNode.clientHeight - 16);
+
+                tasteBubbleBodies.forEach((body) => {
+                    const localMaxX = Math.max(0, maxX - body.width);
+                    const localMaxY = Math.max(0, maxY - body.height);
+
+                    body.x += body.vx * deltaSeconds;
+                    body.y += body.vy * deltaSeconds;
+
+                    if (body.x <= 0) {
+                        body.x = 0;
+                        body.vx = Math.abs(body.vx);
+                    } else if (body.x >= localMaxX) {
+                        body.x = localMaxX;
+                        body.vx = -Math.abs(body.vx);
+                    }
+
+                    if (body.y <= 0) {
+                        body.y = 0;
+                        body.vy = Math.abs(body.vy);
+                    } else if (body.y >= localMaxY) {
+                        body.y = localMaxY;
+                        body.vy = -Math.abs(body.vy);
+                    }
+                });
+
+                for (let i = 0; i < tasteBubbleBodies.length; i++) {
+                    for (let j = i + 1; j < tasteBubbleBodies.length; j++) {
+                        const a = tasteBubbleBodies[i];
+                        const b = tasteBubbleBodies[j];
+
+                        const ar = Math.min(a.width, a.height) / 2;
+                        const br = Math.min(b.width, b.height) / 2;
+                        const acx = a.x + a.width / 2;
+                        const acy = a.y + a.height / 2;
+                        const bcx = b.x + b.width / 2;
+                        const bcy = b.y + b.height / 2;
+
+                        const dx = bcx - acx;
+                        const dy = bcy - acy;
+                        const minDist = ar + br;
+                        const distSq = dx * dx + dy * dy;
+
+                        if (distSq >= minDist * minDist) continue;
+
+                        const dist = Math.sqrt(distSq) || 0.0001;
+                        const nx = dx / dist;
+                        const ny = dy / dist;
+                        const overlap = minDist - dist;
+
+                        a.x -= nx * (overlap / 2);
+                        a.y -= ny * (overlap / 2);
+                        b.x += nx * (overlap / 2);
+                        b.y += ny * (overlap / 2);
+
+                        const aMaxX = Math.max(0, maxX - a.width);
+                        const aMaxY = Math.max(0, maxY - a.height);
+                        const bMaxX = Math.max(0, maxX - b.width);
+                        const bMaxY = Math.max(0, maxY - b.height);
+
+                        a.x = Math.min(aMaxX, Math.max(0, a.x));
+                        a.y = Math.min(aMaxY, Math.max(0, a.y));
+                        b.x = Math.min(bMaxX, Math.max(0, b.x));
+                        b.y = Math.min(bMaxY, Math.max(0, b.y));
+
+                        const relativeVelocity = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+                        if (relativeVelocity < 0) {
+                            const bounce = 0.92;
+                            const impulse = -(1 + bounce) * relativeVelocity / 2;
+                            a.vx -= impulse * nx;
+                            a.vy -= impulse * ny;
+                            b.vx += impulse * nx;
+                            b.vy += impulse * ny;
+                        }
+                    }
+                }
+
+                tasteBubbleBodies.forEach((body) => {
+                    const localMaxX = Math.max(0, maxX - body.width);
+                    const localMaxY = Math.max(0, maxY - body.height);
+                    const wobbleX = Math.sin((timestamp / 1000) * body.wobbleSpeed + body.wobblePhase) * body.wobbleAmplitude;
+                    const wobbleY = Math.cos((timestamp / 1000) * body.wobbleSpeed + body.wobblePhase) * (body.wobbleAmplitude * 0.7);
+                    const renderX = Math.min(localMaxX, Math.max(0, body.x + wobbleX));
+                    const renderY = Math.min(localMaxY, Math.max(0, body.y + wobbleY));
+                    body.bubble.style.transform = `translate(${renderX}px, ${renderY}px)`;
+                });
+
+                tasteBubbleAnimationId = requestAnimationFrame(tick);
+            };
+
+            tasteBubbleAnimationId = requestAnimationFrame(tick);
         }
 
         function renderTasteItems() {
             const list = document.getElementById('tasteList');
             if (!list) return;
 
+            stopTasteBubbleAnimation();
             list.innerHTML = '';
             if (!tasteItems.length) {
                 const empty = document.createElement('div');
@@ -3131,83 +3763,17 @@
                 const typeClass = item.type === 'food' ? 'taste-bubble-food' : 'taste-bubble-restaurant';
                 const statusClass = item.tried ? ' taste-bubble-tried' : '';
                 bubble.className = `taste-bubble ${typeClass}${statusClass}`;
-                bubble.addEventListener('click', () => {
-                    tasteItems = tasteItems.map((entry) => {
-                        if (entry.id === item.id) {
-                            return {
-                                ...entry,
-                                tried: !entry.tried,
-                                updatedAt: Date.now(),
-                                updatedBy: currentUser?.key || null
-                            };
-                        }
-                        return entry;
-                    });
-                    saveTasteItems();
-                    renderTasteItems();
-                });
-
-                const head = document.createElement('div');
-                head.className = 'taste-bubble-head';
-
-                const label = document.createElement('span');
-                label.className = 'taste-label';
-                label.textContent = item.type === 'food' ? '🍜 Food' : '🍽️ Restaurant';
-
-                const owner = document.createElement('span');
-                owner.textContent = item.addedByEmoji || '❓';
-
-                head.appendChild(label);
-                head.appendChild(owner);
+                bubble.title = item.type === 'food' ? 'Food' : 'Restaurant';
+                bubble.addEventListener('click', () => openTasteModal(item.id));
 
                 const name = document.createElement('div');
-                name.className = 'taste-name';
+                name.className = 'taste-bubble-name';
                 name.textContent = item.name || '';
-
-                const status = document.createElement('div');
-                status.className = 'taste-status';
-                status.textContent = item.tried ? '✅ Tried / Went to' : '🕒 To try';
-
-                const ratingWrap = document.createElement('div');
-                ratingWrap.className = 'taste-rating';
-                const currentRating = Number(item.rating) || 0;
-                for (let starIndex = 1; starIndex <= 5; starIndex++) {
-                    const star = document.createElement('button');
-                    star.type = 'button';
-                    star.className = 'taste-star';
-                    star.textContent = starIndex <= currentRating ? '⭐' : '☆';
-                    star.addEventListener('click', (event) => {
-                        event.stopPropagation();
-                        tasteItems = tasteItems.map((entry) => {
-                            if (entry.id === item.id) {
-                                return {
-                                    ...entry,
-                                    rating: starIndex,
-                                    updatedAt: Date.now(),
-                                    updatedBy: currentUser?.key || null
-                                };
-                            }
-                            return entry;
-                        });
-                        saveTasteItems();
-                        renderTasteItems();
-                    });
-                    ratingWrap.appendChild(star);
-                }
-
-                bubble.appendChild(head);
                 bubble.appendChild(name);
-                bubble.appendChild(status);
-                bubble.appendChild(ratingWrap);
-                const whenText = formatTinyTimestamp(item.updatedAt || item.timestamp);
-                if (whenText) {
-                    const meta = document.createElement('span');
-                    meta.className = 'tiny-meta';
-                    meta.textContent = `Updated ${whenText}`;
-                    bubble.appendChild(meta);
-                }
                 list.appendChild(bubble);
             });
+
+            startTasteBubbleAnimation();
         }
 
         function initTaste() {
@@ -4055,10 +4621,44 @@
             }
 
             input.value = '';
+            input.style.height = '46px';
             saveChatMessages();
             renderChatMessages();
             markChatAsSeen();
         });
+
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput) {
+            const resizeChatInput = () => {
+                chatInput.style.height = '46px';
+                chatInput.style.height = `${Math.min(chatInput.scrollHeight, 120)}px`;
+            };
+
+            chatInput.addEventListener('input', resizeChatInput);
+            resizeChatInput();
+
+            chatInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    const form = document.getElementById('chatForm');
+                    if (form) {
+                        form.requestSubmit();
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('gesturestart', (event) => {
+            event.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('gesturechange', (event) => {
+            event.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('gestureend', (event) => {
+            event.preventDefault();
+        }, { passive: false });
 
         document.getElementById('feedbackForm').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -4077,6 +4677,7 @@
                     text,
                     from: currentUser.key,
                     addedByEmoji: currentUser.emoji,
+                    done: false,
                     timestamp: Date.now(),
                     updatedAt: Date.now()
                 }
@@ -4089,6 +4690,10 @@
             input.value = '';
             saveFeedbackItems();
             renderFeedbackItems();
+        });
+
+        document.getElementById('feedbackDoneToggleBtn').addEventListener('click', () => {
+            toggleFeedbackDoneSection();
         });
 
         document.getElementById('tasteForm').addEventListener('submit', (e) => {
@@ -4108,7 +4713,8 @@
                     type,
                     name,
                     tried: false,
-                    rating: 0,
+                    userRatings: { ru: 0, kiki: 0 },
+                    userReviews: { ru: '', kiki: '' },
                     from: currentUser.key,
                     updatedBy: currentUser.key,
                     addedByEmoji: currentUser.emoji,
@@ -4124,6 +4730,63 @@
             input.value = '';
             saveTasteItems();
             renderTasteItems();
+        });
+
+        document.getElementById('tasteModalCloseBtn').addEventListener('click', closeTasteModal);
+
+        document.getElementById('tasteModal').addEventListener('click', (event) => {
+            if (event.target.id === 'tasteModal') {
+                closeTasteModal();
+            }
+        });
+
+        document.getElementById('tasteModalTriedBtn').addEventListener('click', () => {
+            if (!currentUser || activeTasteItemId == null) return;
+
+            tasteItems = tasteItems.map((entry) => {
+                if (String(entry.id) !== String(activeTasteItemId)) return entry;
+                return {
+                    ...entry,
+                    tried: !entry.tried,
+                    updatedAt: Date.now(),
+                    updatedBy: currentUser.key
+                };
+            });
+
+            saveTasteItems();
+            renderTasteItems();
+            renderTasteModal();
+        });
+
+        document.getElementById('tasteModalSaveBtn').addEventListener('click', () => {
+            if (!currentUser || activeTasteItemId == null) return;
+
+            const reviewInput = document.getElementById('tasteModalReviewInput');
+            const reviewText = reviewInput ? reviewInput.value.trim() : '';
+
+            tasteItems = tasteItems.map((entry) => {
+                if (String(entry.id) !== String(activeTasteItemId)) return entry;
+                return {
+                    ...entry,
+                    userReviews: {
+                        ru: typeof entry.userReviews?.ru === 'string' ? entry.userReviews.ru : '',
+                        kiki: typeof entry.userReviews?.kiki === 'string' ? entry.userReviews.kiki : '',
+                        [currentUser.key]: reviewText
+                    },
+                    updatedAt: Date.now(),
+                    updatedBy: currentUser.key
+                };
+            });
+
+            saveTasteItems();
+            renderTasteItems();
+            renderTasteModal();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeTasteModal();
+            }
         });
 
         // ============================================
