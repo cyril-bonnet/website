@@ -20,7 +20,7 @@
             font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
             min-height: 100vh;
             padding: 20px;
-            padding-bottom: 86px;
+            padding-bottom: var(--app-bottom-clearance, calc(86px + env(safe-area-inset-bottom, 0px)));
             background: #5B9BD5;
             background-image: 
                 repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px),
@@ -1747,55 +1747,112 @@
 
         .music-player {
             position: fixed;
-            left: 10px;
-            right: 10px;
+            right: 12px;
             bottom: calc(12px + env(safe-area-inset-bottom, 0px));
             z-index: 1000;
             border: 2px solid #0054E3;
             background: #ECE9D8;
             box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
-            padding: 6px;
-            display: flex;
+            width: 54px;
+            height: 54px;
+            min-width: 54px;
+            min-height: 54px;
+            aspect-ratio: 1 / 1;
+            border-radius: 999px;
+            padding: 0;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
             cursor: pointer;
+        }
+
+        .music-player:active {
+            width: 54px;
+            height: 54px;
+            min-width: 54px;
+            min-height: 54px;
+            padding: 0;
         }
 
         .music-player.hidden {
             display: none;
         }
 
-        .music-title {
-            flex: 1;
-            min-width: 0;
-            font-size: 12px;
+        .music-vinyl {
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            border: 2px solid #1f2f58;
+            background: radial-gradient(circle at 34% 28%, #4f4f4f 0%, #242424 35%, #121212 70%, #060606 100%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 0;
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.07), inset 0 0 0 8px rgba(255, 255, 255, 0.03);
+        }
+
+        .music-vinyl::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #F2F2F2;
+            transform: translate(-50%, -50%);
+        }
+
+        .music-player.playing .music-vinyl {
+            animation: vinyl-spin 2.2s linear infinite;
+        }
+
+        @keyframes vinyl-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .music-now-bubble {
+            position: fixed;
+            right: 76px;
+            bottom: calc(17px + env(safe-area-inset-bottom, 0px));
+            z-index: 999;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            color: #003C74;
+            padding: 7px 10px;
+            min-width: 170px;
+            max-width: min(70vw, 360px);
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 180ms ease, transform 180ms ease;
+        }
+
+        .music-now-bubble.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .music-now-label {
+            display: block;
+            font-size: 10px;
+            color: #555;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .music-now-title {
+            display: block;
+            font-size: 11px;
             color: #003C74;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-
-        .music-open-indicator {
-            font-size: 12px;
-            color: #003C74;
-            font-weight: bold;
-            border: 1px solid #808080;
-            background: #FFFFFF;
-            padding: 2px 6px;
-            line-height: 1;
-            user-select: none;
-        }
-
-        .music-controls {
-            display: flex;
-            gap: 6px;
-        }
-
-        .music-btn {
-            min-width: auto;
-            padding: 4px 8px;
-            font-size: 12px;
         }
 
         .music-full-panel {
@@ -2061,9 +2118,38 @@
             }
 
             .music-player {
-                left: 6px;
-                right: 6px;
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+                right: 8px;
                 bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+            }
+
+            .music-player:active {
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+                padding: 0;
+            }
+
+            .music-vinyl {
+                width: 32px;
+                height: 32px;
+            }
+
+            .music-vinyl::after {
+                width: 7px;
+                height: 7px;
+            }
+
+            .music-now-bubble {
+                right: 62px;
+                bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+                min-width: 132px;
+                max-width: min(68vw, 280px);
+                padding: 6px 8px;
             }
 
             .theme-icon-btn {
@@ -2080,15 +2166,6 @@
 
             .home-note-overlay {
                 height: 110px;
-            }
-
-            .music-title {
-                font-size: 11px;
-            }
-
-            .music-open-indicator {
-                font-size: 11px;
-                padding: 2px 5px;
             }
 
             .music-full-controls {
@@ -2670,14 +2747,12 @@
         </div>
     </div>
 
-    <div class="music-player" id="musicPlayerBar" title="Open full music player">
-        <span class="music-title" id="musicTitle">kanye_west_homecoming.mp3</span>
-        <span class="music-open-indicator" aria-hidden="true">▴ Open</span>
-        <div class="music-controls">
-            <button type="button" id="musicPrevBtn" class="music-btn" title="Previous track">◀◀</button>
-            <button type="button" id="musicPlayPauseBtn" class="music-btn" title="Play or pause">▶</button>
-            <button type="button" id="musicNextBtn" class="music-btn" title="Next track">▶▶</button>
-        </div>
+    <button type="button" class="music-player" id="musicPlayerBar" title="Open full music player" aria-label="Open music player">
+        <span class="music-vinyl" aria-hidden="true"></span>
+    </button>
+    <div class="music-now-bubble" id="musicNowBubble" aria-live="polite" aria-atomic="true" hidden>
+        <span class="music-now-label">Now Playing</span>
+        <span class="music-now-title" id="musicNowTitle">-</span>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -2748,11 +2823,25 @@
             if (musicBar) {
                 musicBar.classList.toggle('hidden', viewId === 'musicView');
             }
+            updateBottomClearanceForMusicBar();
             
             // Reset invitation view if going back
             if (viewId === 'invitationView') {
                 resetInvitation();
             }
+        }
+
+        function updateBottomClearanceForMusicBar() {
+            const musicBar = document.getElementById('musicPlayerBar');
+            if (!musicBar || musicBar.classList.contains('hidden')) {
+                document.body.style.setProperty('--app-bottom-clearance', '20px');
+                return;
+            }
+
+            const computed = window.getComputedStyle(musicBar);
+            const bottom = Number.parseFloat(computed.bottom) || 0;
+            const reserve = Math.ceil(musicBar.offsetHeight + bottom + 12);
+            document.body.style.setProperty('--app-bottom-clearance', `${reserve}px`);
         }
 
         // ============================================
@@ -5457,11 +5546,9 @@
         const playerAudio = new Audio();
         playerAudio.preload = 'metadata';
 
-        const musicTitle = document.getElementById('musicTitle');
-        const musicPrevBtn = document.getElementById('musicPrevBtn');
-        const musicPlayPauseBtn = document.getElementById('musicPlayPauseBtn');
-        const musicNextBtn = document.getElementById('musicNextBtn');
         const musicPlayerBar = document.getElementById('musicPlayerBar');
+        const musicNowBubble = document.getElementById('musicNowBubble');
+        const musicNowTitle = document.getElementById('musicNowTitle');
         const musicFullTitle = document.getElementById('musicFullTitle');
         const musicFullStatus = document.getElementById('musicFullStatus');
         const musicFullPrevBtn = document.getElementById('musicFullPrevBtn');
@@ -5473,6 +5560,7 @@
         const musicTrackList = document.getElementById('musicTrackList');
         let autoplayStarted = false;
         let musicPickerOpen = false;
+        let musicNowBubbleTimeoutId = null;
 
         function getMusicTrackLabel(src) {
             if (!src) return 'Unknown track';
@@ -5487,11 +5575,8 @@
             const title = getMusicTrackLabel(src);
             const playing = !playerAudio.paused;
 
-            if (musicTitle) {
-                musicTitle.textContent = src || '-';
-            }
-            if (musicPlayPauseBtn) {
-                musicPlayPauseBtn.textContent = playing ? '⏸' : '▶';
+            if (musicPlayerBar) {
+                musicPlayerBar.classList.toggle('playing', playing);
             }
             if (musicFullTitle) {
                 musicFullTitle.textContent = title;
@@ -5504,6 +5589,30 @@
             }
 
             renderMusicTrackList();
+        }
+
+        function showNowPlayingBubble(src, durationMs = 3200) {
+            if (!musicNowBubble || !musicNowTitle) return;
+
+            musicNowTitle.textContent = getMusicTrackLabel(src || playlist[currentTrackIndex] || '');
+            musicNowBubble.hidden = false;
+
+            requestAnimationFrame(() => {
+                musicNowBubble.classList.add('visible');
+            });
+
+            if (musicNowBubbleTimeoutId) {
+                clearTimeout(musicNowBubbleTimeoutId);
+            }
+
+            musicNowBubbleTimeoutId = setTimeout(() => {
+                musicNowBubble.classList.remove('visible');
+                setTimeout(() => {
+                    if (musicNowBubble && !musicNowBubble.classList.contains('visible')) {
+                        musicNowBubble.hidden = true;
+                    }
+                }, 190);
+            }, Math.max(800, durationMs));
         }
 
         function renderMusicTrackList() {
@@ -5563,6 +5672,7 @@
             const src = playlist[currentTrackIndex];
             playerAudio.src = src;
             updateMusicUi();
+            showNowPlayingBubble(src);
         }
 
         async function togglePlayPause() {
@@ -5638,30 +5748,15 @@
             updateMusicUi();
         });
 
-        musicPrevBtn.addEventListener('click', prevTrack);
-        musicNextBtn.addEventListener('click', () => nextTrack(true));
-        musicPlayPauseBtn.addEventListener('click', togglePlayPause);
         musicFullPrevBtn.addEventListener('click', prevTrack);
         musicFullNextBtn.addEventListener('click', () => nextTrack(true));
         musicFullPlayPauseBtn.addEventListener('click', togglePlayPause);
         musicFullCenterBtn.addEventListener('click', toggleMusicPicker);
         musicCloseBtn.addEventListener('click', closeMusicView);
 
-        [musicPrevBtn, musicPlayPauseBtn, musicNextBtn].forEach((button) => {
-            button.addEventListener('click', (event) => {
-                event.stopPropagation();
-            });
-        });
-
         if (musicPlayerBar) {
             musicPlayerBar.addEventListener('click', () => {
                 openMusicView();
-            });
-            musicPlayerBar.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    openMusicView();
-                }
             });
         }
 
@@ -5670,6 +5765,7 @@
             : 0;
         loadTrack(initialTrackIndex);
         updateMusicUi();
+        showNowPlayingBubble(playlist[initialTrackIndex], 4200);
         tryAutoplay();
         setupAutoplayFallback();
 
@@ -6080,6 +6176,10 @@
                 });
             }
         }
+
+        window.addEventListener('resize', updateBottomClearanceForMusicBar);
+        window.addEventListener('orientationchange', updateBottomClearanceForMusicBar);
+        requestAnimationFrame(updateBottomClearanceForMusicBar);
 
         // Initial No button click
         noBtn.addEventListener('click', handleInitialNoClick);
