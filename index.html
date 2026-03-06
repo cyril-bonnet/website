@@ -382,7 +382,7 @@
             height: 30px;
             padding: 0;
             font-size: 16px;
-            display: inline-flex;
+            display: none;
             align-items: center;
             justify-content: center;
             line-height: 1;
@@ -2655,7 +2655,7 @@
                     <input type="checkbox" id="appDevModeToggle" />
                     Dev Mode
                 </label>
-                <button type="button" class="dev-mode-toggle dev-only" id="devTestNotifyBtn" hidden aria-label="Send test notification">🔔</button>
+                <button type="button" class="dev-mode-toggle" id="devTestNotifyBtn" aria-label="Send test notification">🔔</button>
                 <button type="button" id="switchUserBtn">👤</button>
             </div>
         </div>
@@ -4370,6 +4370,8 @@
             renderDevOnlyElements();
 
             if (devTestNotifyBtn) {
+                const showDevTestNotify = Boolean(isKiki && appDevModeEnabled);
+                devTestNotifyBtn.style.display = showDevTestNotify ? 'inline-flex' : 'none';
                 devTestNotifyBtn.disabled = !isPushBackendConfigured();
                 devTestNotifyBtn.title = isPushBackendConfigured()
                     ? 'Send test push notification'
