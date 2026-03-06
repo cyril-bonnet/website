@@ -2643,6 +2643,7 @@
                     <input type="checkbox" id="appDevModeToggle" />
                     Dev Mode
                 </label>
+                <button type="button" class="dev-mode-toggle dev-only" id="devTestNotifyBtn" hidden>🔔 Test notif</button>
                 <button type="button" id="switchUserBtn">👤</button>
             </div>
         </div>
@@ -3569,10 +3570,10 @@
             return pushWorkerRegistration;
         }
 
-        async function ensurePushSubscriptionForCurrentUser({ forcePermissionPrompt = false } = {}) {
+        async function ensurePushSubscriptionForCurrentUser({ forcePermissionPrompt = false, forceBackendBind = false } = {}) {
             if (!currentUser || !isPushBackendConfigured()) return;
             if (!('Notification' in window)) return;
-            if (pushBoundUser === currentUser.key) return;
+            if (!forceBackendBind && pushBoundUser === currentUser.key) return;
 
             let permission = Notification.permission;
             if (permission === 'default' && (forcePermissionPrompt || !pushPermissionRequested)) {
@@ -3607,6 +3608,40 @@
             });
 
             pushBoundUser = currentUser.key;
+        }
+
+        async function triggerDevTestNotification() {
+            if (!currentUser) return;
+            if (!appDevModeEnabled || currentUser.key !== 'kiki') {
+                alert('Enable Dev Mode as Kiki first.');
+                return;
+            }
+            if (!isPushBackendConfigured()) {
+                alert('Push backend is not configured in this build.');
+                return;
+            }
+
+            await ensurePushSubscriptionForCurrentUser({
+                forcePermissionPrompt: true,
+                forceBackendBind: true
+            });
+
+            if (!('Notification' in window) || Notification.permission !== 'granted') {
+                alert('Notification permission is not granted on this device.');
+                return;
+            }
+
+            await fetchPushBackendJson('/api/chat/notify', {
+                method: 'POST',
+                body: JSON.stringify({
+                    from: 'kiki',
+                    to: currentUser.key,
+                    text: `Dev mode test ping at ${new Date().toLocaleTimeString()}`,
+                    timestamp: Date.now()
+                })
+            });
+
+            alert('Test push sent. Lock your phone to verify the system notification.');
         }
 
         async function notifyBackendAboutChatMessage(message) {
@@ -4303,6 +4338,7 @@
             const devToggleLabel = document.getElementById('appDevModeLabel');
             const devToggle = document.getElementById('appDevModeToggle');
             const selfToggle = document.getElementById('quickNoteSelfToggle');
+            const devTestNotifyBtn = document.getElementById('devTestNotifyBtn');
             const isKiki = currentUser?.key === 'kiki';
 
             if (!isKiki && appDevModeEnabled) {
@@ -4320,6 +4356,13 @@
             }
 
             renderDevOnlyElements();
+
+            if (devTestNotifyBtn) {
+                devTestNotifyBtn.disabled = !isPushBackendConfigured();
+                devTestNotifyBtn.title = isPushBackendConfigured()
+                    ? 'Send a test push notification to this user'
+                    : 'Configure push backend URL first';
+            }
 
             if (!appDevModeEnabled && selfToggle) {
                 selfToggle.checked = false;
@@ -5978,6 +6021,13 @@
             appDevModeEnabled = Boolean(event.target.checked);
             saveAppDevMode();
             renderAppDevUi();
+        });
+
+        document.getElementById('devTestNotifyBtn').addEventListener('click', () => {
+            triggerDevTestNotification().catch((error) => {
+                console.warn('Dev test notification failed.', error);
+                alert('Could not send test notification. Check backend logs and permission settings.');
+            });
         });
 
         document.getElementById('chatForm').addEventListener('submit', (e) => {
