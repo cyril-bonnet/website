@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /
+
+# Prevent indexing of all paths
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
