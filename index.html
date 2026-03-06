@@ -376,6 +376,18 @@
             justify-content: center;
         }
 
+        #devTestNotifyBtn {
+            min-width: auto;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
         .home-window-content {
             position: relative;
             overflow: hidden;
@@ -2643,7 +2655,7 @@
                     <input type="checkbox" id="appDevModeToggle" />
                     Dev Mode
                 </label>
-                <button type="button" class="dev-mode-toggle dev-only" id="devTestNotifyBtn" hidden>🔔 Test notif</button>
+                <button type="button" class="dev-mode-toggle dev-only" id="devTestNotifyBtn" hidden aria-label="Send test notification">🔔</button>
                 <button type="button" id="switchUserBtn">👤</button>
             </div>
         </div>
@@ -4360,7 +4372,7 @@
             if (devTestNotifyBtn) {
                 devTestNotifyBtn.disabled = !isPushBackendConfigured();
                 devTestNotifyBtn.title = isPushBackendConfigured()
-                    ? 'Send a test push notification to this user'
+                    ? 'Send test push notification'
                     : 'Configure push backend URL first';
             }
 
