@@ -22,7 +22,7 @@ self.addEventListener("push", (event) => {
     icon: payload.icon || "maroon.png",
     badge: payload.badge || "maroon.png",
     data: {
-      url: payload.url || "/",
+      url: payload.url || self.registration.scope || "/",
     },
   };
 
@@ -31,7 +31,7 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const targetUrl = event.notification?.data?.url || "/";
+  const targetUrl = event.notification?.data?.url || self.registration.scope || "/";
 
   event.waitUntil(
     self.clients
