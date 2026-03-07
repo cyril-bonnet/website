@@ -388,6 +388,18 @@
             line-height: 1;
         }
 
+        #notificationSettingsBtn {
+            min-width: auto;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
         .home-window-content {
             position: relative;
             overflow: hidden;
@@ -972,6 +984,36 @@
         .chat-view-window {
             max-width: 700px;
             margin: 0 auto;
+        }
+
+        .notification-prefs-list {
+            display: grid;
+            gap: 8px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 10px;
+        }
+
+        .notification-pref-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #003C74;
+            font-weight: bold;
+            border: 1px solid #B0B0B0;
+            background: #ECE9D8;
+            padding: 6px 8px;
+            line-height: 1.2;
+        }
+
+        .notification-pref-item input {
+            width: auto;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            min-width: 0;
         }
 
         .chat-messages {
@@ -2655,6 +2697,7 @@
                     <input type="checkbox" id="appDevModeToggle" />
                     Dev Mode
                 </label>
+                <button type="button" id="notificationSettingsBtn" aria-label="Open notification settings">🔕</button>
                 <button type="button" class="dev-mode-toggle" id="devTestNotifyBtn" aria-label="Send test notification">🔔</button>
                 <button type="button" id="switchUserBtn">👤</button>
             </div>
@@ -3027,6 +3070,39 @@
             </div>
         </div>
 
+        <!-- Notification Settings View -->
+        <div class="view" id="notificationsView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🔔</span>
+                        <span>notifications.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Notification Settings</h1>
+                    <p class="mood-note" id="notificationPrefsStatus">Choose what notifications you want to receive.</p>
+                    <div class="notification-prefs-list" id="notificationPrefsList">
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="chat" checked /> Chat messages</label>
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="quick_note" checked /> Quick notes</label>
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="todo" checked /> Todo additions</label>
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="weekly" checked /> Weekly planner additions</label>
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="feedback" checked /> Feedback posts</label>
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="taste" checked /> Food/restaurant additions</label>
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="mood" checked /> Mood changes</label>
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="status" checked /> Status changes</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Feedback View -->
         <div class="view" id="feedbackView">
             <button class="back-button" onclick="showView('homeView')">← Back</button>
@@ -3294,6 +3370,11 @@
                 markChatAsSeen();
             }
 
+            if (viewId === 'notificationsView') {
+                initSocial();
+                renderNotificationPreferencesUi();
+            }
+
             if (viewId === 'feedbackView') {
                 initFeedback();
                 markSectionSeen('feedback');
@@ -3476,11 +3557,24 @@
             minimal: 'Minimal Modern',
             nokia: 'Nokia Pixel'
         };
+        const NOTIFICATION_TYPE_LABELS = {
+            chat: 'Chat messages',
+            quick_note: 'Quick notes',
+            todo: 'Todo additions',
+            weekly: 'Weekly planner additions',
+            feedback: 'Feedback posts',
+            taste: 'Food/restaurant additions',
+            mood: 'Mood changes',
+            status: 'Status changes'
+        };
+        const NOTIFICATION_TYPES = Object.keys(NOTIFICATION_TYPE_LABELS);
         let chatLastSeen = { ru: 0, kiki: 0 };
         let sectionLastSeen = {
             ru: { todo: 0, weekly: 0, feedback: 0, taste: 0 },
             kiki: { todo: 0, weekly: 0, feedback: 0, taste: 0 }
         };
+        let notificationPreferences = null;
+        let notificationPrefsUiInitialized = false;
         const notificationAudio = new Audio('notification.mp3');
         notificationAudio.preload = 'auto';
         let pushWorkerRegistration = null;
@@ -3622,6 +3716,133 @@
             pushBoundUser = currentUser.key;
         }
 
+        function getDefaultNotificationPreferences() {
+            return {
+                chat: true,
+                quick_note: true,
+                todo: true,
+                weekly: true,
+                feedback: true,
+                taste: true,
+                mood: true,
+                status: true
+            };
+        }
+
+        function normalizeNotificationPreferences(raw) {
+            const defaults = getDefaultNotificationPreferences();
+            if (!raw || typeof raw !== 'object') return defaults;
+
+            const next = { ...defaults };
+            NOTIFICATION_TYPES.forEach((type) => {
+                if (typeof raw[type] === 'boolean') {
+                    next[type] = raw[type];
+                }
+            });
+            return next;
+        }
+
+        function renderNotificationPreferencesUi() {
+            const status = document.getElementById('notificationPrefsStatus');
+            const checkboxes = document.querySelectorAll('#notificationPrefsList input[data-notification-type]');
+            const hasUser = Boolean(currentUser);
+            const prefs = normalizeNotificationPreferences(notificationPreferences);
+
+            checkboxes.forEach((checkbox) => {
+                const type = checkbox.getAttribute('data-notification-type');
+                checkbox.checked = Boolean(type && prefs[type]);
+                checkbox.disabled = !hasUser;
+            });
+
+            if (!status) return;
+            if (!hasUser) {
+                status.textContent = 'Log in to configure notification preferences.';
+                return;
+            }
+            status.textContent = 'Preferences are saved online for this user.';
+        }
+
+        function initNotificationPreferencesUi() {
+            if (notificationPrefsUiInitialized) return;
+            notificationPrefsUiInitialized = true;
+
+            const checkboxes = document.querySelectorAll('#notificationPrefsList input[data-notification-type]');
+            checkboxes.forEach((checkbox) => {
+                checkbox.addEventListener('change', (event) => {
+                    const target = event.target;
+                    const type = target?.getAttribute('data-notification-type');
+                    if (!type || !currentUser) return;
+
+                    const next = normalizeNotificationPreferences(notificationPreferences);
+                    next[type] = Boolean(target.checked);
+                    notificationPreferences = next;
+                    renderNotificationPreferencesUi();
+
+                    saveNotificationPreferencesForCurrentUser().catch((error) => {
+                        console.warn('Could not save notification preferences.', error);
+                    });
+                });
+            });
+        }
+
+        async function loadNotificationPreferencesForCurrentUser() {
+            if (!currentUser) {
+                notificationPreferences = getDefaultNotificationPreferences();
+                renderNotificationPreferencesUi();
+                return;
+            }
+
+            if (!isPushBackendConfigured()) {
+                notificationPreferences = getDefaultNotificationPreferences();
+                renderNotificationPreferencesUi();
+                return;
+            }
+
+            try {
+                const payload = await fetchPushBackendJson(`/api/notifications/preferences/${currentUser.key}`);
+                notificationPreferences = normalizeNotificationPreferences(payload?.preferences);
+            } catch (error) {
+                console.warn('Could not load notification preferences.', error);
+                notificationPreferences = getDefaultNotificationPreferences();
+            }
+
+            renderNotificationPreferencesUi();
+        }
+
+        async function saveNotificationPreferencesForCurrentUser() {
+            if (!currentUser || !isPushBackendConfigured()) return;
+            const prefs = normalizeNotificationPreferences(notificationPreferences);
+
+            await fetchPushBackendJson('/api/notifications/preferences', {
+                method: 'POST',
+                body: JSON.stringify({
+                    userKey: currentUser.key,
+                    preferences: prefs
+                })
+            });
+        }
+
+        async function notifyBackendAboutEvent({ type, to, title, body, url = '' }) {
+            if (!isPushBackendConfigured()) return;
+            if (!currentUser?.key || !to || !type || !title || !body) return;
+
+            await fetchPushBackendJson('/api/events/notify', {
+                method: 'POST',
+                body: JSON.stringify({
+                    from: currentUser.key,
+                    to,
+                    type,
+                    title,
+                    body,
+                    url
+                })
+            });
+        }
+
+        function getNotificationTitleForCurrentUser() {
+            return `New update from ${currentUser?.name || 'Someone'}`;
+        }
+
         async function triggerDevTestNotification() {
             if (!currentUser) return;
             if (!appDevModeEnabled || currentUser.key !== 'kiki') {
@@ -3643,14 +3864,11 @@
                 return;
             }
 
-            await fetchPushBackendJson('/api/chat/notify', {
-                method: 'POST',
-                body: JSON.stringify({
-                    from: 'kiki',
-                    to: currentUser.key,
-                    text: `Dev mode test ping at ${new Date().toLocaleTimeString()}`,
-                    timestamp: Date.now()
-                })
+            await notifyBackendAboutEvent({
+                type: 'chat',
+                to: currentUser.key,
+                title: 'Dev notification test',
+                body: `Dev mode test ping at ${new Date().toLocaleTimeString()}`
             });
 
             alert('Test push sent. Lock your phone to verify the system notification.');
@@ -3660,14 +3878,11 @@
             if (!isPushBackendConfigured()) return;
             if (!message?.text || !message?.from || !message?.to) return;
 
-            await fetchPushBackendJson('/api/chat/notify', {
-                method: 'POST',
-                body: JSON.stringify({
-                    from: message.from,
-                    to: message.to,
-                    text: message.text,
-                    timestamp: Number(message.timestamp) || Date.now()
-                })
+            await notifyBackendAboutEvent({
+                type: 'chat',
+                to: message.to,
+                title: `New message from ${currentUser?.name || message.from}`,
+                body: message.text
             });
         }
 
@@ -4293,9 +4508,22 @@
             toggleBtn.className = 'period-btn';
             toggleBtn.textContent = onPeriod ? 'Toggle to No' : 'Toggle to Yes';
             toggleBtn.addEventListener('click', () => {
+                const nextOnPeriod = !onPeriod;
                 userStatus = { ...userStatus, ru: { period: !onPeriod, updatedAt: Date.now() } };
                 saveUserStatus();
                 renderPeriodControls();
+
+                const target = getOtherUserKey();
+                if (target) {
+                    notifyBackendAboutEvent({
+                        type: 'status',
+                        to: target,
+                        title: getNotificationTitleForCurrentUser(),
+                        body: `🩸 ${currentUser?.name || 'Ru'} changed period status to ${nextOnPeriod ? 'Yes' : 'No'}.`
+                    }).catch((error) => {
+                        console.warn('Status notification failed.', error);
+                    });
+                }
             });
 
             periodButtonsRu.appendChild(toggleBtn);
@@ -5262,6 +5490,18 @@
             };
             saveMoods();
             renderMoods();
+
+            const target = getOtherUserKey();
+            if (target) {
+                notifyBackendAboutEvent({
+                    type: 'mood',
+                    to: target,
+                    title: getNotificationTitleForCurrentUser(),
+                    body: `Mood update: ${currentUser.name} is now ${MOOD_LABELS[mood]}.`
+                }).catch((error) => {
+                    console.warn('Mood notification failed.', error);
+                });
+            }
         }
 
         function initMoods() {
@@ -5280,11 +5520,13 @@
 
         function initSocial() {
             if (socialInitialized) {
+                initNotificationPreferencesUi();
                 renderAppDevUi();
                 renderQuickNoteInbox();
                 renderChatMessages();
                 renderPeriodControls();
                 renderChatUnreadBadge();
+                renderNotificationPreferencesUi();
                 return;
             }
 
@@ -5294,12 +5536,15 @@
                 loadQuickNotes();
                 loadChatMessages();
                 loadUserStatus();
-                renderAppDevUi();
-                renderQuickNoteInbox();
-                renderChatMessages();
-                renderPeriodControls();
-                renderChatUnreadBadge();
             }
+
+            initNotificationPreferencesUi();
+            renderAppDevUi();
+            renderQuickNoteInbox();
+            renderChatMessages();
+            renderPeriodControls();
+            renderChatUnreadBadge();
+            renderNotificationPreferencesUi();
         }
 
         function getTaskUserPriorities(task) {
@@ -5319,6 +5564,7 @@
         function updateCurrentUserBar() {
             const bar = document.getElementById('currentUserBar');
             const switchUserBtn = document.getElementById('switchUserBtn');
+            const notificationSettingsBtn = document.getElementById('notificationSettingsBtn');
 
             if (!currentUser) {
                 bar.classList.remove('visible');
@@ -5326,6 +5572,7 @@
                 renderAppDevUi();
                 renderChatUnreadBadge();
                 renderSectionUnreadBadges();
+                renderNotificationPreferencesUi();
                 return;
             }
 
@@ -5334,12 +5581,18 @@
                 switchUserBtn.setAttribute('aria-label', `Switch user (current: ${currentUser.name})`);
                 switchUserBtn.title = `Switch user (current: ${currentUser.name})`;
             }
+
+            if (notificationSettingsBtn) {
+                notificationSettingsBtn.textContent = '🔕';
+                notificationSettingsBtn.title = 'Notification settings';
+            }
             bar.classList.add('visible');
             updateFloatingLaunchers();
             renderAppDevUi();
             renderMoods();
             renderChatUnreadBadge();
             renderSectionUnreadBadges();
+            renderNotificationPreferencesUi();
         }
 
         function clearLoginAuthError() {
@@ -5402,12 +5655,16 @@
             const user = USER_MAP[userKey];
             if (!user) return;
             currentUser = user;
+            notificationPreferences = getDefaultNotificationPreferences();
             localStorage.setItem(USER_STORAGE_KEY, user.key);
             updateCurrentUserBar();
             hideLoginAuthPanel();
             showView('homeView');
             ensurePushSubscriptionForCurrentUser({ forcePermissionPrompt: true }).catch((error) => {
                 console.warn('Push subscription setup failed after login.', error);
+            });
+            loadNotificationPreferencesForCurrentUser().catch((error) => {
+                console.warn('Notification preference restore failed after login.', error);
             });
         }
 
@@ -5448,10 +5705,14 @@
             const savedUserKey = localStorage.getItem(USER_STORAGE_KEY);
             if (savedUserKey && USER_MAP[savedUserKey]) {
                 currentUser = USER_MAP[savedUserKey];
+                notificationPreferences = getDefaultNotificationPreferences();
                 updateCurrentUserBar();
                 showView('homeView');
                 ensurePushSubscriptionForCurrentUser().catch((error) => {
                     console.warn('Push subscription restore failed.', error);
+                });
+                loadNotificationPreferencesForCurrentUser().catch((error) => {
+                    console.warn('Notification preference restore failed.', error);
                 });
                 return;
             }
@@ -5978,6 +6239,18 @@
             hideTaskActions();
             saveTasks();
             renderTodoList();
+
+            const target = getOtherUserKey();
+            if (target) {
+                notifyBackendAboutEvent({
+                    type: 'todo',
+                    to: target,
+                    title: getNotificationTitleForCurrentUser(),
+                    body: `New todo: ${title}`
+                }).catch((error) => {
+                    console.warn('Todo notification failed.', error);
+                });
+            }
         });
 
         document.getElementById('quickNoteForm').addEventListener('submit', (e) => {
@@ -6022,6 +6295,15 @@
             input.value = '';
             saveQuickNotes();
             renderQuickNoteInbox();
+
+            notifyBackendAboutEvent({
+                type: 'quick_note',
+                to: target,
+                title: getNotificationTitleForCurrentUser(),
+                body: text.length > 140 ? `${text.slice(0, 140)}…` : text
+            }).catch((error) => {
+                console.warn('Quick note notification failed.', error);
+            });
         });
 
         document.getElementById('appDevModeToggle').addEventListener('change', (event) => {
@@ -6042,6 +6324,32 @@
                 console.warn('Dev test notification failed.', error);
                 alert('Could not send test notification. Check backend logs and permission settings.');
             });
+        });
+
+        document.getElementById('notificationSettingsBtn').addEventListener('click', async () => {
+            if (currentUser && ('Notification' in window)) {
+                try {
+                    const permission = Notification.permission;
+                    if (permission !== 'granted') {
+                        await ensurePushSubscriptionForCurrentUser({
+                            forcePermissionPrompt: true,
+                            forceBackendBind: true
+                        });
+
+                        if (Notification.permission === 'denied') {
+                            alert('Notifications are blocked in browser settings for this app.');
+                        } else if (Notification.permission !== 'granted') {
+                            alert('Notification permission was not granted.');
+                        }
+                    } else {
+                        await ensurePushSubscriptionForCurrentUser({ forceBackendBind: false });
+                    }
+                } catch (error) {
+                    console.warn('Notification access request failed.', error);
+                }
+            }
+
+            showView('notificationsView');
         });
 
         document.getElementById('chatForm').addEventListener('submit', (e) => {
@@ -6130,6 +6438,18 @@
             input.value = '';
             saveFeedbackItems();
             renderFeedbackItems();
+
+            const target = getOtherUserKey();
+            if (target) {
+                notifyBackendAboutEvent({
+                    type: 'feedback',
+                    to: target,
+                    title: getNotificationTitleForCurrentUser(),
+                    body: `${type}: ${text.length > 130 ? `${text.slice(0, 130)}…` : text}`
+                }).catch((error) => {
+                    console.warn('Feedback notification failed.', error);
+                });
+            }
         });
 
         document.getElementById('feedbackDoneToggleBtn').addEventListener('click', () => {
@@ -6170,6 +6490,18 @@
             input.value = '';
             saveTasteItems();
             renderTasteItems();
+
+            const target = getOtherUserKey();
+            if (target) {
+                notifyBackendAboutEvent({
+                    type: 'taste',
+                    to: target,
+                    title: getNotificationTitleForCurrentUser(),
+                    body: `New ${type === 'food' ? 'food' : 'restaurant'} to try: ${name}`
+                }).catch((error) => {
+                    console.warn('Taste notification failed.', error);
+                });
+            }
         });
 
         document.getElementById('tasteModalCloseBtn').addEventListener('click', closeTasteModal);
@@ -6738,11 +7070,24 @@
             document.getElementById('weeklyEndTime').value = '';
             saveWeeklyItems();
             renderWeeklyPlanner();
+
+            const target = getOtherUserKey();
+            if (target) {
+                notifyBackendAboutEvent({
+                    type: 'weekly',
+                    to: target,
+                    title: getNotificationTitleForCurrentUser(),
+                    body: `Weekly plan added: ${text} (${day.toUpperCase()} ${startTime}-${endTime})`
+                }).catch((error) => {
+                    console.warn('Weekly notification failed.', error);
+                });
+            }
         });
 
         document.getElementById('switchUserBtn').addEventListener('click', () => {
             currentUser = null;
             pushBoundUser = null;
+            notificationPreferences = getDefaultNotificationPreferences();
             localStorage.removeItem(USER_STORAGE_KEY);
             updateCurrentUserBar();
             showView('loginView');
