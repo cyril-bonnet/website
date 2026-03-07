@@ -1240,21 +1240,46 @@
             margin-top: 10px;
         }
 
+        .taste-section {
+            margin-bottom: 8px;
+        }
+
+        .taste-section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .taste-section-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #003C74;
+            margin-bottom: 0;
+        }
+
         .taste-list {
             background: #ECE9D8;
             border: 1px solid #B0B0B0;
-            min-height: 260px;
-            height: min(52vh, 420px);
-            max-height: 420px;
+            min-height: 280px;
+            height: min(58vh, 500px);
+            max-height: 500px;
             overflow: hidden;
             padding: 8px;
             position: relative;
         }
 
+        #tasteToggleTriedBtn {
+            min-width: auto;
+            padding: 2px 7px;
+            font-size: 11px;
+        }
+
         .taste-bubble {
             border: 1px solid #7EA8CF;
             padding: 6px;
-            min-width: 92px;
+            min-width: 58px;
             width: min(118px, calc(100% - 12px));
             max-width: 100%;
             cursor: pointer;
@@ -1270,7 +1295,7 @@
             will-change: transform;
             border-radius: 50%;
             aspect-ratio: 1 / 1;
-            min-height: 92px;
+            min-height: 58px;
             box-shadow: inset 0 10px 16px rgba(255, 255, 255, 0.45), 0 2px 8px rgba(0, 60, 116, 0.2);
         }
 
@@ -1287,9 +1312,10 @@
         }
 
         .taste-bubble-name {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             color: #111;
+            line-height: 1.2;
         }
 
         .taste-summary {
@@ -3160,7 +3186,13 @@
                 <div class="window-content">
                     <h1>Restaurants & Food to Try</h1>
                     <div class="taste-panel">
-                        <div class="taste-list" id="tasteList"></div>
+                        <div class="taste-section">
+                            <div class="taste-section-head">
+                                <p class="taste-section-title">Suggestions</p>
+                                <button type="button" id="tasteToggleTriedBtn">Hide Tried</button>
+                            </div>
+                            <div class="taste-list" id="tasteList"></div>
+                        </div>
                         <form class="taste-form" id="tasteForm">
                             <select id="tasteType" required>
                                 <option value="restaurant">Restaurant</option>
@@ -3469,6 +3501,7 @@
         let feedbackItems = [];
         let feedbackDoneCollapsed = true;
         let tasteItems = [];
+        let tasteTriedCollapsed = false;
         let tasteBubbleAnimationId = null;
         let tasteBubbleBodies = [];
         let tasteBubbleLastTick = 0;
@@ -5185,8 +5218,8 @@
             tasteBubbleLastTick = 0;
         }
 
-        function startTasteBubbleAnimation() {
-            const list = document.getElementById('tasteList');
+        function startTasteBubbleAnimation(listId = 'tasteActiveList') {
+            const list = document.getElementById(listId);
             if (!list) return;
 
             const bubbles = Array.from(list.querySelectorAll('.taste-bubble'));
@@ -5199,10 +5232,15 @@
 
             const innerWidth = Math.max(1, list.clientWidth - 16);
             const innerHeight = Math.max(1, list.clientHeight - 16);
-            const bubbleSize = Math.max(92, Math.min(118, Math.floor(innerWidth * 0.22)));
+            const bubbleCount = Math.max(1, bubbles.length);
+            const areaPerBubble = (innerWidth * innerHeight) / bubbleCount;
+            const adaptiveFromArea = Math.floor(Math.sqrt(areaPerBubble) * 0.82);
+            const adaptiveFromWidth = Math.floor(innerWidth * 0.24);
+            const bubbleSize = Math.max(58, Math.min(118, Math.min(adaptiveFromArea, adaptiveFromWidth)));
 
             bubbles.forEach((bubble) => {
                 bubble.style.width = `${bubbleSize}px`;
+                bubble.style.height = `${bubbleSize}px`;
             });
 
             const placedRects = [];
@@ -5253,7 +5291,7 @@
             });
 
             const tick = (timestamp) => {
-                const listNode = document.getElementById('tasteList');
+                const listNode = document.getElementById(listId);
                 if (!listNode || !tasteBubbleBodies.length) {
                     stopTasteBubbleAnimation();
                     return;
@@ -5362,25 +5400,40 @@
 
         function renderTasteItems() {
             const list = document.getElementById('tasteList');
-            if (!list) return;
+            const toggleTriedBtn = document.getElementById('tasteToggleTriedBtn');
+            if (!list || !toggleTriedBtn) return;
 
             stopTasteBubbleAnimation();
             list.innerHTML = '';
-            if (!tasteItems.length) {
+
+            const recentFirst = [...tasteItems].slice(-300).reverse();
+            const activeItems = recentFirst.filter((item) => !item.tried);
+            const triedItems = recentFirst.filter((item) => item.tried);
+            const visibleItems = tasteTriedCollapsed
+                ? activeItems
+                : [...activeItems, ...triedItems];
+
+            toggleTriedBtn.textContent = tasteTriedCollapsed ? 'Show Tried' : 'Hide Tried';
+            toggleTriedBtn.disabled = triedItems.length === 0;
+
+            if (!visibleItems.length) {
                 const empty = document.createElement('div');
                 empty.className = 'taste-empty';
-                empty.textContent = 'No items yet. Add restaurants or food to try.';
+                empty.textContent = tasteItems.length
+                    ? 'Tried items are hidden. Tap Show Tried to view them.'
+                    : 'No items yet. Add restaurants or food to try.';
                 list.appendChild(empty);
                 return;
             }
 
-            const recentFirst = [...tasteItems].slice(-300).reverse();
-            recentFirst.forEach((item) => {
+            visibleItems.forEach((item) => {
                 const bubble = document.createElement('div');
                 const typeClass = item.type === 'food' ? 'taste-bubble-food' : 'taste-bubble-restaurant';
                 const statusClass = item.tried ? ' taste-bubble-tried' : '';
                 bubble.className = `taste-bubble ${typeClass}${statusClass}`;
-                bubble.title = item.type === 'food' ? 'Food' : 'Restaurant';
+                bubble.title = item.type === 'food'
+                    ? (item.tried ? 'Food (tried)' : 'Food')
+                    : (item.tried ? 'Restaurant (tried)' : 'Restaurant');
                 bubble.addEventListener('click', () => openTasteModal(item.id));
 
                 const name = document.createElement('div');
@@ -5390,7 +5443,7 @@
                 list.appendChild(bubble);
             });
 
-            startTasteBubbleAnimation();
+            startTasteBubbleAnimation('tasteList');
         }
 
         function initTaste() {
@@ -6454,6 +6507,11 @@
 
         document.getElementById('feedbackDoneToggleBtn').addEventListener('click', () => {
             toggleFeedbackDoneSection();
+        });
+
+        document.getElementById('tasteToggleTriedBtn').addEventListener('click', () => {
+            tasteTriedCollapsed = !tasteTriedCollapsed;
+            renderTasteItems();
         });
 
         document.getElementById('tasteForm').addEventListener('submit', (e) => {
