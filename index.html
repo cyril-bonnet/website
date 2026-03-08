@@ -400,6 +400,177 @@
             line-height: 1;
         }
 
+        #lillianModeBtn {
+            min-width: auto;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            font-size: 16px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .lillian-mode-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3200;
+            display: none;
+            overflow: hidden;
+        }
+
+        .lillian-mode-overlay.visible {
+            display: block;
+        }
+
+        .lillian-cow-item {
+            position: absolute;
+            bottom: -44px;
+            will-change: transform, opacity;
+            animation: lillian-cow-float 2.9s ease-out forwards;
+        }
+
+        .lillian-cow-item.is-spin {
+            animation-name: lillian-cow-float-spin;
+        }
+
+        .lillian-cow-item.is-zigzag {
+            animation-name: lillian-cow-float-zigzag;
+        }
+
+        .lillian-cow-emoji {
+            display: block;
+            line-height: 1;
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+        }
+
+        .lillian-cow-item.is-spin .lillian-cow-emoji {
+            animation: lillian-cow-head-spin 580ms linear infinite;
+        }
+
+        .lillian-cow-text {
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 6px);
+            transform: translateX(-50%);
+            font-size: clamp(11px, 2.5vw, 16px);
+            line-height: 1;
+            font-weight: bold;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            text-align: center;
+            color: #1f2f4a;
+            text-shadow: 0 1px 0 #fff;
+            animation: lillian-text-pop 1s ease-out forwards;
+        }
+
+        .lillian-hero-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: min(92vw, 760px);
+            width: 92vw;
+            font-size: clamp(18px, 5vw, 38px);
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.05;
+            color: #143157;
+            text-shadow: none;
+            animation: lillian-hero-in 220ms ease-out both;
+        }
+
+        @keyframes lillian-cow-float {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.82) rotate(-8deg);
+            }
+            15% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-115vh) scale(1.12) rotate(10deg);
+            }
+        }
+
+        @keyframes lillian-cow-float-spin {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(0.8) rotate(-14deg);
+            }
+            18% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-118vh) translateX(28px) scale(1.14) rotate(72deg);
+            }
+        }
+
+        @keyframes lillian-cow-float-zigzag {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(0.84) rotate(-6deg);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(-22vh) translateX(-20px) scale(0.92) rotate(6deg);
+            }
+            45% {
+                transform: translateY(-48vh) translateX(26px) scale(1.02) rotate(-8deg);
+            }
+            70% {
+                transform: translateY(-82vh) translateX(-16px) scale(1.08) rotate(10deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-116vh) translateX(30px) scale(1.14) rotate(-12deg);
+            }
+        }
+
+        @keyframes lillian-cow-head-spin {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.04);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        @keyframes lillian-text-pop {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.72);
+            }
+            28% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.06);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.95);
+            }
+        }
+
+        @keyframes lillian-hero-in {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
         .home-window-content {
             position: relative;
             overflow: hidden;
@@ -2654,6 +2825,22 @@
                 height: 110px;
             }
 
+            .lillian-cow-text {
+                max-width: 80vw;
+                font-size: 12px;
+                white-space: normal;
+                line-height: 1.1;
+                text-align: center;
+            }
+
+            .lillian-hero-text {
+                top: 50%;
+                max-width: 92vw;
+                width: 92vw;
+                font-size: 20px;
+                line-height: 1.08;
+            }
+
             .status-strip {
                 grid-template-columns: 1fr;
                 gap: 4px;
@@ -2724,10 +2911,12 @@
                     Dev Mode
                 </label>
                 <button type="button" id="notificationSettingsBtn" aria-label="Open notification settings">🔕</button>
+                <button type="button" id="lillianModeBtn" aria-label="Activate Lillian mode" title="Activate Lillian mode">🐮</button>
                 <button type="button" class="dev-mode-toggle" id="devTestNotifyBtn" aria-label="Send test notification">🔔</button>
                 <button type="button" id="switchUserBtn">👤</button>
             </div>
         </div>
+        <div class="lillian-mode-overlay" id="lillianModeOverlay" aria-hidden="true"></div>
 
         <!-- User Select View -->
         <div class="view active" id="loginView">
@@ -3486,6 +3675,7 @@
         let feedbackDbRef = null;
         let tasteDbRef = null;
         let userStatusDbRef = null;
+        let lillianModeDbRef = null;
         let firebaseUnsubscribe = null;
         let weeklyUnsubscribe = null;
         let moodsUnsubscribe = null;
@@ -3494,6 +3684,7 @@
         let feedbackUnsubscribe = null;
         let tasteUnsubscribe = null;
         let userStatusUnsubscribe = null;
+        let lillianModeUnsubscribe = null;
         let weeklyItems = [];
         let userMoods = { ru: 'normal', kiki: 'normal' };
         let quickNotes = {};
@@ -3613,6 +3804,11 @@
         let pushWorkerRegistration = null;
         let pushBoundUser = null;
         let pushPermissionRequested = false;
+        let lillianModeHasSyncedOnce = false;
+        let latestLillianModeEvent = { triggeredAt: 0, by: '' };
+        let handledLillianModeTimestamp = 0;
+        let lillianModeHideTimeout = null;
+        let lillianModeSpawnInterval = null;
 
         function normalizeTheme(themeId) {
             return THEME_LABELS[themeId] ? themeId : 'y2k';
@@ -3905,6 +4101,164 @@
             });
 
             alert('Test push sent. Lock your phone to verify the system notification.');
+        }
+
+        function normalizeLillianModeEvent(raw) {
+            if (!raw || typeof raw !== 'object') {
+                return { triggeredAt: 0, by: '' };
+            }
+
+            const triggeredAt = Number(raw.triggeredAt) || 0;
+            const by = typeof raw.by === 'string' ? raw.by : '';
+            return {
+                triggeredAt,
+                by
+            };
+        }
+
+        function stopLillianModeVisuals() {
+            const overlay = document.getElementById('lillianModeOverlay');
+            if (!overlay) return;
+
+            if (lillianModeHideTimeout) {
+                clearTimeout(lillianModeHideTimeout);
+                lillianModeHideTimeout = null;
+            }
+            if (lillianModeSpawnInterval) {
+                clearInterval(lillianModeSpawnInterval);
+                lillianModeSpawnInterval = null;
+            }
+
+            overlay.classList.remove('visible');
+            overlay.innerHTML = '';
+        }
+
+        function showLillianModeVisuals(durationMs = 5600) {
+            const overlay = document.getElementById('lillianModeOverlay');
+            if (!overlay) return;
+
+            stopLillianModeVisuals();
+            overlay.classList.add('visible');
+
+            const hero = document.createElement('div');
+            hero.className = 'lillian-hero-text';
+            hero.textContent = 'LILLIAN MODE ACTIVATED';
+            overlay.appendChild(hero);
+
+            const cowPhrases = [
+                'grmmpinrs cure',
+                'moo therapy',
+                'lillian says chill',
+                'anti-grump protocol'
+            ];
+            let randomCaptionBudget = 3;
+
+            const spawnCow = () => {
+                const cow = document.createElement('span');
+                cow.className = 'lillian-cow-item';
+
+                const motionRoll = Math.random();
+                if (motionRoll < 0.34) {
+                    cow.classList.add('is-spin');
+                } else if (motionRoll < 0.67) {
+                    cow.classList.add('is-zigzag');
+                }
+
+                const emoji = document.createElement('span');
+                emoji.className = 'lillian-cow-emoji';
+                emoji.textContent = '🐮';
+
+                const horizontal = Math.random() * 92;
+                const wobble = (Math.random() * 24) - 12;
+                const duration = 2800 + Math.random() * 2300;
+                const delay = Math.random() * 120;
+                const size = 20 + Math.random() * 34;
+
+                cow.style.left = `${horizontal}%`;
+                cow.style.animationDuration = `${duration}ms`;
+                cow.style.animationDelay = `${delay}ms`;
+                cow.style.transform = `translateX(${wobble}px)`;
+                emoji.style.fontSize = `${size}px`;
+
+                let phrase = '';
+                if (randomCaptionBudget > 0 && Math.random() < 0.34) {
+                    phrase = cowPhrases[Math.floor(Math.random() * cowPhrases.length)];
+                    randomCaptionBudget -= 1;
+                }
+
+                cow.appendChild(emoji);
+                if (phrase) {
+                    const text = document.createElement('span');
+                    text.className = 'lillian-cow-text';
+                    text.textContent = phrase;
+                    cow.appendChild(text);
+                }
+
+                overlay.appendChild(cow);
+                setTimeout(() => {
+                    cow.remove();
+                }, duration + delay + 120);
+            };
+
+            const startDelayMs = 220;
+            for (let index = 0; index < 12; index++) {
+                setTimeout(() => spawnCow(), startDelayMs + index * 90);
+            }
+
+            lillianModeSpawnInterval = setInterval(spawnCow, 165);
+            lillianModeHideTimeout = setTimeout(() => {
+                stopLillianModeVisuals();
+            }, durationMs);
+        }
+
+        function maybeActivateLillianModeForRu(eventPayload) {
+            if (!currentUser || currentUser.key !== 'ru') return;
+
+            const normalized = normalizeLillianModeEvent(eventPayload);
+            if (!normalized.triggeredAt) return;
+            if (normalized.triggeredAt <= handledLillianModeTimestamp) return;
+
+            const ageMs = Date.now() - normalized.triggeredAt;
+            handledLillianModeTimestamp = normalized.triggeredAt;
+            if (ageMs > 20000) return;
+
+            showView('homeView');
+            showLillianModeVisuals(5600);
+        }
+
+        async function triggerLillianMode() {
+            if (!currentUser || currentUser.key !== 'kiki') {
+                alert('Only Kiki can activate Lillian mode.');
+                return;
+            }
+
+            if (appDevModeEnabled) {
+                showView('homeView');
+                showLillianModeVisuals(5600);
+                return;
+            }
+
+            const payload = {
+                triggeredAt: Date.now(),
+                by: currentUser.key
+            };
+
+            if (lillianModeDbRef) {
+                try {
+                    await lillianModeDbRef.set(payload);
+                } catch (error) {
+                    console.warn('Could not sync Lillian mode to Firebase.', error);
+                }
+            }
+
+            notifyBackendAboutEvent({
+                type: 'status',
+                to: 'ru',
+                title: getNotificationTitleForCurrentUser(),
+                body: 'LILIAN MODE ACTIVATED 🐮'
+            }).catch((error) => {
+                console.warn('Lillian mode push notification failed.', error);
+            });
         }
 
         async function notifyBackendAboutChatMessage(message) {
@@ -4612,6 +4966,7 @@
             const devToggle = document.getElementById('appDevModeToggle');
             const selfToggle = document.getElementById('quickNoteSelfToggle');
             const devTestNotifyBtn = document.getElementById('devTestNotifyBtn');
+            const lillianModeBtn = document.getElementById('lillianModeBtn');
             const isKiki = currentUser?.key === 'kiki';
 
             if (!isKiki && appDevModeEnabled) {
@@ -4637,6 +4992,12 @@
                 devTestNotifyBtn.title = isPushBackendConfigured()
                     ? 'Send test push notification'
                     : 'Configure push backend URL first';
+            }
+
+            if (lillianModeBtn) {
+                lillianModeBtn.style.display = isKiki ? 'inline-flex' : 'none';
+                lillianModeBtn.disabled = !isKiki;
+                lillianModeBtn.title = 'Activate Lillian mode';
             }
 
             if (!appDevModeEnabled && selfToggle) {
@@ -5719,6 +6080,7 @@
             loadNotificationPreferencesForCurrentUser().catch((error) => {
                 console.warn('Notification preference restore failed after login.', error);
             });
+            maybeActivateLillianModeForRu(latestLillianModeEvent);
         }
 
         async function selectUser(userKey) {
@@ -5767,6 +6129,7 @@
                 loadNotificationPreferencesForCurrentUser().catch((error) => {
                     console.warn('Notification preference restore failed.', error);
                 });
+                maybeActivateLillianModeForRu(latestLillianModeEvent);
                 return;
             }
             hideLoginAuthPanel();
@@ -5808,6 +6171,7 @@
                 feedbackDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/feedback`);
                 tasteDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/taste`);
                 userStatusDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/userStatus`);
+                lillianModeDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/lillianMode`);
                 usersDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/users`);
 
                 if (firebaseUnsubscribe) {
@@ -5833,6 +6197,9 @@
                 }
                 if (userStatusUnsubscribe) {
                     userStatusUnsubscribe();
+                }
+                if (lillianModeUnsubscribe) {
+                    lillianModeUnsubscribe();
                 }
 
                 const listener = firebaseDbRef.on('value', (snapshot) => {
@@ -5944,6 +6311,19 @@
                     renderPeriodControls();
                 });
 
+                const lillianModeListener = lillianModeDbRef.on('value', (snapshot) => {
+                    const normalized = normalizeLillianModeEvent(snapshot.val());
+                    latestLillianModeEvent = normalized;
+
+                    if (!lillianModeHasSyncedOnce) {
+                        handledLillianModeTimestamp = normalized.triggeredAt || 0;
+                        lillianModeHasSyncedOnce = true;
+                        return;
+                    }
+
+                    maybeActivateLillianModeForRu(normalized);
+                });
+
                 firebaseUnsubscribe = () => firebaseDbRef.off('value', listener);
                 weeklyUnsubscribe = () => weeklyDbRef.off('value', weeklyListener);
                 moodsUnsubscribe = () => moodsDbRef.off('value', moodsListener);
@@ -5952,6 +6332,7 @@
                 feedbackUnsubscribe = () => feedbackDbRef.off('value', feedbackListener);
                 tasteUnsubscribe = () => tasteDbRef.off('value', tasteListener);
                 userStatusUnsubscribe = () => userStatusDbRef.off('value', userStatusListener);
+                lillianModeUnsubscribe = () => lillianModeDbRef.off('value', lillianModeListener);
                 return true;
             } catch (error) {
                 console.error('Firebase init failed, using local storage fallback:', error);
@@ -5963,6 +6344,7 @@
                 feedbackDbRef = null;
                 tasteDbRef = null;
                 userStatusDbRef = null;
+                lillianModeDbRef = null;
                 return false;
             }
         }
@@ -6376,6 +6758,13 @@
             triggerDevTestNotification().catch((error) => {
                 console.warn('Dev test notification failed.', error);
                 alert('Could not send test notification. Check backend logs and permission settings.');
+            });
+        });
+
+        document.getElementById('lillianModeBtn').addEventListener('click', () => {
+            triggerLillianMode().catch((error) => {
+                console.warn('Lillian mode activation failed.', error);
+                alert('Could not activate Lillian mode right now.');
             });
         });
 
