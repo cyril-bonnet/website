@@ -1716,31 +1716,19 @@
         .chess-piece {
             width: min(78%, 34px);
             height: min(78%, 34px);
-            border-radius: 999px;
-            border: 2px solid #222;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Tahoma', 'Arial', sans-serif;
-            font-size: clamp(13px, 2.6vw, 17px);
-            font-weight: bold;
-            line-height: 1;
-            letter-spacing: 0.3px;
             user-select: none;
         }
 
-        .chess-piece-white {
-            background: #FFFFFF;
-            color: #111;
-            border-color: #1E1E1E;
-            box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.08);
-        }
-
-        .chess-piece-black {
-            background: #1E2530;
-            color: #FFFFFF;
-            border-color: #0B0E12;
-            box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.06);
+        .chess-piece-icon {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.22));
+            pointer-events: none;
         }
 
         .chess-square-light {
@@ -5082,6 +5070,21 @@
             });
         }
 
+        function getChessPieceIconPath(piece) {
+            if (typeof piece !== 'string' || piece.length < 2) return '';
+            const color = piece[0] === 'b' ? 'black' : 'white';
+            const typeMap = {
+                K: 'king',
+                Q: 'queen',
+                R: 'rook',
+                B: 'bishop',
+                N: 'knight',
+                P: 'pawn'
+            };
+            const type = typeMap[String(piece[1] || '').toUpperCase()] || 'pawn';
+            return `assets/chess/${color}-${type}.svg`;
+        }
+
         function renderChessBoard() {
             const board = document.getElementById('chessBoard');
             if (!board) return;
@@ -5112,9 +5115,15 @@
                     if (piece) {
                         const pieceElement = document.createElement('span');
                         const pieceColor = piece[0] === 'w' ? 'white' : 'black';
-                        const pieceType = piece[1];
                         pieceElement.className = `chess-piece chess-piece-${pieceColor}`;
-                        pieceElement.textContent = pieceType || 'P';
+
+                        const icon = document.createElement('img');
+                        icon.className = 'chess-piece-icon';
+                        icon.src = getChessPieceIconPath(piece);
+                        icon.alt = '';
+                        icon.setAttribute('aria-hidden', 'true');
+                        pieceElement.appendChild(icon);
+
                         pieceElement.setAttribute('aria-hidden', 'true');
                         square.appendChild(pieceElement);
                     }
