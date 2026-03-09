@@ -5050,6 +5050,19 @@
             return new Set(legalMoves.map(([targetRow, targetCol]) => `${targetRow},${targetCol}`));
         }
 
+        function getChessBoardOrientation() {
+            if (isChessSelfPlayMode()) return 'white';
+            const side = getCurrentUserChessSide();
+            return side === 'b' ? 'black' : 'white';
+        }
+
+        function chessDisplayToBoardCoords(displayRow, displayCol) {
+            if (getChessBoardOrientation() === 'black') {
+                return [7 - displayRow, 7 - displayCol];
+            }
+            return [displayRow, displayCol];
+        }
+
         function ensureChessBoardStateShape() {
             if (!Array.isArray(chessBoardState) || chessBoardState.length !== 8) {
                 chessBoardState = createInitialChessBoard();
@@ -5078,8 +5091,9 @@
             board.innerHTML = '';
             const legalMoveSet = getSelectedChessLegalSet();
 
-            for (let row = 0; row < 8; row++) {
-                for (let col = 0; col < 8; col++) {
+            for (let displayRow = 0; displayRow < 8; displayRow++) {
+                for (let displayCol = 0; displayCol < 8; displayCol++) {
+                    const [row, col] = chessDisplayToBoardCoords(displayRow, displayCol);
                     const square = document.createElement('button');
                     square.type = 'button';
                     square.className = 'chess-square';
