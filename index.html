@@ -1643,12 +1643,14 @@
         }
 
         .chat-reaction-picker {
-            display: inline-flex;
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: 4px;
             border: 1px solid #808080;
             background: #FFFFFF;
             border-radius: 999px;
             padding: 2px 4px;
+            max-width: 168px;
         }
 
         .chat-reaction-picker button {
@@ -4195,6 +4197,7 @@
         let chessLastUpdatedAt = 0;
         let openReactionPickerMessageId = null;
         let statusMoodEmojiGridOpen = false;
+        let preserveChatScrollOnNextSync = false;
         let lastViewId = 'loginView';
         const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
         const WEEK_DAYS = [
@@ -4274,7 +4277,7 @@
             status: 'Status changes'
         };
         const NOTIFICATION_TYPES = Object.keys(NOTIFICATION_TYPE_LABELS);
-        const CHAT_REACTION_OPTIONS = ['❤️', '😂', '🔥', '😮', '👍', '👎'];
+        const CHAT_REACTION_OPTIONS = ['👍', '👎', '❤️', '😂', '🔥', '🎉', '👏', '😮', '😢', '😡'];
         let chatLastSeen = { ru: 0, kiki: 0 };
         let sectionLastSeen = {
             ru: { todo: 0, weekly: 0, feedback: 0, taste: 0 },
@@ -6252,19 +6255,23 @@
             });
 
             openReactionPickerMessageId = null;
+            preserveChatScrollOnNextSync = true;
             saveChatMessages();
-            renderChatMessages();
+            renderChatMessages({ preserveScroll: true });
         }
 
         function toggleReactionPicker(messageId) {
             const key = String(messageId);
             openReactionPickerMessageId = openReactionPickerMessageId === key ? null : key;
-            renderChatMessages();
+            renderChatMessages({ preserveScroll: true });
         }
 
-        function renderChatMessages() {
+        function renderChatMessages(options = {}) {
             const list = document.getElementById('chatMessages');
             if (!list) return;
+
+            const preserveScroll = Boolean(options?.preserveScroll);
+            const previousScrollTop = list.scrollTop;
 
             list.innerHTML = '';
             if (!chatMessages.length) {
@@ -6362,7 +6369,11 @@
                 list.appendChild(row);
             });
 
-            list.scrollTop = list.scrollHeight;
+            if (preserveScroll) {
+                list.scrollTop = previousScrollTop;
+            } else {
+                list.scrollTop = list.scrollHeight;
+            }
             renderChatUnreadBadge();
         }
 
@@ -7512,7 +7523,8 @@
                     }
 
                     chatHasSyncedOnce = true;
-                    renderChatMessages();
+                    renderChatMessages({ preserveScroll: preserveChatScrollOnNextSync });
+                    preserveChatScrollOnNextSync = false;
                     const chatView = document.getElementById('chatView');
                     if (chatView && chatView.classList.contains('active')) {
                         markChatAsSeen();
