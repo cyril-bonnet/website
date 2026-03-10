@@ -301,6 +301,197 @@
             border-radius: 0;
         }
 
+        body[data-theme='disco70'] .chat-avatar {
+            border-color: #ffc857;
+            background: linear-gradient(180deg, #ffe5f2 0%, #ffd1a1 100%);
+            color: #2b1740;
+        }
+
+        body[data-theme='disco70'] .chat-line {
+            border-color: #ffc857;
+            background: #4a2a69;
+            color: #ffeec1;
+            border-radius: 14px;
+        }
+
+        body[data-theme='disco70'] .chat-line-me {
+            background: #5d2f7a;
+            border-color: #ff9f5a;
+        }
+
+        body[data-theme='disco70'] .chat-line-other {
+            background: #3f2359;
+            border-color: #ffc857;
+        }
+
+        body[data-theme='disco70'] .chat-line-other::before {
+            border-right-color: #ffc857;
+        }
+
+        body[data-theme='disco70'] .chat-line-me::after {
+            border-left-color: #ff9f5a;
+        }
+
+        body[data-theme='disco70'] .chat-reaction-chip {
+            background: #3f2359;
+            border-color: #ffc857;
+            color: #ffeec1;
+        }
+
+        body[data-theme='disco70'] .chat-reaction-chip.active {
+            background: #5d2f7a;
+            border-color: #ff9f5a;
+            color: #fff2cf;
+        }
+
+        body[data-theme='disco70'] .chat-reaction-action,
+        body[data-theme='disco70'] .chat-reaction-picker {
+            background: #2f1c46;
+            border-color: #ffc857;
+            color: #ffeec1;
+        }
+
+        body[data-theme='disco70'] .chat-reaction-picker button {
+            background: #4a2a69;
+            border-color: #ffc857;
+            color: #ffeec1;
+        }
+
+        body[data-theme='minimal'] .chat-avatar {
+            border-color: #cbd5e1;
+            background: linear-gradient(180deg, #ffffff 0%, #eef2ff 100%);
+            color: #0f172a;
+        }
+
+        body[data-theme='minimal'] .chat-line {
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #0f172a;
+        }
+
+        body[data-theme='minimal'] .chat-line-me {
+            background: #dbeafe;
+            border-color: #93c5fd;
+        }
+
+        body[data-theme='minimal'] .chat-line-other {
+            background: #ffffff;
+            border-color: #d1d5db;
+        }
+
+        body[data-theme='minimal'] .chat-line-other::before {
+            border-right-color: #d1d5db;
+        }
+
+        body[data-theme='minimal'] .chat-line-me::after {
+            border-left-color: #93c5fd;
+        }
+
+        body[data-theme='minimal'] .chat-reaction-chip {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #0f172a;
+        }
+
+        body[data-theme='minimal'] .chat-reaction-chip.active {
+            border-color: #3b82f6;
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+
+        body[data-theme='minimal'] .chat-reaction-action,
+        body[data-theme='minimal'] .chat-reaction-picker {
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #0f172a;
+            border-radius: 10px;
+        }
+
+        body[data-theme='minimal'] .chat-reaction-picker button {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #0f172a;
+            border-radius: 8px;
+        }
+
+        body[data-theme='nokia'] .chat-avatar {
+            border: 2px solid #253407;
+            border-radius: 0;
+            background: #d8f76a;
+            color: #1d2b05;
+        }
+
+        body[data-theme='nokia'] .chat-line {
+            border: 2px solid #253407;
+            border-radius: 0;
+            background: #d8f76a;
+            color: #1d2b05;
+            box-shadow: none;
+        }
+
+        body[data-theme='nokia'] .chat-line-me {
+            background: #cde86a;
+            border-color: #253407;
+        }
+
+        body[data-theme='nokia'] .chat-line-other {
+            background: #d8f76a;
+            border-color: #253407;
+        }
+
+        body[data-theme='nokia'] .chat-line-other::before,
+        body[data-theme='nokia'] .chat-line-me::after {
+            width: 8px;
+            height: 8px;
+            border: 2px solid #253407;
+            background: #d8f76a;
+            top: auto;
+            bottom: 8px;
+            transform: none;
+        }
+
+        body[data-theme='nokia'] .chat-line-other::before {
+            left: -6px;
+            border-right: 0;
+            border-top: 0;
+            border-bottom: 0;
+        }
+
+        body[data-theme='nokia'] .chat-line-me::after {
+            right: -6px;
+            border-left: 0;
+            border-top: 0;
+            border-bottom: 0;
+            background: #cde86a;
+        }
+
+        body[data-theme='nokia'] .chat-reaction-chip,
+        body[data-theme='nokia'] .chat-reaction-chip.active,
+        body[data-theme='nokia'] .chat-reaction-action,
+        body[data-theme='nokia'] .chat-reaction-picker,
+        body[data-theme='nokia'] .chat-reaction-picker button {
+            border: 2px solid #253407;
+            border-radius: 0;
+            box-shadow: none;
+            color: #1d2b05;
+        }
+
+        body[data-theme='nokia'] .chat-reaction-chip,
+        body[data-theme='nokia'] .chat-reaction-action,
+        body[data-theme='nokia'] .chat-reaction-picker button {
+            background: #d8f76a;
+        }
+
+        body[data-theme='nokia'] .chat-reaction-chip.active {
+            background: #c3df61;
+        }
+
+        body[data-theme='nokia'] .chat-reaction-picker {
+            background: #a7c31f;
+            padding: 2px;
+        }
+
         .container {
             max-width: 600px;
             margin: 0 auto;
@@ -990,6 +1181,57 @@
             background: #FFFFFF;
         }
 
+        .status-emoji-picker-wrap {
+            position: relative;
+        }
+
+        .status-emoji-trigger {
+            width: 100%;
+            min-width: 0;
+            text-align: left;
+            font-size: 20px;
+            line-height: 1;
+            padding: 6px 8px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            box-shadow: none;
+        }
+
+        .status-emoji-grid {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 4px);
+            max-height: 180px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(8, minmax(0, 1fr));
+            gap: 4px;
+            padding: 6px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            z-index: 3;
+        }
+
+        .status-emoji-grid[hidden] {
+            display: none;
+        }
+
+        .status-emoji-option {
+            min-width: 0;
+            padding: 4px 0;
+            font-size: 16px;
+            line-height: 1;
+            border: 1px solid #B0B0B0;
+            background: #F8F8F8;
+            box-shadow: none;
+        }
+
+        .status-emoji-option.active {
+            border-color: #0054E3;
+            background: #D6E9FF;
+        }
+
         .status-modal-actions {
             display: flex;
             justify-content: flex-end;
@@ -1361,6 +1603,59 @@
 
         .chat-message-text {
             white-space: pre-wrap;
+        }
+
+        .chat-reactions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .chat-reaction-chip,
+        .chat-reaction-action,
+        .chat-reaction-picker button {
+            min-width: auto;
+            padding: 1px 6px;
+            font-size: 11px;
+            line-height: 1.2;
+        }
+
+        .chat-reaction-chip {
+            border: 1px solid #808080;
+            background: #FFFFFF;
+            color: #111;
+            border-radius: 999px;
+        }
+
+        .chat-reaction-chip.active {
+            border-color: #0054E3;
+            background: #D6E9FF;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .chat-reaction-action {
+            border: 1px solid #808080;
+            background: #ECE9D8;
+            border-radius: 999px;
+        }
+
+        .chat-reaction-picker {
+            display: inline-flex;
+            gap: 4px;
+            border: 1px solid #808080;
+            background: #FFFFFF;
+            border-radius: 999px;
+            padding: 2px 4px;
+        }
+
+        .chat-reaction-picker button {
+            border: 1px solid #B0B0B0;
+            background: #F8F8F8;
+            border-radius: 999px;
+            padding: 0 6px;
         }
 
         .feedback-panel {
@@ -3673,15 +3968,17 @@
             <p class="status-modal-meta" id="statusModalUserLabel">Choose a user to edit status.</p>
 
             <div class="status-modal-field">
-                <label for="statusModalMood">Mood</label>
-                <select id="statusModalMood">
-                    <option value="happy">😄 Happy</option>
-                    <option value="normal">😌 Normal</option>
-                    <option value="meh">😐 Meh</option>
-                    <option value="grumpy">😠 Grumpy</option>
-                    <option value="sad">😢 Sad</option>
-                    <option value="excited">🤩 Excited</option>
-                </select>
+                <label for="statusModalMoodEmoji">Mood emoji</label>
+                <div class="status-emoji-picker-wrap" id="statusMoodEmojiWrap">
+                    <button type="button" id="statusModalMoodEmojiBtn" class="status-emoji-trigger" aria-label="Select mood emoji">😌</button>
+                    <div id="statusModalMoodEmojiGrid" class="status-emoji-grid" hidden></div>
+                    <input type="hidden" id="statusModalMoodEmoji" value="😌" />
+                </div>
+            </div>
+
+            <div class="status-modal-field">
+                <label for="statusModalMoodText">Mood text</label>
+                <input type="text" id="statusModalMoodText" maxlength="32" placeholder="Calm, focused, sleepy..." />
             </div>
 
             <div class="status-modal-field" id="statusModalPeriodWrap">
@@ -3860,7 +4157,10 @@
         let lillianModeUnsubscribe = null;
         let chessUnsubscribe = null;
         let weeklyItems = [];
-        let userMoods = { ru: 'normal', kiki: 'normal' };
+        let userMoods = {
+            ru: { emoji: '😌', text: 'Normal' },
+            kiki: { emoji: '😌', text: 'Normal' }
+        };
         let quickNotes = {};
         let chatMessages = [];
         let feedbackItems = [];
@@ -3893,6 +4193,8 @@
         let chessLastMoveFrom = '';
         let chessLastMoveTo = '';
         let chessLastUpdatedAt = 0;
+        let openReactionPickerMessageId = null;
+        let statusMoodEmojiGridOpen = false;
         let lastViewId = 'loginView';
         const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
         const WEEK_DAYS = [
@@ -3933,25 +4235,28 @@
             kiki: { key: 'kiki', name: 'Kiki', emoji: '🐧' }
         };
 
-        const MOOD_LABELS = {
-            happy: 'Happy',
-            normal: 'Normal',
-            meh: 'Meh',
-            grumpy: 'Grumpy',
-            sad: 'Sad',
-            excited: 'Excited'
+        const LEGACY_MOOD_MAP = {
+            happy: { emoji: '😄', text: 'Happy' },
+            normal: { emoji: '😌', text: 'Normal' },
+            meh: { emoji: '😐', text: 'Meh' },
+            grumpy: { emoji: '😠', text: 'Grumpy' },
+            sad: { emoji: '😢', text: 'Sad' },
+            excited: { emoji: '🤩', text: 'Excited' }
         };
-
-        const MOOD_SYMBOLS = {
-            happy: '😄',
-            normal: '😌',
-            meh: '😐',
-            grumpy: '😠',
-            sad: '😢',
-            excited: '🤩'
-        };
-
-        const MOOD_OPTIONS = ['happy', 'normal', 'meh', 'grumpy', 'sad', 'excited'];
+        const MOOD_FACE_EMOJI_OPTIONS = [
+            '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣',
+            '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩',
+            '😘', '😗', '😚', '😙', '😋', '😛', '😜', '🤪',
+            '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨',
+            '😐', '😑', '😶', '🫥', '😏', '😒', '🙄', '😬',
+            '😮‍💨', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷',
+            '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴',
+            '😵', '🤯', '🤠', '🥳', '😎', '🤓', '🧐', '😕',
+            '🫤', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳',
+            '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭',
+            '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱',
+            '😤', '😡', '😠', '🤬', '😈', '👿', '💀', '💩'
+        ];
         const THEME_LABELS = {
             y2k: 'Y2K',
             disco70: '70s Disco',
@@ -3969,6 +4274,7 @@
             status: 'Status changes'
         };
         const NOTIFICATION_TYPES = Object.keys(NOTIFICATION_TYPE_LABELS);
+        const CHAT_REACTION_OPTIONS = ['❤️', '😂', '🔥', '😮', '👍', '👎'];
         let chatLastSeen = { ru: 0, kiki: 0 };
         let sectionLastSeen = {
             ru: { todo: 0, weekly: 0, feedback: 0, taste: 0 },
@@ -4665,17 +4971,88 @@
             renderChatUnreadBadge();
         }
 
-        function normalizeMoods(raw) {
-            const defaults = { ru: 'normal', kiki: 'normal' };
-            if (!raw || typeof raw !== 'object') return defaults;
+        function normalizeMoodEntry(entry, fallback = { emoji: '😌', text: 'Normal' }) {
+            if (typeof entry === 'string' && LEGACY_MOOD_MAP[entry]) {
+                return { ...LEGACY_MOOD_MAP[entry] };
+            }
 
-            const ruMood = MOOD_LABELS[raw.ru] ? raw.ru : defaults.ru;
-            const kikiMood = MOOD_LABELS[raw.kiki] ? raw.kiki : defaults.kiki;
-            return { ru: ruMood, kiki: kikiMood };
+            if (!entry || typeof entry !== 'object') {
+                return { ...fallback };
+            }
+
+            const rawEmoji = String(entry.emoji || '').trim().slice(0, 8);
+            const emoji = MOOD_FACE_EMOJI_OPTIONS.includes(rawEmoji) ? rawEmoji : fallback.emoji;
+            const text = String(entry.text || '').trim().slice(0, 32) || fallback.text;
+            return { emoji, text };
         }
 
-        function moodClass(mood) {
-            return `mood-badge mood-${mood}`;
+        function ensureMoodEmojiOptions() {
+            const valueInput = document.getElementById('statusModalMoodEmoji');
+            const triggerBtn = document.getElementById('statusModalMoodEmojiBtn');
+            const grid = document.getElementById('statusModalMoodEmojiGrid');
+            if (!valueInput || !triggerBtn || !grid) return;
+            if (grid.dataset.ready === '1') return;
+
+            grid.innerHTML = '';
+            MOOD_FACE_EMOJI_OPTIONS.forEach((emoji) => {
+                const optionBtn = document.createElement('button');
+                optionBtn.type = 'button';
+                optionBtn.className = 'status-emoji-option';
+                optionBtn.textContent = emoji;
+                optionBtn.addEventListener('click', () => {
+                    setStatusModalMoodEmoji(emoji);
+                    toggleStatusMoodEmojiGrid(false);
+                });
+                grid.appendChild(optionBtn);
+            });
+
+            triggerBtn.addEventListener('click', () => {
+                toggleStatusMoodEmojiGrid(!statusMoodEmojiGridOpen);
+            });
+
+            grid.dataset.ready = '1';
+            setStatusModalMoodEmoji(valueInput.value || '😌');
+        }
+
+        function setStatusModalMoodEmoji(emoji) {
+            const valueInput = document.getElementById('statusModalMoodEmoji');
+            const triggerBtn = document.getElementById('statusModalMoodEmojiBtn');
+            const grid = document.getElementById('statusModalMoodEmojiGrid');
+            if (!valueInput || !triggerBtn || !grid) return;
+
+            const normalized = MOOD_FACE_EMOJI_OPTIONS.includes(emoji) ? emoji : '😌';
+            valueInput.value = normalized;
+            triggerBtn.textContent = normalized;
+
+            grid.querySelectorAll('.status-emoji-option').forEach((node) => {
+                node.classList.toggle('active', node.textContent === normalized);
+            });
+        }
+
+        function toggleStatusMoodEmojiGrid(forceOpen) {
+            const grid = document.getElementById('statusModalMoodEmojiGrid');
+            if (!grid) return;
+
+            statusMoodEmojiGridOpen = Boolean(forceOpen);
+            grid.hidden = !statusMoodEmojiGridOpen;
+        }
+
+        function normalizeMoods(raw) {
+            const defaults = {
+                ru: { emoji: '😌', text: 'Normal' },
+                kiki: { emoji: '😌', text: 'Normal' }
+            };
+
+            if (!raw || typeof raw !== 'object') return defaults;
+
+            return {
+                ru: normalizeMoodEntry(raw.ru, defaults.ru),
+                kiki: normalizeMoodEntry(raw.kiki, defaults.kiki)
+            };
+        }
+
+        function moodClass() {
+            return 'mood-badge mood-normal';
         }
 
         function getOtherUserKey() {
@@ -5769,6 +6146,57 @@
             renderHomeNoteBubblesForCurrentUser(notes);
         }
 
+        function normalizeMessageReactions(rawReactions) {
+            if (!rawReactions || typeof rawReactions !== 'object') return {};
+
+            const normalized = {};
+            Object.entries(rawReactions).forEach(([emoji, users]) => {
+                const cleanedEmoji = String(emoji || '').trim().slice(0, 8);
+                if (!cleanedEmoji) return;
+                if (!CHAT_REACTION_OPTIONS.includes(cleanedEmoji)) return;
+
+                let list = [];
+                if (Array.isArray(users)) {
+                    list = users
+                        .map((entry) => String(entry || '').trim())
+                        .filter((entry) => entry === 'ru' || entry === 'kiki');
+                } else if (typeof users === 'object') {
+                    list = Object.keys(users)
+                        .filter((entry) => (entry === 'ru' || entry === 'kiki') && users[entry]);
+                }
+
+                const unique = Array.from(new Set(list));
+                if (unique.length) {
+                    normalized[cleanedEmoji] = unique;
+                }
+            });
+
+            return normalized;
+        }
+
+        function normalizeChatMessage(raw) {
+            if (!raw || typeof raw !== 'object') return null;
+            const text = typeof raw.text === 'string' ? raw.text.trim() : '';
+            if (!text) return null;
+            const from = raw.from === 'ru' || raw.from === 'kiki' ? raw.from : '';
+            const to = raw.to === 'ru' || raw.to === 'kiki' ? raw.to : null;
+            return {
+                id: Number(raw.id) || Date.now(),
+                from,
+                to,
+                text,
+                timestamp: Number(raw.timestamp) || Date.now(),
+                reactions: normalizeMessageReactions(raw.reactions)
+            };
+        }
+
+        function normalizeChatMessages(raw) {
+            if (!Array.isArray(raw)) return [];
+            return raw
+                .map((entry) => normalizeChatMessage(entry))
+                .filter((entry) => entry && entry.from);
+        }
+
         function saveChatMessages() {
             if (chatDbRef) {
                 chatDbRef.set(chatMessages).catch((error) => {
@@ -5787,10 +6215,51 @@
                 return;
             }
             try {
-                chatMessages = JSON.parse(saved) || [];
+                chatMessages = normalizeChatMessages(JSON.parse(saved) || []);
             } catch {
                 chatMessages = [];
             }
+        }
+
+        function toggleChatReaction(messageId, emoji) {
+            if (!currentUser) return;
+            const normalizedEmoji = String(emoji || '').trim().slice(0, 8);
+            if (!normalizedEmoji) return;
+            if (!CHAT_REACTION_OPTIONS.includes(normalizedEmoji)) return;
+
+            chatMessages = chatMessages.map((message) => {
+                if (String(message.id) !== String(messageId)) return message;
+
+                const reactions = normalizeMessageReactions(message.reactions);
+                const users = Array.isArray(reactions[normalizedEmoji]) ? [...reactions[normalizedEmoji]] : [];
+                const hasReaction = users.includes(currentUser.key);
+
+                const nextUsers = hasReaction
+                    ? users.filter((entry) => entry !== currentUser.key)
+                    : [...users, currentUser.key];
+
+                const nextReactions = { ...reactions };
+                if (nextUsers.length) {
+                    nextReactions[normalizedEmoji] = nextUsers;
+                } else {
+                    delete nextReactions[normalizedEmoji];
+                }
+
+                return {
+                    ...message,
+                    reactions: nextReactions
+                };
+            });
+
+            openReactionPickerMessageId = null;
+            saveChatMessages();
+            renderChatMessages();
+        }
+
+        function toggleReactionPicker(messageId) {
+            const key = String(messageId);
+            openReactionPickerMessageId = openReactionPickerMessageId === key ? null : key;
+            renderChatMessages();
         }
 
         function renderChatMessages() {
@@ -5846,6 +6315,47 @@
                 if (whenText) {
                     line.appendChild(metaLine);
                 }
+
+                const reactions = normalizeMessageReactions(msg.reactions);
+                const reactionsWrap = document.createElement('div');
+                reactionsWrap.className = 'chat-reactions';
+
+                Object.entries(reactions).forEach(([emoji, users]) => {
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.className = 'chat-reaction-chip';
+                    if (currentUser && users.includes(currentUser.key)) {
+                        chip.classList.add('active');
+                    }
+                    chip.textContent = `${emoji} ${users.length}`;
+                    chip.addEventListener('click', () => toggleChatReaction(msg.id, emoji));
+                    reactionsWrap.appendChild(chip);
+                });
+
+                const reactBtn = document.createElement('button');
+                reactBtn.type = 'button';
+                reactBtn.className = 'chat-reaction-action';
+                reactBtn.textContent = '+';
+                reactBtn.title = 'Add reaction';
+                reactBtn.addEventListener('click', () => toggleReactionPicker(msg.id));
+                reactionsWrap.appendChild(reactBtn);
+
+                if (openReactionPickerMessageId === String(msg.id)) {
+                    const picker = document.createElement('div');
+                    picker.className = 'chat-reaction-picker';
+
+                    CHAT_REACTION_OPTIONS.forEach((emoji) => {
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.textContent = emoji;
+                        button.addEventListener('click', () => toggleChatReaction(msg.id, emoji));
+                        picker.appendChild(button);
+                    });
+
+                    reactionsWrap.appendChild(picker);
+                }
+
+                line.appendChild(reactionsWrap);
 
                 row.appendChild(avatar);
                 row.appendChild(line);
@@ -6433,25 +6943,6 @@
             renderTasteItems();
         }
 
-        function renderMoodButtonsFor(userKey) {
-            const container = document.getElementById(userKey === 'ru' ? 'moodButtonsRu' : 'moodButtonsKiki');
-            if (!container) return;
-
-            container.innerHTML = '';
-            const canEdit = currentUser && currentUser.key === userKey;
-
-            if (!canEdit) return;
-
-            MOOD_OPTIONS.forEach((mood) => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'mood-btn';
-                button.textContent = MOOD_LABELS[mood];
-                button.addEventListener('click', () => setMoodForCurrentUser(mood));
-                container.appendChild(button);
-            });
-        }
-
         function renderMoods() {
             const ruBadge = document.getElementById('moodBadgeRu');
             const kikiBadge = document.getElementById('moodBadgeKiki');
@@ -6459,16 +6950,16 @@
 
             if (!ruBadge || !kikiBadge || !note) return;
 
-            ruBadge.className = moodClass(userMoods.ru);
-            ruBadge.textContent = `${MOOD_SYMBOLS[userMoods.ru]} ${MOOD_LABELS[userMoods.ru]}`;
-            ruBadge.title = `Ru mood: ${MOOD_LABELS[userMoods.ru]}`;
+            const ruMood = normalizeMoodEntry(userMoods.ru);
+            const kikiMood = normalizeMoodEntry(userMoods.kiki);
 
-            kikiBadge.className = moodClass(userMoods.kiki);
-            kikiBadge.textContent = `${MOOD_SYMBOLS[userMoods.kiki]} ${MOOD_LABELS[userMoods.kiki]}`;
-            kikiBadge.title = `Kiki mood: ${MOOD_LABELS[userMoods.kiki]}`;
+            ruBadge.className = moodClass();
+            ruBadge.textContent = `${ruMood.emoji} ${ruMood.text}`;
+            ruBadge.title = `Ru mood: ${ruMood.text}`;
 
-            renderMoodButtonsFor('ru');
-            renderMoodButtonsFor('kiki');
+            kikiBadge.className = moodClass();
+            kikiBadge.textContent = `${kikiMood.emoji} ${kikiMood.text}`;
+            kikiBadge.title = `Kiki mood: ${kikiMood.text}`;
 
             if (!currentUser) {
                 note.textContent = 'Select a user to set mood.';
@@ -6506,40 +6997,6 @@
                 return;
             }
             userMoods = normalizeMoods(null);
-        }
-
-        function setMoodForCurrentUser(mood) {
-            if (!currentUser || !MOOD_LABELS[mood]) return;
-            userMoods = {
-                ...userMoods,
-                [currentUser.key]: mood
-            };
-            const currentStatus = userStatus?.[currentUser.key] || {};
-            userStatus = {
-                ...userStatus,
-                [currentUser.key]: {
-                    period: Boolean(currentStatus.period),
-                    updatedAt: Number(currentStatus.updatedAt) || 0,
-                    moodUpdatedAt: Date.now(),
-                    message: typeof currentStatus.message === 'string' ? currentStatus.message.slice(0, 120) : '',
-                    messageUpdatedAt: Number(currentStatus.messageUpdatedAt) || 0
-                }
-            };
-            saveMoods();
-            saveUserStatus();
-            renderMoods();
-
-            const target = getOtherUserKey();
-            if (target) {
-                notifyBackendAboutEvent({
-                    type: 'mood',
-                    to: target,
-                    title: getNotificationTitleForCurrentUser(),
-                    body: `Mood update: ${currentUser.name} is now ${MOOD_LABELS[mood]}.`
-                }).catch((error) => {
-                    console.warn('Mood notification failed.', error);
-                });
-            }
         }
 
         function initMoods() {
@@ -6589,10 +7046,12 @@
             const modal = document.getElementById('statusModal');
             if (!modal) return;
             modal.classList.remove('visible');
+            toggleStatusMoodEmojiGrid(false);
         }
 
         function renderStatusModal() {
-            const moodSelect = document.getElementById('statusModalMood');
+            const moodEmojiInput = document.getElementById('statusModalMoodEmoji');
+            const moodTextInput = document.getElementById('statusModalMoodText');
             const periodWrap = document.getElementById('statusModalPeriodWrap');
             const periodSelect = document.getElementById('statusModalPeriod');
             const messageInput = document.getElementById('statusModalMessage');
@@ -6600,38 +7059,53 @@
             const saveBtn = document.getElementById('statusModalSaveBtn');
             const editBtn = document.getElementById('statusQuickEditBtn');
 
-            if (!moodSelect || !periodWrap || !periodSelect || !messageInput || !userLabel || !saveBtn || !editBtn) return;
+            if (!moodEmojiInput || !moodTextInput || !periodWrap || !periodSelect || !messageInput || !userLabel || !saveBtn || !editBtn) return;
+            ensureMoodEmojiOptions();
 
             if (!currentUser) {
                 userLabel.textContent = 'Choose a user to edit status.';
-                moodSelect.value = 'normal';
+                setStatusModalMoodEmoji('😌');
+                moodTextInput.value = 'Normal';
                 periodSelect.value = 'no';
                 messageInput.value = '';
-                moodSelect.disabled = true;
+                moodEmojiInput.disabled = true;
+                const moodTriggerBtn = document.getElementById('statusModalMoodEmojiBtn');
+                if (moodTriggerBtn) {
+                    moodTriggerBtn.disabled = true;
+                }
+                moodTextInput.disabled = true;
                 periodSelect.disabled = true;
                 messageInput.disabled = true;
                 saveBtn.disabled = true;
                 editBtn.disabled = true;
                 periodWrap.style.display = '';
+                toggleStatusMoodEmojiGrid(false);
                 return;
             }
 
             const userKey = currentUser.key;
-            const mood = MOOD_LABELS[userMoods?.[userKey]] ? userMoods[userKey] : 'normal';
+            const mood = normalizeMoodEntry(userMoods?.[userKey]);
             const status = userStatus?.[userKey] || {};
 
             userLabel.textContent = `Editing ${currentUser.emoji} ${currentUser.name}`;
-            moodSelect.value = mood;
+            setStatusModalMoodEmoji(mood.emoji);
+            moodTextInput.value = mood.text;
             messageInput.value = typeof status.message === 'string' ? status.message : '';
             const canSetPeriod = userKey === 'ru';
             periodWrap.style.display = canSetPeriod ? '' : 'none';
             periodSelect.value = status.period ? 'yes' : 'no';
 
-            moodSelect.disabled = false;
+            moodEmojiInput.disabled = false;
+            const moodTriggerBtn = document.getElementById('statusModalMoodEmojiBtn');
+            if (moodTriggerBtn) {
+                moodTriggerBtn.disabled = false;
+            }
+            moodTextInput.disabled = false;
             periodSelect.disabled = !canSetPeriod;
             messageInput.disabled = false;
             saveBtn.disabled = false;
             editBtn.disabled = false;
+            toggleStatusMoodEmojiGrid(false);
         }
 
         function openStatusModal() {
@@ -6650,21 +7124,25 @@
         function saveStatusModalChanges() {
             if (!currentUser) return;
 
-            const moodSelect = document.getElementById('statusModalMood');
+            const moodEmojiInput = document.getElementById('statusModalMoodEmoji');
+            const moodTextInput = document.getElementById('statusModalMoodText');
             const periodSelect = document.getElementById('statusModalPeriod');
             const messageInput = document.getElementById('statusModalMessage');
-            if (!moodSelect || !periodSelect || !messageInput) return;
+            if (!moodEmojiInput || !moodTextInput || !periodSelect || !messageInput) return;
 
             const userKey = currentUser.key;
-            const selectedMood = MOOD_LABELS[moodSelect.value] ? moodSelect.value : 'normal';
+            const selectedMood = normalizeMoodEntry({
+                emoji: moodEmojiInput.value,
+                text: moodTextInput.value
+            });
             const nextMessage = messageInput.value.trim().slice(0, 120);
-            const existingMood = MOOD_LABELS[userMoods?.[userKey]] ? userMoods[userKey] : 'normal';
+            const existingMood = normalizeMoodEntry(userMoods?.[userKey]);
             const previousStatus = userStatus?.[userKey] || {};
             const previousPeriod = Boolean(previousStatus.period);
             const nextPeriod = userKey === 'ru' ? periodSelect.value === 'yes' : previousPeriod;
             const previousMessage = typeof previousStatus.message === 'string' ? previousStatus.message : '';
 
-            const moodChanged = selectedMood !== existingMood;
+            const moodChanged = selectedMood.emoji !== existingMood.emoji || selectedMood.text !== existingMood.text;
             const periodChanged = userKey === 'ru' && nextPeriod !== previousPeriod;
             const messageChanged = nextMessage !== previousMessage;
 
@@ -6701,7 +7179,7 @@
                     type: 'mood',
                     to: target,
                     title: getNotificationTitleForCurrentUser(),
-                    body: `Mood update: ${currentUser.name} is now ${MOOD_LABELS[selectedMood]}.`
+                    body: `Mood update: ${currentUser.name} is now ${selectedMood.emoji} ${selectedMood.text}.`
                 }).catch((error) => {
                     console.warn('Mood notification failed.', error);
                 });
@@ -7023,7 +7501,7 @@
                 const chatListener = chatDbRef.on('value', (snapshot) => {
                     const previousMessages = chatMessages;
                     const value = snapshot.val();
-                    chatMessages = Array.isArray(value) ? value : [];
+                    chatMessages = normalizeChatMessages(Array.isArray(value) ? value : []);
 
                     if (currentUser) {
                         const previousIncoming = getLatestIncomingChatTimestamp(previousMessages, currentUser.key);
@@ -7627,7 +8105,8 @@
                 from: currentUser.key,
                 to: getOtherUserKey(),
                 text,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                reactions: {}
             };
 
             chatMessages = [
@@ -7829,6 +8308,12 @@
         document.getElementById('statusModal').addEventListener('click', (event) => {
             if (event.target.id === 'statusModal') {
                 closeStatusModal();
+                return;
+            }
+
+            const wrap = document.getElementById('statusMoodEmojiWrap');
+            if (statusMoodEmojiGridOpen && wrap && !wrap.contains(event.target)) {
+                toggleStatusMoodEmojiGrid(false);
             }
         });
 
