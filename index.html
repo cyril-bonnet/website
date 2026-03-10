@@ -1673,6 +1673,13 @@
             margin-bottom: 8px;
         }
 
+        .chess-last-move {
+            font-size: 11px;
+            color: #1F2937;
+            margin-bottom: 8px;
+            min-height: 14px;
+        }
+
         .chess-controls {
             display: flex;
             gap: 8px;
@@ -1711,6 +1718,35 @@
             line-height: 1;
             box-shadow: none;
             cursor: pointer;
+            position: relative;
+        }
+
+        .chess-axis-rank,
+        .chess-axis-file {
+            position: absolute;
+            font-size: 10px;
+            font-weight: bold;
+            line-height: 1;
+            user-select: none;
+            pointer-events: none;
+            color: rgba(0, 0, 0, 0.62);
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+        }
+
+        .chess-square-dark .chess-axis-rank,
+        .chess-square-dark .chess-axis-file {
+            color: rgba(255, 255, 255, 0.86);
+            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+        }
+
+        .chess-axis-rank {
+            left: 3px;
+            top: 3px;
+        }
+
+        .chess-axis-file {
+            right: 3px;
+            bottom: 3px;
         }
 
         .chess-piece {
@@ -1746,6 +1782,14 @@
 
         .chess-square-legal {
             box-shadow: inset 0 0 0 3px #2E7D32;
+        }
+
+        .chess-square-last-from {
+            box-shadow: inset 0 0 0 3px rgba(251, 191, 36, 0.95);
+        }
+
+        .chess-square-last-to {
+            box-shadow: inset 0 0 0 3px rgba(249, 115, 22, 0.95);
         }
 
         .chess-modal {
@@ -3501,6 +3545,7 @@
                     <h1>Chess</h1>
                     <div class="chess-panel">
                         <p class="chess-status" id="chessStatus">Turn: White</p>
+                        <p class="chess-last-move" id="chessLastMove">Last move: -</p>
                         <div class="chess-controls">
                             <button type="button" id="chessPlayAgainBtn">Play Again</button>
                             <button type="button" id="chessResignBtn">Resign</button>
@@ -3845,6 +3890,8 @@
         let chessGameOver = false;
         let chessResultMessage = '';
         let chessLastMoveSan = '';
+        let chessLastMoveFrom = '';
+        let chessLastMoveTo = '';
         let chessLastUpdatedAt = 0;
         let lastViewId = 'loginView';
         const statuses = ['Todo', 'Doing', 'Done', "Won't be doing"];
@@ -4861,6 +4908,8 @@
                 gameOver: false,
                 resultMessage: '',
                 lastMoveSan: '',
+                lastMoveFrom: '',
+                lastMoveTo: '',
                 updatedAt: 0,
                 updatedBy: null
             };
@@ -4891,6 +4940,8 @@
                 gameOver: Boolean(raw.gameOver),
                 resultMessage: typeof raw.resultMessage === 'string' ? raw.resultMessage : '',
                 lastMoveSan: typeof raw.lastMoveSan === 'string' ? raw.lastMoveSan : '',
+                lastMoveFrom: typeof raw.lastMoveFrom === 'string' ? raw.lastMoveFrom : '',
+                lastMoveTo: typeof raw.lastMoveTo === 'string' ? raw.lastMoveTo : '',
                 updatedAt: Number(raw.updatedAt) || 0,
                 updatedBy: typeof raw.updatedBy === 'string' ? raw.updatedBy : null
             };
@@ -4911,6 +4962,8 @@
                             chessResultMessage = normalizedState.resultMessage;
                         }
                         chessLastMoveSan = normalizedState.lastMoveSan || '';
+                        chessLastMoveFrom = normalizedState.lastMoveFrom || '';
+                        chessLastMoveTo = normalizedState.lastMoveTo || '';
                         chessLastUpdatedAt = normalizedState.updatedAt || 0;
                         chessSelectedSquare = null;
                         return;
@@ -4925,6 +4978,8 @@
             chessGameOver = normalizedState.gameOver;
             chessResultMessage = normalizedState.resultMessage;
             chessLastMoveSan = normalizedState.lastMoveSan || '';
+            chessLastMoveFrom = normalizedState.lastMoveFrom || '';
+            chessLastMoveTo = normalizedState.lastMoveTo || '';
             chessLastUpdatedAt = normalizedState.updatedAt || 0;
             chessSelectedSquare = null;
         }
@@ -4969,6 +5024,8 @@
                 resultMessage: chessResultMessage,
                 fen: chessEngine ? chessEngine.fen() : chessBoardToFen(chessBoardState, chessTurn),
                 lastMoveSan: chessLastMoveSan,
+                lastMoveFrom: chessLastMoveFrom,
+                lastMoveTo: chessLastMoveTo,
                 updatedAt: Date.now(),
                 updatedBy: currentUser?.key || null
             };
@@ -4990,12 +5047,18 @@
                 if (ensureChessEngineAvailable()) {
                     chessEngine.reset();
                     syncChessStateFromEngine();
+                    chessLastMoveSan = '';
+                    chessLastMoveFrom = '';
+                    chessLastMoveTo = '';
                 } else {
                     chessBoardState = createInitialChessBoard();
                     chessTurn = 'w';
                     chessGameOver = false;
                     chessResultMessage = '';
                     chessSelectedSquare = null;
+                    chessLastMoveSan = '';
+                    chessLastMoveFrom = '';
+                    chessLastMoveTo = '';
                 }
                 return;
             }
@@ -5007,12 +5070,18 @@
                 if (ensureChessEngineAvailable()) {
                     chessEngine.reset();
                     syncChessStateFromEngine();
+                    chessLastMoveSan = '';
+                    chessLastMoveFrom = '';
+                    chessLastMoveTo = '';
                 } else {
                     chessBoardState = createInitialChessBoard();
                     chessTurn = 'w';
                     chessGameOver = false;
                     chessResultMessage = '';
                     chessSelectedSquare = null;
+                    chessLastMoveSan = '';
+                    chessLastMoveFrom = '';
+                    chessLastMoveTo = '';
                 }
             }
         }
@@ -5085,11 +5154,30 @@
             return `assets/chess/${color}-${type}.svg`;
         }
 
+        function renderChessLastMoveText() {
+            const lastMoveNode = document.getElementById('chessLastMove');
+            if (!lastMoveNode) return;
+
+            if (!chessLastMoveSan && !chessLastMoveFrom && !chessLastMoveTo) {
+                lastMoveNode.textContent = 'Last move: -';
+                return;
+            }
+
+            const from = chessLastMoveFrom || '?';
+            const to = chessLastMoveTo || '?';
+            const sanSuffix = chessLastMoveSan ? ` (${chessLastMoveSan})` : '';
+            lastMoveNode.textContent = `Last move: ${from} → ${to}${sanSuffix}`;
+        }
+
         function renderChessBoard() {
             const board = document.getElementById('chessBoard');
             if (!board) return;
 
             ensureChessBoardStateShape();
+            renderChessLastMoveText();
+
+            const lastMoveFromCoords = chessSquareToCoords(chessLastMoveFrom);
+            const lastMoveToCoords = chessSquareToCoords(chessLastMoveTo);
 
             board.innerHTML = '';
             const legalMoveSet = getSelectedChessLegalSet();
@@ -5111,6 +5199,14 @@
                         square.classList.add('chess-square-legal');
                     }
 
+                    if (Array.isArray(lastMoveFromCoords) && lastMoveFromCoords[0] === row && lastMoveFromCoords[1] === col) {
+                        square.classList.add('chess-square-last-from');
+                    }
+
+                    if (Array.isArray(lastMoveToCoords) && lastMoveToCoords[0] === row && lastMoveToCoords[1] === col) {
+                        square.classList.add('chess-square-last-to');
+                    }
+
                     const piece = chessBoardState[row][col];
                     if (piece) {
                         const pieceElement = document.createElement('span');
@@ -5127,6 +5223,23 @@
                         pieceElement.setAttribute('aria-hidden', 'true');
                         square.appendChild(pieceElement);
                     }
+
+                    if (displayCol === 0) {
+                        const rankLabel = document.createElement('span');
+                        rankLabel.className = 'chess-axis-rank';
+                        rankLabel.textContent = String(8 - row);
+                        rankLabel.setAttribute('aria-hidden', 'true');
+                        square.appendChild(rankLabel);
+                    }
+
+                    if (displayRow === 7) {
+                        const fileLabel = document.createElement('span');
+                        fileLabel.className = 'chess-axis-file';
+                        fileLabel.textContent = 'abcdefgh'[col] || '';
+                        fileLabel.setAttribute('aria-hidden', 'true');
+                        square.appendChild(fileLabel);
+                    }
+
                     square.addEventListener('click', () => handleChessSquareClick(row, col));
                     board.appendChild(square);
                 }
@@ -5238,6 +5351,8 @@
 
             chessSelectedSquare = null;
             chessLastMoveSan = moveResult.san || '';
+            chessLastMoveFrom = moveResult.from || fromSquare;
+            chessLastMoveTo = moveResult.to || toSquare;
             syncChessStateFromEngine();
 
             if (chessGameOver) {
@@ -5267,6 +5382,8 @@
             }
             chessSelectedSquare = null;
             chessLastMoveSan = '';
+            chessLastMoveFrom = '';
+            chessLastMoveTo = '';
             hideChessWinnerPopup();
             updateChessStatus(getChessStatusText());
             renderChessBoard();
@@ -5316,11 +5433,17 @@
                         if (ensureChessEngineAvailable()) {
                             chessEngine.reset();
                             syncChessStateFromEngine();
+                            chessLastMoveSan = '';
+                            chessLastMoveFrom = '';
+                            chessLastMoveTo = '';
                         } else {
                             chessBoardState = createInitialChessBoard();
                             chessTurn = 'w';
                             chessGameOver = false;
                             chessResultMessage = '';
+                            chessLastMoveSan = '';
+                            chessLastMoveFrom = '';
+                            chessLastMoveTo = '';
                         }
                     }
                     updateChessStatus(getChessStatusText());
@@ -6978,12 +7101,18 @@
                         if (ensureChessEngineAvailable()) {
                             chessEngine.reset();
                             syncChessStateFromEngine();
+                            chessLastMoveSan = '';
+                            chessLastMoveFrom = '';
+                            chessLastMoveTo = '';
                         } else if (!chessBoardState.length) {
                             chessBoardState = createInitialChessBoard();
                             chessTurn = 'w';
                             chessSelectedSquare = null;
                             chessGameOver = false;
                             chessResultMessage = '';
+                            chessLastMoveSan = '';
+                            chessLastMoveFrom = '';
+                            chessLastMoveTo = '';
                         }
                         saveChessState();
                     } else {
