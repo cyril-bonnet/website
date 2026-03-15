@@ -2197,6 +2197,25 @@
             margin-bottom: 8px;
         }
 
+        .chess-captures {
+            display: grid;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .chess-capture-row {
+            border: 1px solid #B0B0B0;
+            background: #ECE9D8;
+            padding: 5px 7px;
+            font-size: 11px;
+            color: #003C74;
+            line-height: 1.3;
+        }
+
+        .chess-capture-row strong {
+            color: #1F2937;
+        }
+
         .chess-controls button {
             min-width: auto;
             padding: 4px 10px;
@@ -2376,6 +2395,35 @@
             color: #000;
             font-size: 13px;
             margin-bottom: 12px;
+        }
+
+        .chess-promotion-options {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .chess-promotion-btn {
+            min-width: auto;
+            width: 100%;
+            padding: 8px 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .chess-promotion-btn .chess-piece-icon {
+            width: min(100%, 34px);
+            height: min(100%, 34px);
+        }
+
+        .chess-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
         }
 
         .option-button {
@@ -4152,6 +4200,10 @@
                     <div class="chess-panel">
                         <p class="chess-status" id="chessStatus">Turn: White</p>
                         <p class="chess-last-move" id="chessLastMove">Last move: -</p>
+                        <div class="chess-captures">
+                            <p class="chess-capture-row" id="chessCapturedRu">Ru captured: none • Score: 0</p>
+                            <p class="chess-capture-row" id="chessCapturedKiki">Kiki captured: none • Score: 0</p>
+                        </div>
                         <div class="chess-controls">
                             <button type="button" id="chessPlayAgainBtn">Play Again</button>
                             <button type="button" id="chessResignBtn">Resign</button>
@@ -4246,6 +4298,17 @@
             <p class="chess-modal-title">Game Over</p>
             <p class="chess-modal-text" id="chessWinnerText">Winner</p>
             <button type="button" id="chessWinnerPlayAgainBtn">Play Again</button>
+        </div>
+    </div>
+
+    <div class="chess-modal" id="chessPromotionModal">
+        <div class="chess-modal-card">
+            <p class="chess-modal-title">Choose Promotion</p>
+            <p class="chess-modal-text">Pick the piece for your pawn:</p>
+            <div class="chess-promotion-options" id="chessPromotionOptions"></div>
+            <div class="chess-modal-actions">
+                <button type="button" id="chessPromotionCancelBtn">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -4544,6 +4607,7 @@
         let chessLastMoveFrom = '';
         let chessLastMoveTo = '';
         let chessLastUpdatedAt = 0;
+        let chessPendingPromotion = null;
         let openReactionPickerMessageId = null;
         let statusMoodEmojiGridOpen = false;
         let preserveChatScrollOnNextSync = false;
@@ -5909,12 +5973,142 @@
             lastMoveNode.textContent = `Last move: ${from} → ${to}${sanSuffix}`;
         }
 
+        function renderChessCapturedSummary() {
+            const ruNode = document.getElementById('chessCapturedRu');
+            const kikiNode = document.getElementById('chessCapturedKiki');
+            if (!ruNode || !kikiNode) return;
+
+            ensureChessBoardStateShape();
+
+            const initialCounts = {
+                wP: 8, wN: 2, wB: 2, wR: 2, wQ: 1,
+                bP: 8, bN: 2, bB: 2, bR: 2, bQ: 1
+            };
+            const currentCounts = {
+                wP: 0, wN: 0, wB: 0, wR: 0, wQ: 0,
+                bP: 0, bN: 0, bB: 0, bR: 0, bQ: 0
+            };
+
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const piece = chessBoardState[row]?.[col] || null;
+                    if (piece && Object.prototype.hasOwnProperty.call(currentCounts, piece)) {
+                        currentCounts[piece] += 1;
+                    }
+                }
+            }
+
+            const values = { P: 1, N: 3, B: 3, R: 5, Q: 9 };
+            const labels = {
+                bP: '♟', bN: '♞', bB: '♝', bR: '♜', bQ: '♛',
+                wP: '♙', wN: '♘', wB: '♗', wR: '♖', wQ: '♕'
+            };
+
+            const ruCapturedOrder = ['bQ', 'bR', 'bB', 'bN', 'bP'];
+            const kikiCapturedOrder = ['wQ', 'wR', 'wB', 'wN', 'wP'];
+
+            let ruScore = 0;
+            const ruBits = [];
+            ruCapturedOrder.forEach((piece) => {
+                const taken = Math.max(0, (initialCounts[piece] || 0) - (currentCounts[piece] || 0));
+                if (!taken) return;
+                ruBits.push(`${labels[piece]}×${taken}`);
+                ruScore += taken * (values[piece[1]] || 0);
+            });
+
+            let kikiScore = 0;
+            const kikiBits = [];
+            kikiCapturedOrder.forEach((piece) => {
+                const taken = Math.max(0, (initialCounts[piece] || 0) - (currentCounts[piece] || 0));
+                if (!taken) return;
+                kikiBits.push(`${labels[piece]}×${taken}`);
+                kikiScore += taken * (values[piece[1]] || 0);
+            });
+
+            ruNode.innerHTML = `<strong>Ru captured:</strong> ${ruBits.length ? ruBits.join(' ') : 'none'} • <strong>Score:</strong> ${ruScore}`;
+            kikiNode.innerHTML = `<strong>Kiki captured:</strong> ${kikiBits.length ? kikiBits.join(' ') : 'none'} • <strong>Score:</strong> ${kikiScore}`;
+        }
+
+        function hideChessPromotionModal() {
+            const modal = document.getElementById('chessPromotionModal');
+            if (!modal) return;
+            modal.classList.remove('visible');
+            chessPendingPromotion = null;
+        }
+
+        function showChessPromotionModal(fromSquare, toSquare, pieceColor) {
+            const modal = document.getElementById('chessPromotionModal');
+            const options = document.getElementById('chessPromotionOptions');
+            if (!modal || !options) return false;
+
+            const colorPrefix = pieceColor === 'b' ? 'b' : 'w';
+            chessPendingPromotion = { fromSquare, toSquare, pieceColor: colorPrefix };
+            options.innerHTML = '';
+
+            const promotionOptions = [
+                { code: 'q', piece: `${colorPrefix}Q`, title: 'Queen' },
+                { code: 'r', piece: `${colorPrefix}R`, title: 'Rook' },
+                { code: 'b', piece: `${colorPrefix}B`, title: 'Bishop' },
+                { code: 'n', piece: `${colorPrefix}N`, title: 'Knight' }
+            ];
+
+            promotionOptions.forEach((option) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'chess-promotion-btn';
+                button.title = option.title;
+
+                const icon = document.createElement('img');
+                icon.className = 'chess-piece-icon';
+                icon.src = getChessPieceIconPath(option.piece);
+                icon.alt = option.title;
+                button.appendChild(icon);
+
+                button.addEventListener('click', () => {
+                    applyChessMove(fromSquare, toSquare, option.code);
+                    hideChessPromotionModal();
+                });
+
+                options.appendChild(button);
+            });
+
+            modal.classList.add('visible');
+            return true;
+        }
+
+        function applyChessMove(fromSquare, toSquare, promotion) {
+            const moveResult = chessEngine.move({ from: fromSquare, to: toSquare, promotion });
+            if (!moveResult) return false;
+
+            chessSelectedSquare = null;
+            chessLastMoveSan = moveResult.san || '';
+            chessLastMoveFrom = moveResult.from || fromSquare;
+            chessLastMoveTo = moveResult.to || toSquare;
+            syncChessStateFromEngine();
+
+            if (chessGameOver) {
+                finishChessGame(chessResultMessage || deriveChessResultFromEngine() || 'Game over.');
+                return true;
+            }
+
+            updateChessStatus(getChessStatusText());
+            renderChessBoard();
+            saveChessState();
+
+            notifyOtherPlayerAboutChessTurn(chessLastMoveSan).catch((error) => {
+                console.warn('Chess move notification failed.', error);
+            });
+
+            return true;
+        }
+
         function renderChessBoard() {
             const board = document.getElementById('chessBoard');
             if (!board) return;
 
             ensureChessBoardStateShape();
             renderChessLastMoveText();
+            renderChessCapturedSummary();
 
             const lastMoveFromCoords = chessSquareToCoords(chessLastMoveFrom);
             const lastMoveToCoords = chessSquareToCoords(chessLastMoveTo);
@@ -6082,31 +6276,14 @@
             const fromSquare = chessCoordsToSquare(fromRow, fromCol);
             const toSquare = chessCoordsToSquare(row, col);
             const movingPiece = chessBoardState[fromRow][fromCol];
-            const promotion = (movingPiece === 'wP' && row === 0) || (movingPiece === 'bP' && row === 7)
-                ? 'q'
-                : undefined;
-
-            const moveResult = chessEngine.move({ from: fromSquare, to: toSquare, promotion });
-            if (!moveResult) return;
-
-            chessSelectedSquare = null;
-            chessLastMoveSan = moveResult.san || '';
-            chessLastMoveFrom = moveResult.from || fromSquare;
-            chessLastMoveTo = moveResult.to || toSquare;
-            syncChessStateFromEngine();
-
-            if (chessGameOver) {
-                finishChessGame(chessResultMessage || deriveChessResultFromEngine() || 'Game over.');
+            const needsPromotion = (movingPiece === 'wP' && row === 0) || (movingPiece === 'bP' && row === 7);
+            if (needsPromotion) {
+                const pieceColor = movingPiece[0] === 'b' ? 'b' : 'w';
+                showChessPromotionModal(fromSquare, toSquare, pieceColor);
                 return;
             }
 
-            updateChessStatus(getChessStatusText());
-            renderChessBoard();
-            saveChessState();
-
-            notifyOtherPlayerAboutChessTurn(chessLastMoveSan).catch((error) => {
-                console.warn('Chess move notification failed.', error);
-            });
+            applyChessMove(fromSquare, toSquare);
         }
 
         function resetChessGame() {
@@ -6125,6 +6302,7 @@
             chessLastMoveFrom = '';
             chessLastMoveTo = '';
             hideChessWinnerPopup();
+            hideChessPromotionModal();
             updateChessStatus(getChessStatusText());
             renderChessBoard();
             saveChessState();
@@ -9121,6 +9299,24 @@
             }
         });
 
+        document.getElementById('chessPromotionCancelBtn').addEventListener('click', () => {
+            hideChessPromotionModal();
+            if (chessInitialized) {
+                updateChessStatus(getChessStatusText());
+                renderChessBoard();
+            }
+        });
+
+        document.getElementById('chessPromotionModal').addEventListener('click', (event) => {
+            if (event.target.id === 'chessPromotionModal') {
+                hideChessPromotionModal();
+                if (chessInitialized) {
+                    updateChessStatus(getChessStatusText());
+                    renderChessBoard();
+                }
+            }
+        });
+
         document.getElementById('tasteModalCloseBtn').addEventListener('click', closeTasteModal);
 
         document.getElementById('tasteModal').addEventListener('click', (event) => {
@@ -9192,6 +9388,7 @@
             if (event.key === 'Escape') {
                 closeTasteModal();
                 closeMovieModal();
+                hideChessPromotionModal();
                 closeStatusModal();
             }
         });
