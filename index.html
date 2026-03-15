@@ -110,6 +110,7 @@
         body[data-theme='disco70'] .section,
         body[data-theme='disco70'] .feedback-panel,
         body[data-theme='disco70'] .taste-panel,
+        body[data-theme='disco70'] .movie-panel,
         body[data-theme='disco70'] .mood-panel,
         body[data-theme='disco70'] .quick-note-panel,
         body[data-theme='disco70'] .music-full-panel,
@@ -178,6 +179,7 @@
         body[data-theme='minimal'] .section,
         body[data-theme='minimal'] .feedback-panel,
         body[data-theme='minimal'] .taste-panel,
+        body[data-theme='minimal'] .movie-panel,
         body[data-theme='minimal'] .mood-panel,
         body[data-theme='minimal'] .quick-note-panel,
         body[data-theme='minimal'] .music-full-panel,
@@ -254,12 +256,14 @@
         body[data-theme='nokia'] .section,
         body[data-theme='nokia'] .feedback-panel,
         body[data-theme='nokia'] .taste-panel,
+        body[data-theme='nokia'] .movie-panel,
         body[data-theme='nokia'] .mood-panel,
         body[data-theme='nokia'] .quick-note-panel,
         body[data-theme='nokia'] .music-full-panel,
         body[data-theme='nokia'] .chess-panel,
         body[data-theme='nokia'] .chat-messages,
         body[data-theme='nokia'] .feedback-list,
+        body[data-theme='nokia'] .movie-list,
         body[data-theme='nokia'] .quick-note-inbox {
             background: #a7c31f;
             border-color: #253407;
@@ -1956,6 +1960,215 @@
             padding: 8px;
         }
 
+        .movie-panel {
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .movie-queue-meta {
+            font-size: 11px;
+            color: #003C74;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .movie-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 6px;
+        }
+
+        .movie-watched-section {
+            margin-top: 8px;
+            border-top: 1px solid #B0B0B0;
+            padding-top: 8px;
+        }
+
+        .movie-watched-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #003C74;
+            margin-bottom: 4px;
+        }
+
+        .movie-list {
+            background: #ECE9D8;
+            border: 1px solid #B0B0B0;
+            min-height: 260px;
+            max-height: 560px;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .movie-item {
+            background: #FFFFFF;
+            border: 2px solid #808080;
+            padding: 8px;
+            font-size: 12px;
+            line-height: 1.35;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .movie-item-watched {
+            background: #F3F3F3;
+            border-color: #A0A0A0;
+        }
+
+        .movie-item-main {
+            min-width: 0;
+            flex: 1;
+            display: grid;
+            gap: 2px;
+            cursor: pointer;
+        }
+
+        .movie-title {
+            color: #003C74;
+            font-weight: bold;
+            font-size: 13px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .movie-meta {
+            font-size: 11px;
+            color: #555;
+        }
+
+        .movie-rank-controls {
+            display: flex;
+            align-items: stretch;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .movie-rank-btn {
+            min-width: auto;
+            width: 28px;
+            height: 26px;
+            padding: 0;
+            font-size: 13px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .movie-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2050;
+            padding: 20px;
+        }
+
+        .movie-modal.visible {
+            display: flex;
+        }
+
+        .movie-modal-card {
+            width: min(100%, 500px);
+            border: 3px solid #0054E3;
+            background: #ECE9D8;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+            padding: 12px;
+        }
+
+        .movie-modal-title {
+            color: #003C74;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .movie-modal-meta {
+            color: #003C74;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .movie-modal-summary {
+            font-size: 11px;
+            color: #003C74;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .movie-modal-field {
+            margin-top: 8px;
+            display: grid;
+            gap: 4px;
+        }
+
+        .movie-modal-field label {
+            font-size: 11px;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .movie-modal-rating-input {
+            width: 72px;
+            padding: 6px;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .movie-modal-review-input {
+            width: 100%;
+            min-height: 92px;
+            resize: vertical;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .movie-modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .movie-empty {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .movie-form {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .movie-form input {
+            width: 100%;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
         .chess-panel {
             border: 2px solid #808080;
             background: #FFFFFF;
@@ -3158,6 +3371,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .movie-form {
+                grid-template-columns: 1fr;
+            }
+
             .chess-controls {
                 flex-direction: column;
             }
@@ -3190,6 +3407,18 @@
 
             .taste-form button {
                 width: 100%;
+            }
+
+            .movie-form button {
+                width: 100%;
+            }
+
+            .movie-item {
+                align-items: flex-start;
+            }
+
+            .movie-rank-controls {
+                flex-direction: column;
             }
 
             .weekly-grid {
@@ -3483,6 +3712,10 @@
                             <span>🍽️</span>
                             <span>Restaurants & Food to Try</span>
                             <span class="chat-option-badge" id="tasteUnreadBadge">NEW</span>
+                        </button>
+                        <button class="option-button" onclick="showView('movieView')">
+                            <span>🎬</span>
+                            <span>Movie List</span>
                         </button>
                         <button class="option-button" onclick="showView('chessView')">
                             <span>♟️</span>
@@ -3861,6 +4094,43 @@
             </div>
         </div>
 
+        <!-- Movie List View -->
+        <div class="view" id="movieView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🎬</span>
+                        <span>movie_list.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Movies to Watch</h1>
+                    <div class="movie-panel">
+                        <p class="movie-queue-meta" id="movieQueueMeta">Watch queue is empty.</p>
+                        <div class="movie-toolbar">
+                            <button type="button" id="movieToggleWatchedBtn">Show Watched</button>
+                        </div>
+                        <div class="movie-list" id="movieList"></div>
+                        <div class="movie-watched-section" id="movieWatchedSection" hidden>
+                            <p class="movie-watched-title">Watched</p>
+                            <div class="movie-list" id="movieWatchedList"></div>
+                        </div>
+                        <form class="movie-form" id="movieForm">
+                            <input type="text" id="movieInput" placeholder="Add a movie" maxlength="120" required />
+                            <button type="submit">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Chess View -->
         <div class="view" id="chessView">
             <button class="back-button" onclick="showView('homeView')">← Back</button>
@@ -4003,6 +4273,33 @@
         </div>
     </div>
 
+    <div class="movie-modal" id="movieModal">
+        <div class="movie-modal-card">
+            <p class="movie-modal-title" id="movieModalTitle">Movie</p>
+            <p class="movie-modal-meta" id="movieModalMeta"></p>
+
+            <button type="button" id="movieModalWatchedBtn">Mark Watched</button>
+
+            <div class="movie-modal-field">
+                <label for="movieModalRatingInput">Your rating (0-10)</label>
+                <input type="number" id="movieModalRatingInput" class="movie-modal-rating-input" min="0" max="10" step="1" placeholder="0-10" />
+            </div>
+
+            <div class="movie-modal-field">
+                <label for="movieModalReviewInput">Your review</label>
+                <textarea id="movieModalReviewInput" class="movie-modal-review-input" maxlength="280" placeholder="Write a short review..."></textarea>
+            </div>
+
+            <p class="movie-modal-summary" id="movieModalSummary"></p>
+
+            <div class="movie-modal-actions">
+                <button type="button" id="movieModalRemoveBtn">Remove</button>
+                <button type="button" id="movieModalSaveBtn">Save</button>
+                <button type="button" id="movieModalCloseBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
     <div class="status-modal" id="statusModal">
         <div class="status-modal-card">
             <p class="status-modal-title">Edit Status</p>
@@ -4119,6 +4416,12 @@
                 closeTasteModal();
             }
 
+            if (viewId === 'movieView') {
+                initMovieList();
+            } else {
+                closeMovieModal();
+            }
+
             if (viewId === 'chessView') {
                 initChess();
             }
@@ -4177,6 +4480,7 @@
         let socialInitialized = false;
         let feedbackInitialized = false;
         let tasteInitialized = false;
+        let movieInitialized = false;
         let firebaseDbRef = null;
         let weeklyDbRef = null;
         let moodsDbRef = null;
@@ -4184,6 +4488,7 @@
         let chatDbRef = null;
         let feedbackDbRef = null;
         let tasteDbRef = null;
+        let movieDbRef = null;
         let userStatusDbRef = null;
         let lillianModeDbRef = null;
         let chessDbRef = null;
@@ -4194,6 +4499,7 @@
         let chatUnsubscribe = null;
         let feedbackUnsubscribe = null;
         let tasteUnsubscribe = null;
+        let movieUnsubscribe = null;
         let userStatusUnsubscribe = null;
         let lillianModeUnsubscribe = null;
         let chessUnsubscribe = null;
@@ -4207,16 +4513,20 @@
         let feedbackItems = [];
         let feedbackDoneCollapsed = true;
         let tasteItems = [];
+        let movieItems = [];
         let tasteTriedCollapsed = false;
+        let movieWatchedVisible = false;
         let tasteBubbleAnimationId = null;
         let tasteBubbleBodies = [];
         let tasteBubbleLastTick = 0;
         let activeTasteItemId = null;
+        let activeMovieItemId = null;
         let chatHasSyncedOnce = false;
         let todoHasSyncedOnce = false;
         let weeklyHasSyncedOnce = false;
         let feedbackHasSyncedOnce = false;
         let tasteHasSyncedOnce = false;
+        let movieHasSyncedOnce = false;
         let userStatus = { ru: { period: false, message: '' }, kiki: { period: false, message: '' } };
         let currentUser = null;
         let appDevModeEnabled = false;
@@ -4258,6 +4568,7 @@
         const SECTION_LAST_SEEN_STORAGE_KEY = 'rugile_section_last_seen';
         const FEEDBACK_STORAGE_KEY = 'rugile_feedback_items';
         const TASTE_STORAGE_KEY = 'rugile_taste_items';
+        const MOVIE_STORAGE_KEY = 'rugile_movie_items';
         const CHESS_STORAGE_KEY = 'rugile_chess_state';
         const USER_STATUS_STORAGE_KEY = 'rugile_user_status';
         const USER_STORAGE_KEY = 'rugile_current_user';
@@ -4829,6 +5140,16 @@
         }
 
         function latestIncomingTasteTimestamp(userKey, sourceItems = tasteItems) {
+            if (!userKey || !Array.isArray(sourceItems)) return 0;
+            return sourceItems.reduce((latest, item) => {
+                const actor = item?.updatedBy || item?.from;
+                if (!actor || actor === userKey) return latest;
+                const timestamp = Number(item?.updatedAt || item?.timestamp || item?.id) || 0;
+                return timestamp > latest ? timestamp : latest;
+            }, 0);
+        }
+
+        function latestIncomingMovieTimestamp(userKey, sourceItems = movieItems) {
             if (!userKey || !Array.isArray(sourceItems)) return 0;
             return sourceItems.reduce((latest, item) => {
                 const actor = item?.updatedBy || item?.from;
@@ -6581,6 +6902,391 @@
             renderFeedbackItems();
         }
 
+        function clampMovieRating(value) {
+            const parsed = Math.round(Number(value));
+            if (!Number.isFinite(parsed)) return 0;
+            return Math.max(0, Math.min(10, parsed));
+        }
+
+        function normalizeMovieItem(item, fallbackId) {
+            if (!item || typeof item !== 'object') return null;
+
+            const title = String(item.title || item.name || '').trim().slice(0, 120);
+            if (!title) return null;
+
+            const id = Number(item.id) || Number(fallbackId) || Date.now();
+            const watched = Boolean(item.watched);
+
+            return {
+                id,
+                title,
+                watched,
+                rank: watched ? 0 : Math.max(0, Math.floor(Number(item.rank) || 0)),
+                userRatings: {
+                    ru: clampMovieRating(item?.userRatings?.ru),
+                    kiki: clampMovieRating(item?.userRatings?.kiki)
+                },
+                userReviews: {
+                    ru: typeof item?.userReviews?.ru === 'string' ? item.userReviews.ru.slice(0, 280) : '',
+                    kiki: typeof item?.userReviews?.kiki === 'string' ? item.userReviews.kiki.slice(0, 280) : ''
+                },
+                from: item?.from === 'ru' || item?.from === 'kiki' ? item.from : null,
+                addedByEmoji: typeof item?.addedByEmoji === 'string' ? item.addedByEmoji : '❓',
+                updatedBy: item?.updatedBy === 'ru' || item?.updatedBy === 'kiki' ? item.updatedBy : null,
+                timestamp: Number(item?.timestamp) || Date.now(),
+                updatedAt: Number(item?.updatedAt) || Number(item?.timestamp) || Date.now()
+            };
+        }
+
+        function normalizeMovieRanks(sourceItems) {
+            if (!Array.isArray(sourceItems)) return [];
+
+            const unwatched = sourceItems
+                .filter((item) => item && !item.watched)
+                .sort((a, b) => {
+                    const rankA = Number(a.rank) > 0 ? Number(a.rank) : Number.MAX_SAFE_INTEGER;
+                    const rankB = Number(b.rank) > 0 ? Number(b.rank) : Number.MAX_SAFE_INTEGER;
+                    if (rankA !== rankB) return rankA - rankB;
+                    return (Number(b.updatedAt) || Number(b.timestamp) || 0) - (Number(a.updatedAt) || Number(a.timestamp) || 0);
+                })
+                .map((item, index) => ({
+                    ...item,
+                    rank: index + 1
+                }));
+
+            const watched = sourceItems
+                .filter((item) => item && item.watched)
+                .sort((a, b) => (Number(b.updatedAt) || Number(b.timestamp) || 0) - (Number(a.updatedAt) || Number(a.timestamp) || 0))
+                .map((item) => ({
+                    ...item,
+                    rank: 0
+                }));
+
+            return [...unwatched, ...watched];
+        }
+
+        function normalizeMovieItems(raw) {
+            if (!Array.isArray(raw)) return [];
+
+            const normalized = raw
+                .map((item, index) => normalizeMovieItem(item, Date.now() + index))
+                .filter(Boolean);
+
+            return normalizeMovieRanks(normalized);
+        }
+
+        function getMovieItemById(movieId) {
+            return movieItems.find((item) => String(item.id) === String(movieId)) || null;
+        }
+
+        function getMovieDisplayGroups() {
+            const unwatched = movieItems
+                .filter((item) => !item.watched)
+                .sort((a, b) => (Number(a.rank) || 0) - (Number(b.rank) || 0));
+            const watched = movieItems
+                .filter((item) => item.watched)
+                .sort((a, b) => (Number(b.updatedAt) || Number(b.timestamp) || 0) - (Number(a.updatedAt) || Number(a.timestamp) || 0));
+            return { unwatched, watched };
+        }
+
+        function saveMovieItems() {
+            movieItems = normalizeMovieRanks(movieItems);
+
+            if (movieDbRef) {
+                movieDbRef.set(movieItems).catch((error) => {
+                    console.error('Firebase movie save failed, fallback to localStorage:', error);
+                    localStorage.setItem(MOVIE_STORAGE_KEY, JSON.stringify(movieItems));
+                });
+                return;
+            }
+
+            localStorage.setItem(MOVIE_STORAGE_KEY, JSON.stringify(movieItems));
+        }
+
+        function loadMovieItems() {
+            const saved = localStorage.getItem(MOVIE_STORAGE_KEY);
+            if (!saved) {
+                movieItems = [];
+                return;
+            }
+
+            try {
+                movieItems = normalizeMovieItems(JSON.parse(saved) || []);
+            } catch {
+                movieItems = [];
+            }
+        }
+
+        function setMovieWatched(movieId, watched) {
+            const movie = getMovieItemById(movieId);
+            if (!movie || !currentUser) return;
+
+            const nextWatched = Boolean(watched);
+            const { unwatched } = getMovieDisplayGroups();
+            const maxRank = unwatched.reduce((max, item) => Math.max(max, Number(item.rank) || 0), 0);
+
+            movieItems = movieItems.map((item) => {
+                if (String(item.id) !== String(movieId)) return item;
+                return {
+                    ...item,
+                    watched: nextWatched,
+                    rank: nextWatched ? 0 : maxRank + 1,
+                    updatedAt: Date.now(),
+                    updatedBy: currentUser.key
+                };
+            });
+
+            saveMovieItems();
+            renderMovieItems();
+        }
+
+        function removeMovie(movieId) {
+            if (!currentUser) return;
+            movieItems = movieItems.filter((item) => String(item.id) !== String(movieId));
+            saveMovieItems();
+            renderMovieItems();
+            closeMovieModal();
+        }
+
+        function closeMovieModal() {
+            const modal = document.getElementById('movieModal');
+            if (!modal) return;
+            modal.classList.remove('visible');
+            activeMovieItemId = null;
+        }
+
+        function renderMovieModal() {
+            const movie = getMovieItemById(activeMovieItemId);
+            if (!movie) {
+                closeMovieModal();
+                return;
+            }
+
+            const title = document.getElementById('movieModalTitle');
+            const meta = document.getElementById('movieModalMeta');
+            const watchedBtn = document.getElementById('movieModalWatchedBtn');
+            const ratingInput = document.getElementById('movieModalRatingInput');
+            const reviewInput = document.getElementById('movieModalReviewInput');
+            const saveBtn = document.getElementById('movieModalSaveBtn');
+            const summary = document.getElementById('movieModalSummary');
+            if (!title || !meta || !watchedBtn || !ratingInput || !reviewInput || !saveBtn || !summary) return;
+
+            const canEdit = Boolean(currentUser);
+            const myKey = currentUser?.key || '';
+            const ruRating = Number(movie.userRatings?.ru) || 0;
+            const kikiRating = Number(movie.userRatings?.kiki) || 0;
+            const ruReview = String(movie.userReviews?.ru || '').trim();
+            const kikiReview = String(movie.userReviews?.kiki || '').trim();
+
+            title.textContent = movie.title || 'Movie';
+            meta.textContent = `${movie.addedByEmoji || '🎬'} • ${movie.watched ? '✅ Watched' : `Queue #${movie.rank || '-'}`}`;
+
+            watchedBtn.disabled = !canEdit;
+            watchedBtn.textContent = movie.watched ? 'Mark Unwatched' : 'Mark Watched';
+
+            ratingInput.disabled = !canEdit;
+            ratingInput.value = canEdit ? String(Number(movie.userRatings?.[myKey]) || 0) : '';
+
+            reviewInput.disabled = !canEdit;
+            reviewInput.value = canEdit ? String(movie.userReviews?.[myKey] || '') : '';
+            reviewInput.placeholder = canEdit ? 'Write a short review...' : 'Pick a user to leave a review';
+
+            saveBtn.disabled = !canEdit;
+            const parts = [
+                `Ru ${ruRating ? `${ruRating}/10` : '—'}`,
+                `Kiki ${kikiRating ? `${kikiRating}/10` : '—'}`
+            ];
+            if (ruReview) parts.push(`Ru: “${ruReview}”`);
+            if (kikiReview) parts.push(`Kiki: “${kikiReview}”`);
+            summary.textContent = parts.join(' • ');
+        }
+
+        function openMovieModal(movieId) {
+            const modal = document.getElementById('movieModal');
+            if (!modal) return;
+            activeMovieItemId = movieId;
+            renderMovieModal();
+            modal.classList.add('visible');
+        }
+
+        function saveMovieModalChanges() {
+            if (!currentUser || activeMovieItemId == null) return;
+
+            const ratingInput = document.getElementById('movieModalRatingInput');
+            const reviewInput = document.getElementById('movieModalReviewInput');
+            const rating = clampMovieRating(ratingInput ? ratingInput.value : 0);
+            const review = String(reviewInput?.value || '').trim().slice(0, 280);
+
+            movieItems = movieItems.map((item) => {
+                if (String(item.id) !== String(activeMovieItemId)) return item;
+                return {
+                    ...item,
+                    userRatings: {
+                        ru: Number(item.userRatings?.ru) || 0,
+                        kiki: Number(item.userRatings?.kiki) || 0,
+                        [currentUser.key]: rating
+                    },
+                    userReviews: {
+                        ru: typeof item.userReviews?.ru === 'string' ? item.userReviews.ru : '',
+                        kiki: typeof item.userReviews?.kiki === 'string' ? item.userReviews.kiki : '',
+                        [currentUser.key]: review
+                    },
+                    updatedAt: Date.now(),
+                    updatedBy: currentUser.key
+                };
+            });
+
+            saveMovieItems();
+            renderMovieItems();
+            renderMovieModal();
+        }
+
+        function moveMovieRank(movieId, direction) {
+            if (!currentUser) return;
+
+            const { unwatched } = getMovieDisplayGroups();
+            const index = unwatched.findIndex((item) => String(item.id) === String(movieId));
+            if (index < 0) return;
+
+            const targetIndex = direction === 'up' ? index - 1 : index + 1;
+            if (targetIndex < 0 || targetIndex >= unwatched.length) return;
+
+            const reordered = [...unwatched];
+            const [moved] = reordered.splice(index, 1);
+            reordered.splice(targetIndex, 0, moved);
+
+            const rankMap = new Map(reordered.map((item, rankIndex) => [String(item.id), rankIndex + 1]));
+            movieItems = movieItems.map((item) => {
+                const nextRank = rankMap.get(String(item.id));
+                if (!nextRank) return item;
+                return {
+                    ...item,
+                    rank: nextRank,
+                    updatedAt: Date.now(),
+                    updatedBy: currentUser.key
+                };
+            });
+
+            saveMovieItems();
+            renderMovieItems();
+        }
+
+        function renderMovieItems() {
+            const list = document.getElementById('movieList');
+            const watchedList = document.getElementById('movieWatchedList');
+            const queueMeta = document.getElementById('movieQueueMeta');
+            const toggleWatchedBtn = document.getElementById('movieToggleWatchedBtn');
+            const watchedSection = document.getElementById('movieWatchedSection');
+            if (!list || !watchedList || !queueMeta || !toggleWatchedBtn || !watchedSection) return;
+
+            list.innerHTML = '';
+            watchedList.innerHTML = '';
+
+            const { unwatched, watched } = getMovieDisplayGroups();
+            queueMeta.textContent = `Queue: ${unwatched.length} to watch next • Watched: ${watched.length}`;
+
+            if (!watched.length && movieWatchedVisible) {
+                movieWatchedVisible = false;
+            }
+            watchedSection.hidden = !movieWatchedVisible;
+            toggleWatchedBtn.textContent = movieWatchedVisible
+                ? `Hide Watched (${watched.length})`
+                : `Show Watched (${watched.length})`;
+            toggleWatchedBtn.disabled = watched.length === 0;
+
+            if (!unwatched.length) {
+                const empty = document.createElement('div');
+                empty.className = 'movie-empty';
+                empty.textContent = movieItems.length
+                    ? 'No movies left in queue. Add more or view watched.'
+                    : 'No movies yet. Add one to start your shared watch queue.';
+                list.appendChild(empty);
+            }
+
+            const canEdit = Boolean(currentUser);
+            const renderMovieCard = (movie, targetList, withReorderButtons) => {
+                const card = document.createElement('div');
+                card.className = `movie-item${movie.watched ? ' movie-item-watched' : ''}`;
+
+                const main = document.createElement('div');
+                main.className = 'movie-item-main';
+                main.dataset.action = 'open';
+                main.dataset.movieId = String(movie.id);
+
+                const title = document.createElement('span');
+                title.className = 'movie-title';
+                title.textContent = `${movie.addedByEmoji || '🎬'} ${movie.title}`;
+
+                const meta = document.createElement('span');
+                meta.className = 'movie-meta';
+                meta.textContent = movie.watched
+                    ? '✅ Watched • tap to edit details'
+                    : `Queue #${movie.rank || '-'} • tap to edit details`;
+
+                main.appendChild(title);
+                main.appendChild(meta);
+
+                const controls = document.createElement('div');
+                controls.className = 'movie-rank-controls';
+
+                const upBtn = document.createElement('button');
+                upBtn.type = 'button';
+                upBtn.className = 'movie-rank-btn';
+                upBtn.textContent = '↑';
+                upBtn.dataset.action = 'move-up';
+                upBtn.dataset.movieId = String(movie.id);
+                upBtn.disabled = !canEdit || !withReorderButtons || Number(movie.rank) <= 1;
+                upBtn.title = 'Move up';
+
+                const downBtn = document.createElement('button');
+                downBtn.type = 'button';
+                downBtn.className = 'movie-rank-btn';
+                downBtn.textContent = '↓';
+                downBtn.dataset.action = 'move-down';
+                downBtn.dataset.movieId = String(movie.id);
+                downBtn.disabled = !canEdit || !withReorderButtons || Number(movie.rank) >= unwatched.length;
+                downBtn.title = 'Move down';
+
+                controls.appendChild(upBtn);
+                controls.appendChild(downBtn);
+
+                card.appendChild(main);
+                card.appendChild(controls);
+                targetList.appendChild(card);
+            };
+
+            unwatched.forEach((movie) => {
+                renderMovieCard(movie, list, true);
+            });
+
+            if (!watched.length && movieWatchedVisible) {
+                const emptyWatched = document.createElement('div');
+                emptyWatched.className = 'movie-empty';
+                emptyWatched.textContent = 'No watched movies yet.';
+                watchedList.appendChild(emptyWatched);
+            }
+
+            if (movieWatchedVisible) {
+                watched.forEach((movie) => {
+                    renderMovieCard(movie, watchedList, false);
+                });
+            }
+        }
+
+        function initMovieList() {
+            if (movieInitialized) {
+                renderMovieItems();
+                return;
+            }
+
+            movieInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadMovieItems();
+            }
+            renderMovieItems();
+        }
+
         function saveTasteItems() {
             if (tasteDbRef) {
                 tasteDbRef.set(tasteItems).catch((error) => {
@@ -7281,6 +7987,7 @@
                 renderChatUnreadBadge();
                 renderSectionUnreadBadges();
                 renderNotificationPreferencesUi();
+                renderMovieItems();
                 return;
             }
 
@@ -7301,6 +8008,7 @@
             renderChatUnreadBadge();
             renderSectionUnreadBadges();
             renderNotificationPreferencesUi();
+            renderMovieItems();
         }
 
         function clearLoginAuthError() {
@@ -7464,6 +8172,7 @@
                 chatDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/chat`);
                 feedbackDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/feedback`);
                 tasteDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/taste`);
+                movieDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/movies`);
                 userStatusDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/userStatus`);
                 lillianModeDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/lillianMode`);
                 chessDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/chess`);
@@ -7489,6 +8198,9 @@
                 }
                 if (tasteUnsubscribe) {
                     tasteUnsubscribe();
+                }
+                if (movieUnsubscribe) {
+                    movieUnsubscribe();
                 }
                 if (userStatusUnsubscribe) {
                     userStatusUnsubscribe();
@@ -7606,6 +8318,23 @@
                     renderSectionUnreadBadges();
                 });
 
+                const movieListener = movieDbRef.on('value', (snapshot) => {
+                    const previousMovieItems = movieItems;
+                    const value = snapshot.val();
+                    movieItems = normalizeMovieItems(Array.isArray(value) ? value : []);
+
+                    if (currentUser) {
+                        const previousIncoming = latestIncomingMovieTimestamp(currentUser.key, previousMovieItems);
+                        const nextIncoming = latestIncomingMovieTimestamp(currentUser.key, movieItems);
+                        if (movieHasSyncedOnce && nextIncoming > previousIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    movieHasSyncedOnce = true;
+                    renderMovieItems();
+                });
+
                 const userStatusListener = userStatusDbRef.on('value', (snapshot) => {
                     userStatus = normalizeUserStatus(snapshot.val());
                     renderPeriodControls();
@@ -7667,6 +8396,7 @@
                 chatUnsubscribe = () => chatDbRef.off('value', chatListener);
                 feedbackUnsubscribe = () => feedbackDbRef.off('value', feedbackListener);
                 tasteUnsubscribe = () => tasteDbRef.off('value', tasteListener);
+                movieUnsubscribe = () => movieDbRef.off('value', movieListener);
                 userStatusUnsubscribe = () => userStatusDbRef.off('value', userStatusListener);
                 lillianModeUnsubscribe = () => lillianModeDbRef.off('value', lillianModeListener);
                 chessUnsubscribe = () => chessDbRef.off('value', chessListener);
@@ -7680,6 +8410,7 @@
                 chatDbRef = null;
                 feedbackDbRef = null;
                 tasteDbRef = null;
+                movieDbRef = null;
                 userStatusDbRef = null;
                 lillianModeDbRef = null;
                 chessDbRef = null;
@@ -8301,6 +9032,95 @@
             }
         });
 
+        document.getElementById('movieForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const input = document.getElementById('movieInput');
+            const title = input.value.trim();
+            if (!title) return;
+
+            const { unwatched } = getMovieDisplayGroups();
+            const maxRank = unwatched.reduce((max, item) => Math.max(max, Number(item.rank) || 0), 0);
+
+            movieItems = [
+                ...movieItems,
+                {
+                    id: Date.now(),
+                    title,
+                    watched: false,
+                    rank: maxRank + 1,
+                    userRatings: { ru: 0, kiki: 0 },
+                    userReviews: { ru: '', kiki: '' },
+                    from: currentUser.key,
+                    updatedBy: currentUser.key,
+                    addedByEmoji: currentUser.emoji,
+                    timestamp: Date.now(),
+                    updatedAt: Date.now()
+                }
+            ];
+
+            if (movieItems.length > 500) {
+                movieItems = movieItems.slice(-500);
+            }
+
+            input.value = '';
+            saveMovieItems();
+            renderMovieItems();
+        });
+
+        document.getElementById('movieToggleWatchedBtn').addEventListener('click', () => {
+            movieWatchedVisible = !movieWatchedVisible;
+            renderMovieItems();
+        });
+
+        const handleMovieListClick = (event) => {
+            const button = event.target.closest('button[data-action][data-movie-id]');
+            if (button) {
+                const movieId = button.dataset.movieId;
+                const action = button.dataset.action;
+
+                if (action === 'move-up') {
+                    moveMovieRank(movieId, 'up');
+                    return;
+                }
+
+                if (action === 'move-down') {
+                    moveMovieRank(movieId, 'down');
+                    return;
+                }
+            }
+
+            const openTarget = event.target.closest('[data-action="open"][data-movie-id]');
+            if (openTarget) {
+                openMovieModal(openTarget.dataset.movieId);
+            }
+        };
+
+        document.getElementById('movieList').addEventListener('click', handleMovieListClick);
+        document.getElementById('movieWatchedList').addEventListener('click', handleMovieListClick);
+
+        document.getElementById('movieModalCloseBtn').addEventListener('click', closeMovieModal);
+        document.getElementById('movieModalSaveBtn').addEventListener('click', saveMovieModalChanges);
+        document.getElementById('movieModalRemoveBtn').addEventListener('click', () => {
+            if (!currentUser || activeMovieItemId == null) return;
+            removeMovie(activeMovieItemId);
+        });
+
+        document.getElementById('movieModalWatchedBtn').addEventListener('click', () => {
+            if (!currentUser || activeMovieItemId == null) return;
+            const movie = getMovieItemById(activeMovieItemId);
+            if (!movie) return;
+            setMovieWatched(activeMovieItemId, !movie.watched);
+            renderMovieModal();
+        });
+
+        document.getElementById('movieModal').addEventListener('click', (event) => {
+            if (event.target.id === 'movieModal') {
+                closeMovieModal();
+            }
+        });
+
         document.getElementById('tasteModalCloseBtn').addEventListener('click', closeTasteModal);
 
         document.getElementById('tasteModal').addEventListener('click', (event) => {
@@ -8371,6 +9191,7 @@
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 closeTasteModal();
+                closeMovieModal();
                 closeStatusModal();
             }
         });
