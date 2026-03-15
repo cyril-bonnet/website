@@ -109,6 +109,7 @@
         body[data-theme='disco70'] .window-content,
         body[data-theme='disco70'] .section,
         body[data-theme='disco70'] .feedback-panel,
+        body[data-theme='disco70'] .song-panel,
         body[data-theme='disco70'] .taste-panel,
         body[data-theme='disco70'] .movie-panel,
         body[data-theme='disco70'] .mood-panel,
@@ -178,6 +179,7 @@
         body[data-theme='minimal'] .window-content,
         body[data-theme='minimal'] .section,
         body[data-theme='minimal'] .feedback-panel,
+        body[data-theme='minimal'] .song-panel,
         body[data-theme='minimal'] .taste-panel,
         body[data-theme='minimal'] .movie-panel,
         body[data-theme='minimal'] .mood-panel,
@@ -255,6 +257,7 @@
         body[data-theme='nokia'] .window-content,
         body[data-theme='nokia'] .section,
         body[data-theme='nokia'] .feedback-panel,
+        body[data-theme='nokia'] .song-panel,
         body[data-theme='nokia'] .taste-panel,
         body[data-theme='nokia'] .movie-panel,
         body[data-theme='nokia'] .mood-panel,
@@ -263,6 +266,7 @@
         body[data-theme='nokia'] .chess-panel,
         body[data-theme='nokia'] .chat-messages,
         body[data-theme='nokia'] .feedback-list,
+        body[data-theme='nokia'] .song-list,
         body[data-theme='nokia'] .movie-list,
         body[data-theme='nokia'] .quick-note-inbox {
             background: #a7c31f;
@@ -1770,6 +1774,84 @@
             color: #555;
             text-align: center;
             padding: 8px;
+        }
+
+        .song-panel {
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .song-list {
+            background: #ECE9D8;
+            border: 1px solid #B0B0B0;
+            min-height: 220px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .song-item {
+            background: #FFFFFF;
+            border: 2px solid #808080;
+            padding: 7px;
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .song-item-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 3px;
+        }
+
+        .song-title {
+            color: #003C74;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .song-meta {
+            font-size: 11px;
+            color: #555;
+        }
+
+        .song-form {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .song-form input {
+            width: 100%;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .song-empty {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .song-note {
+            font-size: 11px;
+            color: #1F2937;
+            margin-top: 3px;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
         .taste-panel {
@@ -3415,6 +3497,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .song-form {
+                grid-template-columns: 1fr;
+            }
+
             .taste-form {
                 grid-template-columns: 1fr;
             }
@@ -3450,6 +3536,10 @@
             }
 
             .feedback-form button {
+                width: 100%;
+            }
+
+            .song-form button {
                 width: 100%;
             }
 
@@ -3755,6 +3845,10 @@
                             <span>💡</span>
                             <span>Feedback & Suggestions</span>
                             <span class="chat-option-badge" id="feedbackUnreadBadge">NEW</span>
+                        </button>
+                        <button class="option-button" onclick="showView('songView')">
+                            <span>🎧</span>
+                            <span>Song Recs</span>
                         </button>
                         <button class="option-button" onclick="showView('tasteView')">
                             <span>🍽️</span>
@@ -4097,6 +4191,37 @@
                             </select>
                             <input type="text" id="feedbackInput" placeholder="Share your idea or feedback" maxlength="280" required />
                             <button type="submit">Post</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Song Recommendations View -->
+        <div class="view" id="songView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🎧</span>
+                        <span>song_recs.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Song Recommendations</h1>
+                    <div class="song-panel">
+                        <div class="song-list" id="songList"></div>
+                        <form class="song-form" id="songForm">
+                            <input type="text" id="songTitleInput" placeholder="Song title" maxlength="120" required />
+                            <input type="text" id="songArtistInput" placeholder="Artist (optional)" maxlength="120" />
+                            <input type="text" id="songNoteInput" placeholder="Short message (optional)" maxlength="180" />
+                            <button type="submit">Add</button>
                         </form>
                     </div>
                 </div>
@@ -4471,6 +4596,10 @@
                 markSectionSeen('feedback');
             }
 
+            if (viewId === 'songView') {
+                initSongs();
+            }
+
             if (viewId === 'tasteView') {
                 initTaste();
                 markSectionSeen('taste');
@@ -4542,6 +4671,7 @@
         let moodsInitialized = false;
         let socialInitialized = false;
         let feedbackInitialized = false;
+        let songInitialized = false;
         let tasteInitialized = false;
         let movieInitialized = false;
         let firebaseDbRef = null;
@@ -4550,6 +4680,7 @@
         let quickNoteDbRef = null;
         let chatDbRef = null;
         let feedbackDbRef = null;
+        let songDbRef = null;
         let tasteDbRef = null;
         let movieDbRef = null;
         let userStatusDbRef = null;
@@ -4561,6 +4692,7 @@
         let quickNoteUnsubscribe = null;
         let chatUnsubscribe = null;
         let feedbackUnsubscribe = null;
+        let songUnsubscribe = null;
         let tasteUnsubscribe = null;
         let movieUnsubscribe = null;
         let userStatusUnsubscribe = null;
@@ -4574,6 +4706,7 @@
         let quickNotes = {};
         let chatMessages = [];
         let feedbackItems = [];
+        let songItems = [];
         let feedbackDoneCollapsed = true;
         let tasteItems = [];
         let movieItems = [];
@@ -4588,6 +4721,7 @@
         let todoHasSyncedOnce = false;
         let weeklyHasSyncedOnce = false;
         let feedbackHasSyncedOnce = false;
+        let songHasSyncedOnce = false;
         let tasteHasSyncedOnce = false;
         let movieHasSyncedOnce = false;
         let userStatus = { ru: { period: false, message: '' }, kiki: { period: false, message: '' } };
@@ -4631,6 +4765,7 @@
         const CHAT_LAST_SEEN_STORAGE_KEY = 'rugile_chat_last_seen';
         const SECTION_LAST_SEEN_STORAGE_KEY = 'rugile_section_last_seen';
         const FEEDBACK_STORAGE_KEY = 'rugile_feedback_items';
+        const SONG_STORAGE_KEY = 'rugile_song_items';
         const TASTE_STORAGE_KEY = 'rugile_taste_items';
         const MOVIE_STORAGE_KEY = 'rugile_movie_items';
         const CHESS_STORAGE_KEY = 'rugile_chess_state';
@@ -7080,6 +7215,113 @@
             renderFeedbackItems();
         }
 
+        function normalizeSongItems(raw) {
+            if (!Array.isArray(raw)) return [];
+            return raw
+                .map((item) => {
+                    if (!item || typeof item !== 'object') return null;
+                    const title = String(item.title || '').trim().slice(0, 120);
+                    if (!title) return null;
+                    const artist = String(item.artist || '').trim().slice(0, 120);
+                    const note = String(item.note || '').trim().slice(0, 180);
+                    return {
+                        id: Number(item.id) || Date.now(),
+                        title,
+                        artist,
+                        note,
+                        from: item.from === 'ru' || item.from === 'kiki' ? item.from : null,
+                        addedByEmoji: typeof item.addedByEmoji === 'string' ? item.addedByEmoji : '❓',
+                        timestamp: Number(item.timestamp) || Date.now(),
+                        updatedAt: Number(item.updatedAt) || Number(item.timestamp) || Date.now()
+                    };
+                })
+                .filter(Boolean)
+                .slice(-400);
+        }
+
+        function saveSongItems() {
+            if (songDbRef) {
+                songDbRef.set(songItems).catch((error) => {
+                    console.error('Firebase song save failed, fallback to localStorage:', error);
+                    localStorage.setItem(SONG_STORAGE_KEY, JSON.stringify(songItems));
+                });
+                return;
+            }
+            localStorage.setItem(SONG_STORAGE_KEY, JSON.stringify(songItems));
+        }
+
+        function loadSongItems() {
+            const saved = localStorage.getItem(SONG_STORAGE_KEY);
+            if (!saved) {
+                songItems = [];
+                return;
+            }
+            try {
+                songItems = normalizeSongItems(JSON.parse(saved) || []);
+            } catch {
+                songItems = [];
+            }
+        }
+
+        function renderSongItems() {
+            const list = document.getElementById('songList');
+            if (!list) return;
+
+            list.innerHTML = '';
+            if (!songItems.length) {
+                const empty = document.createElement('div');
+                empty.className = 'song-empty';
+                empty.textContent = 'No song recommendations yet. Add the first one.';
+                list.appendChild(empty);
+                return;
+            }
+
+            const latestFirst = [...songItems].slice(-250).reverse();
+            latestFirst.forEach((item) => {
+                const row = document.createElement('div');
+                row.className = 'song-item';
+
+                const head = document.createElement('div');
+                head.className = 'song-item-head';
+
+                const title = document.createElement('span');
+                title.className = 'song-title';
+                title.textContent = item.artist ? `${item.title} — ${item.artist}` : item.title;
+
+                const author = document.createElement('span');
+                author.className = 'song-meta';
+                const whenText = formatTinyTimestamp(item.updatedAt || item.timestamp);
+                author.textContent = `${item.addedByEmoji || '❓'}${whenText ? ` • ${whenText}` : ''}`;
+
+                head.appendChild(title);
+                head.appendChild(author);
+                row.appendChild(head);
+
+                if (item.note) {
+                    const note = document.createElement('div');
+                    note.className = 'song-note';
+                    note.textContent = `💬 ${item.note}`;
+                    row.appendChild(note);
+                }
+
+                list.appendChild(row);
+            });
+        }
+
+        function initSongs() {
+            if (songInitialized) {
+                renderSongItems();
+                return;
+            }
+
+            songInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadSongItems();
+            }
+            renderSongItems();
+        }
+
         function clampMovieRating(value) {
             const parsed = Math.round(Number(value));
             if (!Number.isFinite(parsed)) return 0;
@@ -8349,6 +8591,7 @@
                 quickNoteDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/quickNotes`);
                 chatDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/chat`);
                 feedbackDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/feedback`);
+                songDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/songs`);
                 tasteDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/taste`);
                 movieDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/movies`);
                 userStatusDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/userStatus`);
@@ -8373,6 +8616,9 @@
                 }
                 if (feedbackUnsubscribe) {
                     feedbackUnsubscribe();
+                }
+                if (songUnsubscribe) {
+                    songUnsubscribe();
                 }
                 if (tasteUnsubscribe) {
                     tasteUnsubscribe();
@@ -8478,6 +8724,33 @@
                     renderSectionUnreadBadges();
                 });
 
+                const songListener = songDbRef.on('value', (snapshot) => {
+                    const previousSongs = songItems;
+                    const value = snapshot.val();
+                    songItems = normalizeSongItems(Array.isArray(value) ? value : []);
+
+                    if (currentUser) {
+                        const previousIncoming = previousSongs.reduce((latest, item) => {
+                            const actor = item?.from;
+                            if (!actor || actor === currentUser.key) return latest;
+                            const ts = Number(item?.updatedAt || item?.timestamp || item?.id) || 0;
+                            return ts > latest ? ts : latest;
+                        }, 0);
+                        const nextIncoming = songItems.reduce((latest, item) => {
+                            const actor = item?.from;
+                            if (!actor || actor === currentUser.key) return latest;
+                            const ts = Number(item?.updatedAt || item?.timestamp || item?.id) || 0;
+                            return ts > latest ? ts : latest;
+                        }, 0);
+                        if (songHasSyncedOnce && nextIncoming > previousIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    songHasSyncedOnce = true;
+                    renderSongItems();
+                });
+
                 const tasteListener = tasteDbRef.on('value', (snapshot) => {
                     const previousTasteItems = tasteItems;
                     const value = snapshot.val();
@@ -8573,6 +8846,7 @@
                 quickNoteUnsubscribe = () => quickNoteDbRef.off('value', quickNoteListener);
                 chatUnsubscribe = () => chatDbRef.off('value', chatListener);
                 feedbackUnsubscribe = () => feedbackDbRef.off('value', feedbackListener);
+                songUnsubscribe = () => songDbRef.off('value', songListener);
                 tasteUnsubscribe = () => tasteDbRef.off('value', tasteListener);
                 movieUnsubscribe = () => movieDbRef.off('value', movieListener);
                 userStatusUnsubscribe = () => userStatusDbRef.off('value', userStatusListener);
@@ -8587,6 +8861,7 @@
                 quickNoteDbRef = null;
                 chatDbRef = null;
                 feedbackDbRef = null;
+                songDbRef = null;
                 tasteDbRef = null;
                 movieDbRef = null;
                 userStatusDbRef = null;
@@ -9157,6 +9432,43 @@
             toggleFeedbackDoneSection();
         });
 
+        document.getElementById('songForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const titleInput = document.getElementById('songTitleInput');
+            const artistInput = document.getElementById('songArtistInput');
+            const noteInput = document.getElementById('songNoteInput');
+            const title = titleInput.value.trim();
+            const artist = artistInput.value.trim();
+            const note = noteInput.value.trim();
+            if (!title) return;
+
+            songItems = [
+                ...songItems,
+                {
+                    id: Date.now(),
+                    title,
+                    artist,
+                    note,
+                    from: currentUser.key,
+                    addedByEmoji: currentUser.emoji,
+                    timestamp: Date.now(),
+                    updatedAt: Date.now()
+                }
+            ];
+
+            if (songItems.length > 400) {
+                songItems = songItems.slice(-400);
+            }
+
+            titleInput.value = '';
+            artistInput.value = '';
+            noteInput.value = '';
+            saveSongItems();
+            renderSongItems();
+        });
+
         document.getElementById('tasteToggleTriedBtn').addEventListener('click', () => {
             tasteTriedCollapsed = !tasteTriedCollapsed;
             renderTasteItems();
@@ -9409,6 +9721,7 @@
             'belinda_carlisle_heaven_is_a_place_on_earth.mp3',
             'pulp_disco_2000.mp3',
             'the_cure_friday_im_in_love.mp3',
+            'childish_gambino_sober.mp3',
         ];
 
         let currentTrackIndex = 0;
