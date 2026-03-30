@@ -85,6 +85,98 @@
             background: linear-gradient(180deg, #D6E9FF 0%, #A4C9FF 100%);
         }
 
+        .guest-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .guest-prompt {
+            margin: 0 0 10px 0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .guest-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border: 2px solid #999;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.2s;
+        }
+
+        .guest-button:hover {
+            background: #e8e8e8;
+            border-color: #666;
+        }
+
+        .guest-button:active {
+            transform: scale(0.98);
+        }
+
+        .guest-description {
+            margin: 8px 0 0 0;
+            font-size: 11px;
+            color: #999;
+        }
+
+        .guest-mode-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .guest-mode-banner button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .guest-mode-banner button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        body.guest-mode {
+            padding-top: 46px;
+        }
+
+        .guest-mode-hidden {
+            display: none !important;
+        }
+
+        .guest-mode-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
         body[data-theme='disco70'] {
             background: #32104f;
             background-image:
@@ -143,89 +235,94 @@
             color: #2a173f;
         }
 
-        body[data-theme='minimal'] {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #f4f6f8;
-            background-image: none;
+        body[data-theme='xp'] {
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            background: #7b7b7b;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0, rgba(255, 255, 255, 0.06) 1px, transparent 1px, transparent 3px),
+                repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 3px);
         }
 
-        body[data-theme='minimal'] .window,
-        body[data-theme='minimal'] .current-user-bar {
-            background: #ffffff;
-            border: 1px solid #d0d7de;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+        body[data-theme='xp'] .window,
+        body[data-theme='xp'] .current-user-bar {
+            background: #d4d0c8;
+            border: 2px solid;
+            border-color: #ffffff #5a5a5a #5a5a5a #ffffff;
+            border-radius: 0;
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
         }
 
-        body[data-theme='minimal'] .window-header {
-            background: #f8fafc;
-            border-bottom: 1px solid #d0d7de;
-            border-radius: 12px 12px 0 0;
+        body[data-theme='xp'] .window-header {
+            background: linear-gradient(90deg, #0a246a 0%, #3a6ea5 55%, #7ea2cf 100%);
+            border-bottom: 1px solid #163b6f;
+            border-radius: 0;
         }
 
-        body[data-theme='minimal'] .window-title {
-            color: #0f172a;
-            text-shadow: none;
-            font-weight: 600;
-        }
-
-        body[data-theme='minimal'] .window-button {
-            border-radius: 8px;
-            border-color: #cbd5e1;
-            background: #ffffff;
-            color: #334155;
-        }
-
-        body[data-theme='minimal'] .window-content,
-        body[data-theme='minimal'] .section,
-        body[data-theme='minimal'] .feedback-panel,
-        body[data-theme='minimal'] .song-panel,
-        body[data-theme='minimal'] .taste-panel,
-        body[data-theme='minimal'] .movie-panel,
-        body[data-theme='minimal'] .mood-panel,
-        body[data-theme='minimal'] .quick-note-panel,
-        body[data-theme='minimal'] .music-full-panel,
-        body[data-theme='minimal'] .chess-panel {
-            background: #ffffff;
-            border-color: #d0d7de;
-            border-width: 1px;
-        }
-
-        body[data-theme='minimal'] h1,
-        body[data-theme='minimal'] .current-user-text,
-        body[data-theme='minimal'] .panel-title,
-        body[data-theme='minimal'] .question,
-        body[data-theme='minimal'] .section p {
-            color: #0f172a;
-        }
-
-        body[data-theme='minimal'] button {
-            background: #2563eb;
+        body[data-theme='xp'] .window-title {
             color: #ffffff;
-            border: 1px solid #1d4ed8;
+            text-shadow: 1px 1px 0 #001f4d;
+            font-weight: bold;
+        }
+
+        body[data-theme='xp'] .window-button {
+            border-radius: 0;
+            border-color: #ffffff #5a5a5a #5a5a5a #ffffff;
+            background: #d4d0c8;
+            color: #000000;
+        }
+
+        body[data-theme='xp'] .window-content,
+        body[data-theme='xp'] .section,
+        body[data-theme='xp'] .feedback-panel,
+        body[data-theme='xp'] .song-panel,
+        body[data-theme='xp'] .taste-panel,
+        body[data-theme='xp'] .movie-panel,
+        body[data-theme='xp'] .mood-panel,
+        body[data-theme='xp'] .quick-note-panel,
+        body[data-theme='xp'] .music-full-panel,
+        body[data-theme='xp'] .chess-panel {
+            background: #ece9d8;
+            border-color: #ffffff #7f7f7f #7f7f7f #ffffff;
+            border-width: 2px;
+        }
+
+        body[data-theme='xp'] h1,
+        body[data-theme='xp'] .current-user-text,
+        body[data-theme='xp'] .panel-title,
+        body[data-theme='xp'] .question,
+        body[data-theme='xp'] .section p {
+            color: #102a52;
+        }
+
+        body[data-theme='xp'] button {
+            background: #d4d0c8;
+            color: #000000;
+            border: 2px solid;
+            border-color: #ffffff #5a5a5a #5a5a5a #ffffff;
             box-shadow: none;
-            border-radius: 10px;
-            padding: 7px 14px;
+            border-radius: 0;
+            padding: 6px 14px;
         }
 
-        body[data-theme='minimal'] button:hover {
-            background: #1d4ed8;
+        body[data-theme='xp'] button:hover {
+            background: #dedad3;
         }
 
-        body[data-theme='minimal'] button:active {
-            border: 1px solid #1d4ed8;
+        body[data-theme='xp'] button:active {
+            border-color: #5a5a5a #ffffff #ffffff #5a5a5a;
             box-shadow: none;
-            padding: 7px 14px;
+            padding: 6px 14px;
         }
 
-        body[data-theme='minimal'] input,
-        body[data-theme='minimal'] textarea,
-        body[data-theme='minimal'] select,
-        body[data-theme='minimal'] .theme-icons {
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
+        body[data-theme='xp'] input,
+        body[data-theme='xp'] textarea,
+        body[data-theme='xp'] select,
+        body[data-theme='xp'] .theme-icons {
+            border: 2px solid;
+            border-color: #7f7f7f #ffffff #ffffff #7f7f7f;
+            border-radius: 0;
             background: #ffffff;
-            color: #0f172a;
+            color: #000000;
         }
 
         body[data-theme='nokia'] {
@@ -365,62 +462,64 @@
             color: #ffeec1;
         }
 
-        body[data-theme='minimal'] .chat-avatar {
-            border-color: #cbd5e1;
-            background: linear-gradient(180deg, #ffffff 0%, #eef2ff 100%);
-            color: #0f172a;
+        body[data-theme='xp'] .chat-avatar {
+            border-color: #7f7f7f;
+            border-radius: 2px;
+            background: linear-gradient(180deg, #f8f8f8 0%, #d9d9d9 100%);
+            color: #000000;
         }
 
-        body[data-theme='minimal'] .chat-line {
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
+        body[data-theme='xp'] .chat-line {
+            border: 1px solid #7f7f7f;
+            border-radius: 3px;
             background: #ffffff;
-            color: #0f172a;
+            color: #111111;
         }
 
-        body[data-theme='minimal'] .chat-line-me {
-            background: #dbeafe;
-            border-color: #93c5fd;
+        body[data-theme='xp'] .chat-line-me {
+            background: #dfe7f1;
+            border-color: #879eb8;
         }
 
-        body[data-theme='minimal'] .chat-line-other {
+        body[data-theme='xp'] .chat-line-other {
             background: #ffffff;
-            border-color: #d1d5db;
+            border-color: #7f7f7f;
         }
 
-        body[data-theme='minimal'] .chat-line-other::before {
-            border-right-color: #d1d5db;
+        body[data-theme='xp'] .chat-line-other::before {
+            border-right-color: #7f7f7f;
         }
 
-        body[data-theme='minimal'] .chat-line-me::after {
-            border-left-color: #93c5fd;
+        body[data-theme='xp'] .chat-line-me::after {
+            border-left-color: #879eb8;
         }
 
-        body[data-theme='minimal'] .chat-reaction-chip {
-            border: 1px solid #cbd5e1;
+        body[data-theme='xp'] .chat-reaction-chip {
+            border: 1px solid #7f7f7f;
             background: #ffffff;
-            color: #0f172a;
+            color: #111111;
+            border-radius: 2px;
         }
 
-        body[data-theme='minimal'] .chat-reaction-chip.active {
-            border-color: #3b82f6;
-            background: #dbeafe;
-            color: #1e3a8a;
+        body[data-theme='xp'] .chat-reaction-chip.active {
+            border-color: #486f9c;
+            background: #d4e3f4;
+            color: #0f305b;
         }
 
-        body[data-theme='minimal'] .chat-reaction-action,
-        body[data-theme='minimal'] .chat-reaction-picker {
-            border: 1px solid #cbd5e1;
-            background: #f8fafc;
-            color: #0f172a;
-            border-radius: 10px;
+        body[data-theme='xp'] .chat-reaction-action,
+        body[data-theme='xp'] .chat-reaction-picker {
+            border: 1px solid #7f7f7f;
+            background: #ece9d8;
+            color: #000000;
+            border-radius: 2px;
         }
 
-        body[data-theme='minimal'] .chat-reaction-picker button {
-            border: 1px solid #cbd5e1;
+        body[data-theme='xp'] .chat-reaction-picker button {
+            border: 1px solid #7f7f7f;
             background: #ffffff;
-            color: #0f172a;
-            border-radius: 8px;
+            color: #000000;
+            border-radius: 2px;
         }
 
         body[data-theme='nokia'] .chat-avatar {
@@ -2399,17 +2498,48 @@
             background: #9a5b8f;
         }
 
-        body[data-theme='minimal'] .chess-board {
-            background: #cbd5e1;
-            border-color: #94a3b8;
+        body[data-theme='xp'] .chess-board {
+            background: #c7c7c7;
+            border-color: #5f5f5f;
         }
 
-        body[data-theme='minimal'] .chess-square-light {
-            background: #f8fafc;
+        body[data-theme='xp'] .chess-square-light {
+            background: #eeeeee;
         }
 
-        body[data-theme='minimal'] .chess-square-dark {
-            background: #94a3b8;
+        body[data-theme='xp'] .chess-square-dark {
+            background: #9aa6b5;
+        }
+
+        body[data-theme='xp'] .chess-piece {
+            width: min(92%, 46px);
+            height: min(92%, 46px);
+        }
+
+        body[data-theme='xp'] .music-player,
+        body[data-theme='xp'] .music-player:active {
+            border-radius: 999px;
+            width: 54px;
+            height: 54px;
+            min-width: 54px;
+            min-height: 54px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body[data-theme='xp'] .music-vinyl {
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            aspect-ratio: 1 / 1;
+        }
+
+        body[data-theme='xp'] .music-vinyl::after {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
         }
 
         body[data-theme='nokia'] .chess-board {
@@ -3531,6 +3661,32 @@
                 font-size: 13px;
             }
 
+            body[data-theme='xp'] .chess-piece {
+                width: min(94%, 42px);
+                height: min(94%, 42px);
+            }
+
+            body[data-theme='xp'] .music-player,
+            body[data-theme='xp'] .music-player:active {
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+                border-radius: 999px;
+                padding: 0;
+            }
+
+            body[data-theme='xp'] .music-vinyl {
+                width: 34px;
+                height: 34px;
+                border-radius: 999px;
+            }
+
+            body[data-theme='xp'] .music-vinyl::after {
+                width: 7px;
+                height: 7px;
+            }
+
             .weekly-form button {
                 width: 100%;
             }
@@ -3746,7 +3902,7 @@
                 <legend class="sr-only">Select app theme</legend>
                 <button type="button" class="theme-icon-btn" data-theme-id="y2k" title="Y2K">💿</button>
                 <button type="button" class="theme-icon-btn" data-theme-id="disco70" title="70s Disco">🪩</button>
-                <button type="button" class="theme-icon-btn" data-theme-id="minimal" title="Minimal Modern">⚪</button>
+                <button type="button" class="theme-icon-btn" data-theme-id="xp" title="Windows XP Classic">🪟</button>
                 <button type="button" class="theme-icon-btn" data-theme-id="nokia" title="Nokia Pixel">📟</button>
             </fieldset>
             <div class="current-user-actions">
@@ -3788,6 +3944,14 @@
                             <span class="user-emoji">🐧</span>
                             <span class="user-name">Kiki</span>
                         </button>
+                    </div>
+                    <div class="guest-section">
+                        <p class="guest-prompt">or</p>
+                        <button class="guest-button" onclick="initGuestMode()">
+                            <span>👁️</span>
+                            <span>View as Guest</span>
+                        </button>
+                        <p class="guest-description">Browse read-only • No login required</p>
                     </div>
 
                     <div class="login-auth-panel" id="loginAuthPanel">
@@ -4470,7 +4634,7 @@
 
             <div class="movie-modal-field">
                 <label for="movieModalRatingInput">Your rating (0-10)</label>
-                <input type="number" id="movieModalRatingInput" class="movie-modal-rating-input" min="0" max="10" step="1" placeholder="0-10" />
+                <input type="number" id="movieModalRatingInput" class="movie-modal-rating-input" min="0" max="10" step="0.1" placeholder="0-10 (e.g. 8.5)" />
             </div>
 
             <div class="movie-modal-field">
@@ -4552,6 +4716,11 @@
         // VIEW SWITCHING
         // ============================================
         function showView(viewId) {
+            // Prevent accessing chat in guest mode
+            if (isGuestMode && viewId === 'chatView') {
+                viewId = 'homeView';
+            }
+            
             if (viewId !== 'musicView') {
                 lastViewId = viewId;
             }
@@ -4728,6 +4897,8 @@
         let movieHasSyncedOnce = false;
         let userStatus = { ru: { period: false, message: '' }, kiki: { period: false, message: '' } };
         let currentUser = null;
+        let isGuestMode = false;
+        let guestViewingUser = 'ru';
         let appDevModeEnabled = false;
         let usersDbRef = null;
         let pendingUserKey = null;
@@ -4739,6 +4910,7 @@
         let chessSelectedSquare = null;
         let chessGameOver = false;
         let chessResultMessage = '';
+        let chessUserSides = { ru: 'w', kiki: 'b' };
         let chessLastMoveSan = '';
         let chessLastMoveFrom = '';
         let chessLastMoveTo = '';
@@ -4780,6 +4952,7 @@
         const PRIORITY_LABELS = {
             super: 'Really really want to do it',
             want: 'Want to do',
+            maybe: 'Maybe',
             meh: 'Meh',
             dont: "Don't want to do it"
         };
@@ -4814,7 +4987,7 @@
         const THEME_LABELS = {
             y2k: 'Y2K',
             disco70: '70s Disco',
-            minimal: 'Minimal Modern',
+            xp: 'Windows XP Classic',
             nokia: 'Nokia Pixel'
         };
         const NOTIFICATION_TYPE_LABELS = {
@@ -4891,6 +5064,143 @@
                 applyTheme(nextTheme, { persist: true });
                 });
             });
+        }
+
+        function initGuestMode() {
+            isGuestMode = true;
+            currentUser = null;
+            guestViewingUser = 'ru';
+            document.body.classList.add('guest-mode');
+            
+            // Create and insert guest mode banner
+            const existingBanner = document.getElementById('guestModeBanner');
+            if (existingBanner) existingBanner.remove();
+            
+            const banner = document.createElement('div');
+            banner.id = 'guestModeBanner';
+            banner.className = 'guest-mode-banner';
+            banner.innerHTML = `
+                <span>👁️ GUEST MODE • Viewing as ${USER_MAP[guestViewingUser].emoji} ${USER_MAP[guestViewingUser].name}</span>
+                <button onclick="switchGuestViewingUser()">Switch User</button>
+                <button onclick="exitGuestMode()">Exit</button>
+            `;
+            document.body.insertBefore(banner, document.body.firstChild);
+            
+            // Apply guest mode restrictions
+            applyGuestModeRestrictions();
+            
+            // Initialize session like a logged-in user would
+            loadAppDevMode();
+            loadChatLastSeen();
+            loadSectionLastSeen();
+            notificationPreferences = getDefaultNotificationPreferences();
+            updateCurrentUserBar();
+            
+            // Load Firebase data
+            initFirebaseSync();
+            
+            // Show home view
+            showView('homeView');
+        }
+
+        function switchGuestViewingUser() {
+            const otherUser = guestViewingUser === 'ru' ? 'kiki' : 'ru';
+            guestViewingUser = otherUser;
+            const banner = document.getElementById('guestModeBanner');
+            if (banner) {
+                banner.querySelector('span').textContent = `👁️ GUEST MODE • Viewing as ${USER_MAP[guestViewingUser].emoji} ${USER_MAP[guestViewingUser].name}`;
+            }
+            
+            // Refresh all views to show data for new user
+            const activeView = document.querySelector('.view.active')?.id;
+            if (activeView === 'homeView') {
+                renderMoods();
+                renderPeriodControls();
+            } else if (activeView === 'todoView') {
+                renderTodoList();
+            } else if (activeView === 'weeklyView') {
+                renderWeeklyPlanner();
+            } else if (activeView === 'feedbackView') {
+                renderFeedback();
+            } else if (activeView === 'tasteView') {
+                renderTasteList();
+            } else if (activeView === 'movieView') {
+                renderMovieList();
+            } else if (activeView === 'songView') {
+                renderSongList();
+            } else if (activeView === 'chessView') {
+                renderChessBoard();
+            }
+            
+            renderQuickNoteInbox();
+            renderStatusModal();
+            renderSectionUnreadBadges();
+        }
+
+        function exitGuestMode() {
+            isGuestMode = false;
+            currentUser = null;
+            guestViewingUser = 'ru';
+            document.body.classList.remove('guest-mode');
+            const banner = document.getElementById('guestModeBanner');
+            if (banner) banner.remove();
+            showView('loginView');
+        }
+
+        function applyGuestModeRestrictions() {
+            // Hide chat view
+            const chatViewNav = document.querySelector("button[onclick*=\"showView('chatView'\"]");
+            if (chatViewNav) chatViewNav.parentElement.style.display = 'none';
+            
+            // Hide sensitive information
+            const periodStatus = document.getElementById('periodStatusRu');
+            if (periodStatus) periodStatus.classList.add('guest-mode-hidden');
+            
+            // Disable all input fields and buttons that modify data
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.id !== 'appDevModeToggle' && input.id !== 'tasteModalEmojiInput') {
+                    input.disabled = true;
+                    input.style.cursor = 'not-allowed';
+                    input.style.opacity = '0.6';
+                }
+            });
+            
+            // Disable edit, delete, add, save buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                const text = button.textContent.toLowerCase();
+                const onclick = button.getAttribute('onclick') || '';
+                
+                // Keep these buttons enabled for viewing
+                if (button.classList.contains('theme-icon-btn') || 
+                    button.id === 'notificationSettingsBtn' ||
+                    button.id === 'lillianModeBtn' ||
+                    button.id === 'devTestNotifyBtn' ||
+                    button.id === 'guestModeBanner' ||
+                    onclick.includes('showView')) {
+                    return;
+                }
+                
+                // Disable action buttons
+                if (text.includes('add') || text.includes('create') || text.includes('save') || 
+                    text.includes('delete') || text.includes('remove') || text.includes('edit') ||
+                    text.includes('send') || text.includes('submit') || text.includes('post') ||
+                    text.includes('update') || onclick.includes('deleteTask') || 
+                    onclick.includes('toggleTask') || onclick.includes('addTask') ||
+                    onclick.includes('editTask') || onclick.includes('saveMovie') ||
+                    onclick.includes('toggleTaste') || button.id === 'switchUserBtn' ||
+                    onclick.includes('setUserStatus') || onclick.includes('setUserMood') ||
+                    onclick.includes('selectUser')) {
+                    button.disabled = true;
+                    button.classList.add('guest-mode-disabled');
+                    button.title = 'Disabled in guest mode';
+                }
+            });
+        }
+
+        function isGuestModeActive() {
+            return isGuestMode && !currentUser;
         }
 
         function getPushBackendUrl() {
@@ -5736,6 +6046,32 @@
             ];
         }
 
+        function createRandomChessUserSides() {
+            const ruIsWhite = Math.random() < 0.5;
+            return ruIsWhite
+                ? { ru: 'w', kiki: 'b' }
+                : { ru: 'b', kiki: 'w' };
+        }
+
+        function normalizeChessUserSides(rawSides) {
+            const ruSide = rawSides?.ru === 'b' ? 'b' : (rawSides?.ru === 'w' ? 'w' : null);
+            const kikiSide = rawSides?.kiki === 'b' ? 'b' : (rawSides?.kiki === 'w' ? 'w' : null);
+
+            if (ruSide && kikiSide && ruSide !== kikiSide) {
+                return { ru: ruSide, kiki: kikiSide };
+            }
+
+            if (ruSide && !kikiSide) {
+                return { ru: ruSide, kiki: ruSide === 'w' ? 'b' : 'w' };
+            }
+
+            if (kikiSide && !ruSide) {
+                return { ru: kikiSide === 'w' ? 'b' : 'w', kiki: kikiSide };
+            }
+
+            return { ...chessUserSides };
+        }
+
         function isWhiteChessPiece(piece) {
             return Boolean(piece && piece[0] === 'w');
         }
@@ -5848,6 +6184,7 @@
                 turn: 'w',
                 gameOver: false,
                 resultMessage: '',
+                userSides: { ...chessUserSides },
                 lastMoveSan: '',
                 lastMoveFrom: '',
                 lastMoveTo: '',
@@ -5880,6 +6217,7 @@
                 turn: raw.turn === 'b' ? 'b' : 'w',
                 gameOver: Boolean(raw.gameOver),
                 resultMessage: typeof raw.resultMessage === 'string' ? raw.resultMessage : '',
+                userSides: normalizeChessUserSides(raw.userSides),
                 lastMoveSan: typeof raw.lastMoveSan === 'string' ? raw.lastMoveSan : '',
                 lastMoveFrom: typeof raw.lastMoveFrom === 'string' ? raw.lastMoveFrom : '',
                 lastMoveTo: typeof raw.lastMoveTo === 'string' ? raw.lastMoveTo : '',
@@ -5890,6 +6228,7 @@
 
         function applyNormalizedChessState(normalizedState) {
             if (!normalizedState) return;
+            chessUserSides = normalizeChessUserSides(normalizedState.userSides);
 
             const canUseEngine = ensureChessEngineAvailable();
             const fenCandidate = normalizedState.fen || chessBoardToFen(normalizedState.board, normalizedState.turn);
@@ -5930,8 +6269,8 @@
         }
 
         function getCurrentUserChessSide() {
-            if (currentUser?.key === 'ru') return 'w';
-            if (currentUser?.key === 'kiki') return 'b';
+            if (currentUser?.key === 'ru') return chessUserSides.ru;
+            if (currentUser?.key === 'kiki') return chessUserSides.kiki;
             return null;
         }
 
@@ -5963,6 +6302,7 @@
                 turn: chessTurn,
                 gameOver: chessGameOver,
                 resultMessage: chessResultMessage,
+                userSides: { ...chessUserSides },
                 fen: chessEngine ? chessEngine.fen() : chessBoardToFen(chessBoardState, chessTurn),
                 lastMoveSan: chessLastMoveSan,
                 lastMoveFrom: chessLastMoveFrom,
@@ -5985,6 +6325,7 @@
         function loadChessState() {
             const saved = localStorage.getItem(CHESS_STORAGE_KEY);
             if (!saved) {
+                chessUserSides = createRandomChessUserSides();
                 if (ensureChessEngineAvailable()) {
                     chessEngine.reset();
                     syncChessStateFromEngine();
@@ -6008,6 +6349,7 @@
                 const normalized = normalizeChessState(JSON.parse(saved));
                 applyNormalizedChessState(normalized);
             } catch {
+                chessUserSides = createRandomChessUserSides();
                 if (ensureChessEngineAvailable()) {
                     chessEngine.reset();
                     syncChessStateFromEngine();
@@ -6141,8 +6483,12 @@
                 wP: '♙', wN: '♘', wB: '♗', wR: '♖', wQ: '♕'
             };
 
-            const ruCapturedOrder = ['bQ', 'bR', 'bB', 'bN', 'bP'];
-            const kikiCapturedOrder = ['wQ', 'wR', 'wB', 'wN', 'wP'];
+            const ruCapturedOrder = chessUserSides.ru === 'w'
+                ? ['bQ', 'bR', 'bB', 'bN', 'bP']
+                : ['wQ', 'wR', 'wB', 'wN', 'wP'];
+            const kikiCapturedOrder = chessUserSides.kiki === 'w'
+                ? ['bQ', 'bR', 'bB', 'bN', 'bP']
+                : ['wQ', 'wR', 'wB', 'wN', 'wP'];
 
             let ruScore = 0;
             const ruBits = [];
@@ -6343,7 +6689,7 @@
         }
 
         function getChessTurnOwnerKey() {
-            return chessTurn === 'w' ? 'ru' : 'kiki';
+            return chessUserSides.ru === chessTurn ? 'ru' : 'kiki';
         }
 
         function canCurrentUserPlayCurrentTurn() {
@@ -6379,7 +6725,8 @@
             if (!currentUser || (currentUser.key !== 'ru' && currentUser.key !== 'kiki')) return;
             const currentSide = getCurrentUserChessSide();
             if (!canCurrentUserPlayCurrentTurn()) {
-                const waitingFor = chessTurn === 'w' ? 'Ru 🧘‍♀️' : 'Kiki 🐧';
+                const waitingForKey = getChessTurnOwnerKey();
+                const waitingFor = waitingForKey === 'ru' ? 'Ru 🧘‍♀️' : 'Kiki 🐧';
                 const sideLabel = currentSide === 'w' ? 'White' : currentSide === 'b' ? 'Black' : 'Observer';
                 updateChessStatus(`Waiting for ${waitingFor} • You are ${sideLabel}`);
                 return;
@@ -6424,6 +6771,7 @@
         }
 
         function resetChessGame() {
+            chessUserSides = createRandomChessUserSides();
             if (ensureChessEngineAvailable()) {
                 chessEngine.reset();
                 syncChessStateFromEngine();
@@ -6452,7 +6800,7 @@
 
             const resigningSide = isChessSelfPlayMode()
                 ? chessTurn
-                : (currentUser.key === 'ru' ? 'w' : 'b');
+                : (getCurrentUserChessSide() || chessTurn);
             const resigning = resigningSide === 'w' ? 'White' : 'Black';
             const winner = resigningSide === 'w' ? 'Black' : 'White';
             finishChessGame(`${winner} wins (${resigning} resigned).`);
@@ -6546,6 +6894,13 @@
             const currentActivityRu = document.getElementById('statusCurrentActivityRu');
             const currentActivityKiki = document.getElementById('statusCurrentActivityKiki');
             if (!periodStatusRu || !messageRu || !messageKiki || !currentActivityRu || !currentActivityKiki) return;
+
+            // Hide period data in guest mode
+            if (isGuestMode) {
+                periodStatusRu.classList.add('guest-mode-hidden');
+            } else {
+                periodStatusRu.classList.remove('guest-mode-hidden');
+            }
 
             const ruStatus = userStatus?.ru || {};
             const kikiStatus = userStatus?.kiki || {};
@@ -6677,7 +7032,7 @@
             const palettes = {
                 y2k: ['#E9D6FF', '#D6E9FF', '#FFD6F2', '#CFF7D3', '#FFF2BF'],
                 disco70: ['#ffdf80', '#ff9bbf', '#80f0e5', '#ffd5a3', '#f7b2ff'],
-                minimal: ['#e2e8f0', '#dbeafe', '#d1fae5', '#fef3c7', '#f3e8ff'],
+                xp: ['#d9d9d9', '#c8d0db', '#e6e6e6', '#bfc7d4', '#f2f2f2'],
                 nokia: ['#d8f76a', '#cde86a', '#c3df61', '#b7d259', '#d2ef73']
             };
             return palettes[currentTheme] || palettes.y2k;
@@ -7325,9 +7680,10 @@
         }
 
         function clampMovieRating(value) {
-            const parsed = Math.round(Number(value));
+            const parsed = Number(value);
             if (!Number.isFinite(parsed)) return 0;
-            return Math.max(0, Math.min(10, parsed));
+            const clamped = Math.max(0, Math.min(10, parsed));
+            return Math.round(clamped * 10) / 10;
         }
 
         function normalizeMovieItem(item, fallbackId) {
@@ -7560,7 +7916,7 @@
 
             saveMovieItems();
             renderMovieItems();
-            renderMovieModal();
+            closeMovieModal();
         }
 
         function moveMovieRank(movieId, direction) {
@@ -8838,6 +9194,7 @@
                 const chessListener = chessDbRef.on('value', (snapshot) => {
                     const value = snapshot.val();
                     if (!value) {
+                        chessUserSides = createRandomChessUserSides();
                         if (ensureChessEngineAvailable()) {
                             chessEngine.reset();
                             syncChessStateFromEngine();
