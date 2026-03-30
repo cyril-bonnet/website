@@ -4541,6 +4541,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
     <script type="module">
         import { Chess } from 'https://unpkg.com/chess.js@1.4.0/dist/esm/chess.js';
         window.Chess = Chess;
@@ -4698,6 +4699,7 @@
         let userStatusUnsubscribe = null;
         let lillianModeUnsubscribe = null;
         let chessUnsubscribe = null;
+        let firebaseAuth = null;
         let weeklyItems = [];
         let userMoods = {
             ru: { emoji: '😌', text: 'Normal' },
@@ -8471,6 +8473,35 @@
             return firebase.database();
         }
 
+        function getFirebaseAuth() {
+            if (!hasFirebaseConfig() || typeof firebase === 'undefined') {
+                return null;
+            }
+
+            if (!firebase.apps.length) {
+                firebase.initializeApp(FIREBASE_CONFIG);
+            }
+
+            if (!firebaseAuth) {
+                firebaseAuth = firebase.auth();
+            }
+
+            return firebaseAuth;
+        }
+
+        async function signInAnonymouslyOnLoad() {
+            const auth = getFirebaseAuth();
+            if (!auth) return;
+
+            if (auth.currentUser) return;
+
+            try {
+                await auth.signInAnonymously();
+            } catch (error) {
+                console.error('Anonymous Firebase sign-in failed:', error);
+            }
+        }
+
         async function getUserPasswordRecord(userKey) {
             const database = getFirebaseDatabase();
             if (!database) return null;
@@ -10238,6 +10269,7 @@
             showView('loginView');
         });
 
+        signInAnonymouslyOnLoad();
         initUserSession();
 
         // ============================================
