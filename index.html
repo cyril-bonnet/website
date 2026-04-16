@@ -4247,6 +4247,143 @@
             color: #6b4200 !important;
         }
 
+        /* Workout mode */
+        .gym-workout-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 4500;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .gym-workout-modal.visible {
+            display: flex;
+        }
+
+        .gym-workout-card {
+            background: #ECE9D8;
+            border: 2px solid #808080;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+            padding: 18px 20px 16px;
+            width: min(480px, 100%);
+            margin: auto;
+        }
+
+        .gym-workout-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .gym-workout-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #003C74;
+            margin: 0;
+        }
+
+        .gym-workout-progress {
+            font-size: 12px;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .gym-workout-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .gym-workout-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 8px;
+            background: #FFFFFF;
+            border: 2px solid #B0B0B0;
+            padding: 8px 10px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .gym-workout-row.done {
+            background: #D6FFE2;
+            border-color: #4CAF50;
+        }
+
+        .gym-workout-info {
+            min-width: 0;
+        }
+
+        .gym-workout-name {
+            font-weight: bold;
+            font-size: 13px;
+            color: #1F2937;
+        }
+
+        .gym-workout-row.done .gym-workout-name {
+            text-decoration: line-through;
+            color: #555;
+        }
+
+        .gym-workout-meta {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .gym-workout-weight-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .gym-workout-weight-input {
+            width: 62px;
+            padding: 4px 6px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .gym-workout-weight-label {
+            font-size: 11px;
+            color: #555;
+        }
+
+        .gym-workout-done-btn {
+            min-width: 0;
+            padding: 4px 10px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .gym-workout-done-btn.is-done {
+            background: linear-gradient(180deg, #c8f7d4 0%, #83d48e 100%) !important;
+            border-color: #e8fff0 #1b7a2a #1b7a2a #e8fff0 !important;
+            color: #0a4214 !important;
+        }
+
+        .gym-workout-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .gym-workout-day-btn {
+            padding: 3px 9px;
+            font-size: 11px;
+            min-width: 0;
+            white-space: nowrap;
+        }
+
         /* Theme: disco70 */
         body[data-theme='disco70'] .gym-panel {
             background: #3a2155;
@@ -5231,6 +5368,20 @@
         </div>
     </div>
 
+    <!-- Gym Workout Modal -->
+    <div class="gym-workout-modal" id="gymWorkoutModal">
+        <div class="gym-workout-card">
+            <div class="gym-workout-header">
+                <p class="gym-workout-title" id="gymWorkoutTitle">Workout</p>
+                <span class="gym-workout-progress" id="gymWorkoutProgress">0 / 0 done</span>
+            </div>
+            <div class="gym-workout-list" id="gymWorkoutList"></div>
+            <div class="gym-workout-actions">
+                <button type="button" id="gymWorkoutCloseBtn">End Workout</button>
+            </div>
+        </div>
+    </div>
+
     <div class="chess-modal" id="chessWinnerModal">
         <div class="chess-modal-card">
             <p class="chess-modal-title">Game Over</p>
@@ -5578,6 +5729,8 @@
         let gymEditingExerciseId = null;
         let gymEditingDayIdForEx = null;
         let gymSelectedLibExId = null;
+        let gymWorkoutDayId = null;      // day currently being worked out
+        let gymWorkoutDone = {};         // { exerciseId: true } for this session
         let statusMoodEmojiGridOpen = false;
         let preserveChatScrollOnNextSync = false;
         let lastViewId = 'loginView';
@@ -11716,6 +11869,7 @@
                 loadGymPlanner();
             }
             setupGymModals();
+            setupGymWorkoutModal();
             renderGymDays();
         }
 
@@ -11753,6 +11907,12 @@
                 editBtn.textContent = 'Edit';
                 editBtn.addEventListener('click', () => openGymDayModal(day.id));
 
+                const workoutBtn = document.createElement('button');
+                workoutBtn.type = 'button';
+                workoutBtn.textContent = '▶ Start';
+                workoutBtn.className = 'gym-workout-day-btn';
+                workoutBtn.addEventListener('click', () => openGymWorkout(day.id));
+
                 const addExBtn = document.createElement('button');
                 addExBtn.type = 'button';
                 addExBtn.textContent = '+ Exercise';
@@ -11760,6 +11920,7 @@
                 addExBtn.addEventListener('click', () => openGymExerciseModal(day.id, null));
 
                 actions.appendChild(editBtn);
+                actions.appendChild(workoutBtn);
                 actions.appendChild(addExBtn);
                 header.appendChild(nameEl);
                 header.appendChild(actions);
@@ -12072,6 +12233,154 @@
             saveGymPlanner();
             closeGymExerciseModal();
             renderGymDays();
+        }
+
+        // ---- Workout Mode ----
+        function openGymWorkout(dayId) {
+            gymWorkoutDayId = dayId;
+            gymWorkoutDone = {};
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === dayId);
+            if (!day) return;
+
+            document.getElementById('gymWorkoutTitle').textContent = '💪 ' + day.name;
+            renderGymWorkoutList();
+            document.getElementById('gymWorkoutModal').classList.add('visible');
+        }
+
+        function renderGymWorkoutList() {
+            const list = document.getElementById('gymWorkoutList');
+            if (!list) return;
+            list.innerHTML = '';
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
+            if (!day || !day.exercises || !day.exercises.length) {
+                const p = document.createElement('p');
+                p.style.cssText = 'color:#888;font-size:12px;text-align:center;padding:12px 0';
+                p.textContent = 'No exercises in this day.';
+                list.appendChild(p);
+                updateGymWorkoutProgress();
+                return;
+            }
+
+            day.exercises.forEach((dayEx) => {
+                if (!dayEx) return;
+                const libEx = (plan.library || []).find(l => l && l.id === dayEx.exerciseId);
+                if (!libEx) return;
+                const isDone = !!gymWorkoutDone[dayEx.exerciseId];
+
+                const row = document.createElement('div');
+                row.className = 'gym-workout-row' + (isDone ? ' done' : '');
+                row.dataset.exId = dayEx.exerciseId;
+
+                const info = document.createElement('div');
+                info.className = 'gym-workout-info';
+
+                const name = document.createElement('div');
+                name.className = 'gym-workout-name';
+                name.textContent = libEx.name;
+
+                const meta = document.createElement('div');
+                meta.className = 'gym-workout-meta';
+                meta.textContent = `${dayEx.sets} sets × ${dayEx.reps} reps`;
+
+                info.appendChild(name);
+                info.appendChild(meta);
+
+                const weightWrap = document.createElement('div');
+                weightWrap.className = 'gym-workout-weight-wrap';
+
+                const weightInput = document.createElement('input');
+                weightInput.type = 'number';
+                weightInput.className = 'gym-workout-weight-input';
+                weightInput.min = '0';
+                weightInput.max = '1000';
+                weightInput.step = '0.5';
+                weightInput.value = dayEx.weight;
+                weightInput.dataset.exId = dayEx.exerciseId;
+
+                const weightLabel = document.createElement('span');
+                weightLabel.className = 'gym-workout-weight-label';
+                weightLabel.textContent = 'kg';
+
+                weightWrap.appendChild(weightInput);
+                weightWrap.appendChild(weightLabel);
+
+                const doneBtn = document.createElement('button');
+                doneBtn.type = 'button';
+                doneBtn.className = 'gym-workout-done-btn' + (isDone ? ' is-done' : '');
+                doneBtn.textContent = isDone ? '✓ Done' : 'Mark Done';
+                doneBtn.addEventListener('click', () => gymMarkExerciseDone(dayEx.exerciseId, weightInput));
+
+                row.appendChild(info);
+                row.appendChild(weightWrap);
+                row.appendChild(doneBtn);
+                list.appendChild(row);
+            });
+
+            updateGymWorkoutProgress();
+        }
+
+        function gymMarkExerciseDone(exerciseId, weightInputEl) {
+            const newWeight = Math.max(0, parseFloat(weightInputEl.value) || 0);
+            const key = getGymUserKey();
+            if (!key) return;
+
+            const day = gymPlanner[key].days.find(d => d && d.id === gymWorkoutDayId);
+            if (!day) return;
+            const dayEx = day.exercises.find(e => e && e.exerciseId === exerciseId);
+            if (!dayEx) return;
+
+            const libEx = gymPlanner[key].library.find(l => l && l.id === exerciseId);
+
+            // Record history entry if weight changed
+            if (libEx) {
+                if (!libEx.history) libEx.history = [];
+                const prevWeight = dayEx.weight;
+                if (prevWeight !== newWeight) {
+                    libEx.history.push({ ts: Date.now(), weight: newWeight });
+                }
+            }
+
+            // Update the day-level weight
+            dayEx.weight = newWeight;
+
+            // Mark done in session state
+            gymWorkoutDone[exerciseId] = true;
+
+            saveGymPlanner();
+            renderGymWorkoutList();
+        }
+
+        function updateGymWorkoutProgress() {
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
+            const total = (day && day.exercises) ? day.exercises.filter(e => e).length : 0;
+            const done = Object.keys(gymWorkoutDone).length;
+            const el = document.getElementById('gymWorkoutProgress');
+            if (el) el.textContent = `${done} / ${total} done`;
+        }
+
+        function closeGymWorkout() {
+            document.getElementById('gymWorkoutModal').classList.remove('visible');
+            gymWorkoutDayId = null;
+            gymWorkoutDone = {};
+            renderGymDays(); // refresh to show updated weights
+        }
+
+        function setupGymWorkoutModal() {
+            const closeBtn = document.getElementById('gymWorkoutCloseBtn');
+            if (closeBtn && !closeBtn._gymBound) {
+                closeBtn._gymBound = true;
+                closeBtn.addEventListener('click', closeGymWorkout);
+            }
+            const modal = document.getElementById('gymWorkoutModal');
+            if (modal && !modal._gymBound) {
+                modal._gymBound = true;
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeGymWorkout();
+                });
+            }
         }
 
         // ---- Progress Graph ----
