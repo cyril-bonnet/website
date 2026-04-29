@@ -4000,6 +4000,14 @@
             font-size: 14px;
             font-weight: bold;
             color: #003C74;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-underline-offset: 3px;
+        }
+
+        .gym-day-name:hover {
+            color: #0054E3;
         }
 
         .gym-day-actions {
@@ -4040,6 +4048,17 @@
             font-weight: bold;
             color: #1F2937;
             font-size: 13px;
+        }
+
+        .gym-exercise-name-link {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-underline-offset: 3px;
+        }
+
+        .gym-exercise-name-link:hover {
+            color: #0054E3;
         }
 
         .gym-exercise-meta {
@@ -4144,17 +4163,33 @@
 
         .gym-modal-actions {
             display: flex;
+            flex-direction: column;
             gap: 8px;
-            justify-content: flex-end;
             margin-top: 14px;
+        }
+
+        .gym-modal-actions-danger {
+            display: flex;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
+        .gym-modal-actions-danger:empty {
+            display: none;
+        }
+
+        .gym-modal-actions-primary {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
         .gym-modal-delete-btn {
-            margin-right: auto !important;
             background: linear-gradient(180deg, #ffdddd 0%, #ffaaaa 100%) !important;
             border-color: #ffeeee #880000 #880000 #ffeeee !important;
             color: #880000 !important;
+            font-size: 11px !important;
+            padding: 3px 8px !important;
         }
 
         /* Weight progress graph */
@@ -4241,10 +4276,11 @@
         }
 
         .gym-modal-remove-btn {
-            margin-right: 4px !important;
             background: linear-gradient(180deg, #fff3dd 0%, #ffd98a 100%) !important;
             border-color: #fffaee #8a5800 #8a5800 #fffaee !important;
             color: #6b4200 !important;
+            font-size: 11px !important;
+            padding: 3px 8px !important;
         }
 
         /* Workout mode */
@@ -4327,6 +4363,17 @@
             color: #1F2937;
         }
 
+        .gym-workout-name-link {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-underline-offset: 3px;
+        }
+
+        .gym-workout-name-link:hover {
+            color: #0054E3;
+        }
+
         .gym-workout-row.done .gym-workout-name {
             text-decoration: line-through;
             color: #555;
@@ -4375,6 +4422,29 @@
             display: flex;
             justify-content: flex-end;
             gap: 8px;
+        }
+
+        .gym-workout-hint {
+            font-size: 11px;
+            color: #555;
+            background: #fffbe6;
+            border: 1px solid #ffe082;
+            padding: 5px 8px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .gym-workout-resume-btn {
+            background: linear-gradient(180deg, #d6ffe2 0%, #83d48e 100%) !important;
+            border-color: #e8fff0 #1b7a2a #1b7a2a #e8fff0 !important;
+            color: #0a4214 !important;
+        }
+
+        .gym-workout-continue-btn {
+            background: linear-gradient(180deg, #f5f5f5 0%, #dcdcdc 100%) !important;
+            border-color: #ffffff #808080 #808080 #ffffff !important;
+            color: #444 !important;
+            margin-right: auto !important;
         }
 
         .gym-workout-day-btn {
@@ -5267,6 +5337,7 @@
                                 <button type="button" id="musicActionBackBtn" class="music-action-btn">Back</button>
                                 <button type="button" id="musicActionShuffleBtn" class="music-action-btn">Shuffle: Off</button>
                                 <button type="button" id="musicActionLoopBtn" class="music-action-btn">Loop: Off</button>
+                                <button type="button" id="musicActionAutoplayBtn" class="music-action-btn">Autoplay on launch: On</button>
                             </div>
                         </div>
 
@@ -5360,10 +5431,14 @@
                 </div>
             </div>
             <div class="gym-modal-actions">
-                <button type="button" class="gym-modal-delete-btn" id="gymExerciseLibDeleteBtn" style="display:none">Delete from library</button>
-                <button type="button" class="gym-modal-remove-btn" id="gymExerciseDeleteBtn" style="display:none">Remove from day</button>
-                <button type="button" id="gymExerciseCloseBtn">Cancel</button>
-                <button type="button" id="gymExerciseSaveBtn">Save</button>
+                <div class="gym-modal-actions-danger" id="gymExerciseDangerRow">
+                    <button type="button" class="gym-modal-remove-btn" id="gymExerciseDeleteBtn" style="display:none">Remove from day</button>
+                    <button type="button" class="gym-modal-delete-btn" id="gymExerciseLibDeleteBtn" style="display:none">Delete from library</button>
+                </div>
+                <div class="gym-modal-actions-primary">
+                    <button type="button" id="gymExerciseCloseBtn">Cancel</button>
+                    <button type="button" id="gymExerciseSaveBtn">Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -5375,8 +5450,10 @@
                 <p class="gym-workout-title" id="gymWorkoutTitle">Workout</p>
                 <span class="gym-workout-progress" id="gymWorkoutProgress">0 / 0 done</span>
             </div>
+            <p class="gym-workout-hint">Adjust weight if needed, then tap <strong>Done</strong> after each set. Tap <strong>Done</strong> again to undo. Progress is saved automatically.</p>
             <div class="gym-workout-list" id="gymWorkoutList"></div>
             <div class="gym-workout-actions">
+                <button type="button" id="gymWorkoutContinueLaterBtn" class="gym-workout-continue-btn">Continue Later</button>
                 <button type="button" id="gymWorkoutCloseBtn">End Workout</button>
             </div>
         </div>
@@ -5758,6 +5835,7 @@
         const MOVIE_STORAGE_KEY = 'rugile_movie_items';
         const CHESS_STORAGE_KEY = 'rugile_chess_state';
         const GYM_STORAGE_KEY = 'rugile_gym_planner';
+        const GYM_WORKOUT_SESSION_KEY = 'rugile_gym_workout_session';
         const USER_STATUS_STORAGE_KEY = 'rugile_user_status';
         const USER_STORAGE_KEY = 'rugile_current_user';
         const THEME_STORAGE_KEY = 'rugile_app_theme';
@@ -10964,6 +11042,7 @@
         const musicActionBackBtn = document.getElementById('musicActionBackBtn');
         const musicActionShuffleBtn = document.getElementById('musicActionShuffleBtn');
         const musicActionLoopBtn = document.getElementById('musicActionLoopBtn');
+        const musicActionAutoplayBtn = document.getElementById('musicActionAutoplayBtn');
         const musicTrackPicker = document.getElementById('musicTrackPicker');
         const musicTrackList = document.getElementById('musicTrackList');
         let autoplayStarted = false;
@@ -10971,6 +11050,7 @@
         let musicActionMenuOpen = false;
         let shuffleEnabled = false;
         let loopEnabled = false;
+        let autoplayOnLaunch = localStorage.getItem('rugile_music_autoplay_launch') !== 'off';
         let musicNowBubbleTimeoutId = null;
 
         function getMusicTrackLabel(src) {
@@ -11081,6 +11161,9 @@
             }
             if (musicActionLoopBtn) {
                 musicActionLoopBtn.textContent = `Loop: ${loopEnabled ? 'On' : 'Off'}`;
+            }
+            if (musicActionAutoplayBtn) {
+                musicActionAutoplayBtn.textContent = `Autoplay on launch: ${autoplayOnLaunch ? 'On' : 'Off'}`;
             }
         }
 
@@ -11222,6 +11305,7 @@
         }
 
         function tryAutoplay() {
+            if (!autoplayOnLaunch) return;
             if (autoplayStarted) return;
             playerAudio.play().then(() => {
                 autoplayStarted = true;
@@ -11232,6 +11316,7 @@
         }
 
         function setupAutoplayFallback() {
+            if (!autoplayOnLaunch) return;
             const unlockAutoplay = () => {
                 tryAutoplay();
                 if (autoplayStarted) {
@@ -11303,6 +11388,14 @@
         if (musicActionLoopBtn) {
             musicActionLoopBtn.addEventListener('click', () => {
                 loopEnabled = !loopEnabled;
+                updateMusicActionMenuUi();
+            });
+        }
+
+        if (musicActionAutoplayBtn) {
+            musicActionAutoplayBtn.addEventListener('click', () => {
+                autoplayOnLaunch = !autoplayOnLaunch;
+                localStorage.setItem('rugile_music_autoplay_launch', autoplayOnLaunch ? 'on' : 'off');
                 updateMusicActionMenuUi();
             });
         }
@@ -11898,6 +11991,8 @@
                 const nameEl = document.createElement('span');
                 nameEl.className = 'gym-day-name';
                 nameEl.textContent = day.name;
+                nameEl.title = 'Open workout';
+                nameEl.addEventListener('click', () => openGymWorkout(day.id));
 
                 const actions = document.createElement('div');
                 actions.className = 'gym-day-actions';
@@ -11909,8 +12004,10 @@
 
                 const workoutBtn = document.createElement('button');
                 workoutBtn.type = 'button';
-                workoutBtn.textContent = '▶ Start';
-                workoutBtn.className = 'gym-workout-day-btn';
+                const _activeSession = loadGymWorkoutSession();
+                const _isResume = _activeSession && _activeSession.userKey === getGymUserKey() && _activeSession.dayId === day.id;
+                workoutBtn.textContent = _isResume ? '▶ Resume' : '▶ Start';
+                workoutBtn.className = 'gym-workout-day-btn' + (_isResume ? ' gym-workout-resume-btn' : '');
                 workoutBtn.addEventListener('click', () => openGymWorkout(day.id));
 
                 const addExBtn = document.createElement('button');
@@ -11947,8 +12044,10 @@
                         info.className = 'gym-exercise-info';
 
                         const exName = document.createElement('div');
-                        exName.className = 'gym-exercise-name';
+                        exName.className = 'gym-exercise-name gym-exercise-name-link';
                         exName.textContent = libEx.name;
+                        exName.title = 'View details & progress';
+                        exName.addEventListener('click', () => openGymExerciseModal(day.id, dayEx.exerciseId));
 
                         const exMeta = document.createElement('div');
                         exMeta.className = 'gym-exercise-meta';
@@ -12236,12 +12335,35 @@
         }
 
         // ---- Workout Mode ----
+        function saveGymWorkoutSession() {
+            const key = getGymUserKey();
+            if (!key || !gymWorkoutDayId) { localStorage.removeItem(GYM_WORKOUT_SESSION_KEY); return; }
+            localStorage.setItem(GYM_WORKOUT_SESSION_KEY, JSON.stringify({ userKey: key, dayId: gymWorkoutDayId, done: gymWorkoutDone }));
+        }
+
+        function loadGymWorkoutSession() {
+            try { const s = localStorage.getItem(GYM_WORKOUT_SESSION_KEY); return s ? JSON.parse(s) : null; }
+            catch (e) { return null; }
+        }
+
+        function clearGymWorkoutSession() {
+            localStorage.removeItem(GYM_WORKOUT_SESSION_KEY);
+        }
+
         function openGymWorkout(dayId) {
-            gymWorkoutDayId = dayId;
-            gymWorkoutDone = {};
+            const key = getGymUserKey();
             const plan = getGymUserPlan();
             const day = plan.days.find(d => d && d.id === dayId);
             if (!day) return;
+
+            // Restore in-progress session for this day (survives page refresh / accidental close)
+            const savedSession = loadGymWorkoutSession();
+            if (savedSession && savedSession.userKey === key && savedSession.dayId === dayId) {
+                gymWorkoutDone = savedSession.done || {};
+            } else {
+                gymWorkoutDone = {};
+            }
+            gymWorkoutDayId = dayId;
 
             document.getElementById('gymWorkoutTitle').textContent = '💪 ' + day.name;
             renderGymWorkoutList();
@@ -12322,10 +12444,18 @@
         }
 
         function gymMarkExerciseDone(exerciseId, weightInputEl) {
-            const newWeight = Math.max(0, parseFloat(weightInputEl.value) || 0);
             const key = getGymUserKey();
             if (!key) return;
 
+            // Toggle: if already marked done, unmark without changing weight
+            if (gymWorkoutDone[exerciseId]) {
+                delete gymWorkoutDone[exerciseId];
+                saveGymWorkoutSession();
+                renderGymWorkoutList();
+                return;
+            }
+
+            const newWeight = Math.max(0, parseFloat(weightInputEl.value) || 0);
             const day = gymPlanner[key].days.find(d => d && d.id === gymWorkoutDayId);
             if (!day) return;
             const dayEx = day.exercises.find(e => e && e.exerciseId === exerciseId);
@@ -12349,6 +12479,7 @@
             gymWorkoutDone[exerciseId] = true;
 
             saveGymPlanner();
+            saveGymWorkoutSession();
             renderGymWorkoutList();
         }
 
@@ -12362,10 +12493,29 @@
         }
 
         function closeGymWorkout() {
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
+            const total = (day && day.exercises) ? day.exercises.filter(e => e).length : 0;
+            const done = Object.keys(gymWorkoutDone).length;
+
+            if (total > 0 && done < total) {
+                if (!confirm(`${done} of ${total} exercises done. End workout?\n\nYour progress and weights are already saved — you can resume this workout anytime.`)) return;
+            }
+
+            clearGymWorkoutSession();
             document.getElementById('gymWorkoutModal').classList.remove('visible');
             gymWorkoutDayId = null;
             gymWorkoutDone = {};
             renderGymDays(); // refresh to show updated weights
+        }
+
+        function continueLaterGymWorkout() {
+            // Save session and close — user can resume from the day card
+            saveGymWorkoutSession();
+            document.getElementById('gymWorkoutModal').classList.remove('visible');
+            gymWorkoutDayId = null;
+            gymWorkoutDone = {};
+            renderGymDays(); // refresh to show Resume button
         }
 
         function setupGymWorkoutModal() {
@@ -12374,13 +12524,12 @@
                 closeBtn._gymBound = true;
                 closeBtn.addEventListener('click', closeGymWorkout);
             }
-            const modal = document.getElementById('gymWorkoutModal');
-            if (modal && !modal._gymBound) {
-                modal._gymBound = true;
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) closeGymWorkout();
-                });
+            const continueBtn = document.getElementById('gymWorkoutContinueLaterBtn');
+            if (continueBtn && !continueBtn._gymBound) {
+                continueBtn._gymBound = true;
+                continueBtn.addEventListener('click', continueLaterGymWorkout);
             }
+            // Backdrop click intentionally disabled — prevents accidental workout close
         }
 
         // ---- Progress Graph ----
