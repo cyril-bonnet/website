@@ -4106,20 +4106,42 @@
         }
 
         .gym-exercises-list {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
             margin-bottom: 6px;
+        }
+
+        .gym-exercises-list.edit-mode {
+            grid-template-columns: 1fr;
         }
 
         .gym-exercise-row {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: space-between;
-            gap: 8px;
+            gap: 4px;
             background: #FFFFFF;
-            border: 1px solid #B0B0B0;
+            border: 2px solid #C0C0C0;
+            padding: 8px 10px;
+            min-height: 52px;
+            transition: border-color 0.12s, background 0.12s;
+        }
+
+        .gym-exercises-list.edit-mode .gym-exercise-row {
+            flex-direction: row;
+            align-items: center;
+            min-height: 0;
             padding: 6px 8px;
+        }
+
+        .gym-exercise-row.clickable {
+            cursor: pointer;
+        }
+
+        .gym-exercise-row.clickable:hover {
+            border-color: #0054E3;
+            background: #F0F5FF;
         }
 
         .gym-exercise-info {
@@ -4130,24 +4152,22 @@
         .gym-exercise-name {
             font-weight: bold;
             color: #1F2937;
-            font-size: 13px;
+            font-size: 12px;
+            line-height: 1.3;
         }
 
         .gym-exercise-name-link {
             cursor: pointer;
-            text-decoration: underline;
-            text-decoration-style: dotted;
-            text-underline-offset: 3px;
-        }
-
-        .gym-exercise-name-link:hover {
-            color: #0054E3;
         }
 
         .gym-exercise-meta {
-            color: #666;
-            font-size: 11px;
-            margin-top: 2px;
+            display: inline-block;
+            color: #003C74;
+            font-size: 10px;
+            font-weight: bold;
+            background: #E8F0FE;
+            padding: 1px 5px;
+            margin-top: 4px;
         }
 
         .gym-exercise-actions {
@@ -4443,118 +4463,360 @@
             margin-bottom: 16px;
         }
 
-        .gym-workout-ex-heading {
-            font-size: 12px;
-            font-weight: bold;
-            color: #003C74;
-            padding: 8px 2px 2px;
-            border-bottom: 1px solid #C0C0C0;
-            margin-top: 4px;
-        }
-
-        .gym-workout-ex-heading:first-child {
-            margin-top: 0;
-        }
-
-        .gym-workout-row {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            align-items: center;
-            gap: 8px;
-            background: #FFFFFF;
-            border: 2px solid #B0B0B0;
-            padding: 8px 10px;
-            transition: background 0.15s, border-color 0.15s;
-        }
-
-        .gym-workout-row.done {
-            background: #D6FFE2;
-            border-color: #4CAF50;
-        }
-
-        .gym-workout-progress-dots {
+        /* Workout overview — exercise items */
+        .gym-workout-ex-item {
             display: flex;
             align-items: center;
-            gap: 3px;
-            margin-top: 3px;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #fff;
+            border: 2px solid #ccc;
+            cursor: pointer;
+            transition: background 0.12s, border-color 0.12s;
         }
 
-        .gym-workout-dot {
-            font-size: 10px;
-            color: #bbb;
-            line-height: 1;
+        .gym-workout-ex-item:hover { border-color: #0054E3; }
+
+        .gym-workout-ex-item.done {
+            background: #D6FFE2;
+            border-color: #4CAF50;
+            cursor: default;
         }
 
-        .gym-workout-dot.done {
-            color: #2e8b57;
-        }
-
-        .gym-workout-dot.warmup {
-            color: #D4A84B;
-        }
-
-        .gym-workout-dot.warmup.done {
-            color: #2e8b57;
-        }
-
-        .gym-workout-dots-sep {
-            font-size: 9px;
+        .gym-workout-ex-check {
+            font-size: 14px;
             color: #ccc;
-            margin: 0 1px;
+            flex-shrink: 0;
         }
 
-        .gym-workout-info {
-            min-width: 0;
-        }
+        .gym-workout-ex-item.done .gym-workout-ex-check { color: #4CAF50; }
 
-        .gym-workout-name {
+        .gym-workout-ex-name {
+            flex: 1;
             font-weight: bold;
             font-size: 13px;
             color: #1F2937;
         }
 
-        .gym-workout-row.done .gym-workout-name {
+        .gym-workout-ex-item.done .gym-workout-ex-name {
             text-decoration: line-through;
             color: #555;
         }
 
-        .gym-workout-meta {
-            font-size: 11px;
-            color: #666;
-            margin-top: 2px;
+        .gym-workout-ex-meta {
+            font-size: 10px;
+            color: #888;
+            flex-shrink: 0;
         }
 
-        .gym-workout-weight-wrap {
+        .gym-workout-ex-arrow {
+            font-size: 11px;
+            color: #aaa;
+            flex-shrink: 0;
+        }
+
+        /* Per-exercise set tracking */
+        .gym-ex-workout-sets {
             display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .gym-ex-set-row {
+            background: #fff;
+            border: 2px solid #ccc;
+            padding: 8px 10px;
+        }
+
+        .gym-ex-set-row.done {
+            background: #D6FFE2;
+            border-color: #4CAF50;
+        }
+
+        .gym-ex-set-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .gym-ex-set-label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .gym-ex-set-header-right {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .gym-ex-warmup-btn {
+            font-size: 10px;
+            padding: 2px 7px;
+            border: 1px solid #bbb;
+            background: #f5f5f5;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .gym-ex-warmup-btn.active {
+            background: #FFFBF0;
+            border-color: #D4B483;
+            color: #6b4200;
+        }
+
+        .gym-ex-remove-set-btn {
+            font-size: 13px;
+            padding: 1px 6px;
+            border: 1px solid #ccc;
+            background: none;
+            color: #c00;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .gym-ex-set-inputs {
+            display: flex;
+            align-items: stretch;
+            gap: 8px;
+        }
+
+        .gym-ex-field {
+            display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 4px;
         }
 
-        .gym-workout-weight-input {
-            width: 62px;
-            padding: 4px 6px;
-            border: 2px solid #808080;
-            background: #FFFFFF;
-            font-size: 13px;
+        .gym-ex-field-label {
+            font-size: 9px;
+            font-weight: bold;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .gym-ex-set-weight {
+            width: 72px;
+            padding: 10px 6px;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid #aaa;
             text-align: center;
+            background: #fff;
+            line-height: 1;
         }
 
-        .gym-workout-weight-label {
-            font-size: 11px;
-            color: #555;
+        .gym-ex-set-reps {
+            width: 62px;
+            padding: 10px 6px;
+            font-size: 20px;
+            font-weight: bold;
+            border: 2px solid #aaa;
+            text-align: center;
+            background: #fff;
+            line-height: 1;
         }
 
-        .gym-workout-done-btn {
-            min-width: 0;
-            padding: 4px 10px;
-            font-size: 12px;
-            white-space: nowrap;
+        .gym-ex-set-weight:disabled, .gym-ex-set-reps:disabled {
+            background: #f0f0f0;
+            color: #888;
         }
 
-        .gym-workout-done-btn.is-done {
+        .gym-ex-set-unit { display: none; }
+
+        .gym-ex-set-done-btn {
+            margin-left: auto;
+            align-self: stretch;
+            min-width: 52px;
+            padding: 6px 14px;
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .gym-ex-set-done-btn.is-done {
             background: linear-gradient(180deg, #c8f7d4 0%, #83d48e 100%) !important;
             border-color: #e8fff0 #1b7a2a #1b7a2a #e8fff0 !important;
             color: #0a4214 !important;
+        }
+
+        .gym-ex-add-set-btn {
+            font-size: 12px;
+            padding: 5px 12px;
+            border: 2px dashed #bbb;
+            background: #fafafa;
+            color: #555;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .gym-ex-add-set-btn:hover { border-color: #0054E3; color: #0054E3; }
+
+        .gym-ex-workout-done-btn {
+            background: linear-gradient(180deg, #d6ffe2 0%, #83d48e 100%) !important;
+            border-color: #e8fff0 #1b7a2a #1b7a2a #e8fff0 !important;
+            color: #0a4214 !important;
+            width: 100%;
+        }
+
+        .gym-workout-back-btn {
+            font-size: 12px;
+            padding: 3px 10px;
+            background: none;
+            border: 1px solid #ccc;
+            color: #555;
+        }
+
+        /* Stats modal */
+        .gym-stats-content { margin-bottom: 10px; }
+
+        .gym-stats-history-toggle {
+            display: inline-block;
+            font-size: 11px;
+            color: #0054E3;
+            cursor: pointer;
+            margin: 6px 0 0;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            text-decoration-style: dotted;
+        }
+
+        .gym-stats-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 8px;
+            max-height: 45vh;
+            overflow-y: auto;
+        }
+
+        .gym-stats-session-row {
+            border: 1px solid #ddd;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        .gym-stats-session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 9px;
+            cursor: pointer;
+            gap: 8px;
+        }
+
+        .gym-stats-session-header:hover { background: #f0f5ff; }
+
+        .gym-stats-session-date {
+            font-size: 11px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .gym-stats-session-peak {
+            font-size: 11px;
+            color: #003C74;
+            font-weight: bold;
+            background: #E8F0FE;
+            padding: 1px 6px;
+        }
+
+        .gym-stats-session-arrow {
+            font-size: 10px;
+            color: #aaa;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+
+        .gym-stats-session-arrow.open { transform: rotate(90deg); }
+
+        .gym-stats-session-detail {
+            display: none;
+            border-top: 1px solid #e0e0e0;
+            background: #fff;
+            padding: 6px 9px;
+        }
+
+        .gym-stats-session-detail.open { display: block; }
+
+        .gym-stats-set-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .gym-stats-set-table th {
+            text-align: left;
+            color: #888;
+            font-weight: normal;
+            padding: 2px 4px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .gym-stats-set-table td {
+            padding: 3px 4px;
+            color: #333;
+        }
+
+        .gym-stats-set-table tr.warmup-row td { color: #a07020; font-style: italic; }
+
+        .gym-stats-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .gym-stat-item {
+            flex: 1;
+            min-width: 70px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 8px 6px;
+            text-align: center;
+        }
+
+        .gym-stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #003C74;
+        }
+
+        .gym-stat-label {
+            font-size: 10px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        /* Library add/remove btns */
+        .gym-library-add-btn {
+            font-size: 11px;
+            padding: 3px 9px;
+            white-space: nowrap;
+        }
+
+        .gym-library-added-btn {
+            font-size: 11px;
+            padding: 3px 9px;
+            background: linear-gradient(180deg, #d6ffe2 0%, #83d48e 100%) !important;
+            border-color: #e8fff0 #1b7a2a #1b7a2a #e8fff0 !important;
+            color: #0a4214 !important;
+            white-space: nowrap;
+        }
+
+        .gym-exercise-remove-btn {
+            font-size: 11px;
+            padding: 1px 6px;
+            border: 1px solid #ccc;
+            background: none;
+            color: #c00;
+            cursor: pointer;
+            margin-left: auto;
+            flex-shrink: 0;
         }
 
         .gym-workout-actions {
@@ -4571,29 +4833,6 @@
             padding: 5px 8px;
             margin-bottom: 10px;
             line-height: 1.4;
-        }
-
-        .gym-workout-row.warmup {
-            background: #FFFBF0;
-            border-color: #D4B483;
-        }
-
-        .gym-workout-row.warmup .gym-workout-name {
-            color: #6b4200;
-        }
-
-        .gym-workout-set-label {
-            font-size: 10px;
-            color: #888;
-            margin-top: 2px;
-        }
-
-        .gym-workout-row.warmup .gym-workout-set-label {
-            color: #8a5800;
-        }
-
-        .gym-workout-row.done .gym-workout-set-label {
-            color: #555;
         }
 
         .gym-workout-continue-btn {
@@ -4631,12 +4870,17 @@
             border-color: #ffc857;
         }
 
+        body[data-theme='disco70'] .gym-exercise-row.clickable:hover {
+            background: #5a2e82;
+        }
+
         body[data-theme='disco70'] .gym-exercise-name {
             color: #ffeec1;
         }
 
         body[data-theme='disco70'] .gym-exercise-meta {
-            color: #d0b8ec;
+            background: #5a3080;
+            color: #ffc857;
         }
 
         body[data-theme='disco70'] .gym-modal-card {
@@ -4720,12 +4964,18 @@
             color: #1d2b05;
         }
 
+        body[data-theme='nokia'] .gym-exercise-row.clickable:hover {
+            background: #c5e855;
+        }
+
         body[data-theme='nokia'] .gym-exercise-name {
             color: #1d2b05;
         }
 
         body[data-theme='nokia'] .gym-exercise-meta {
-            color: #3a5510;
+            background: #253407;
+            color: #9bbc0f;
+        }
         }
 
         body[data-theme='nokia'] .gym-modal-card {
@@ -5555,96 +5805,99 @@
         </div>
     </div>
 
-    <!-- Gym Exercise Modal -->
-    <div class="gym-modal" id="gymExerciseModal">
-        <div class="gym-modal-card">
-            <p class="gym-modal-title" id="gymExerciseModalTitle">Exercise</p>
-
-            <!-- Picker: shown when adding a new exercise to a day -->
-            <div class="gym-exercise-picker" id="gymExercisePicker" style="display:none">
-                <p class="gym-exercise-picker-label">Pick an existing exercise:</p>
-                <div class="gym-exercise-picker-chips" id="gymExercisePickerChips"></div>
-                <p class="gym-exercise-picker-or">— or type a new name below —</p>
-            </div>
-
-            <div class="gym-modal-field">
-                <label for="gymExerciseNameInput">Exercise Name</label>
-                <input type="text" id="gymExerciseNameInput" placeholder="e.g. Bench Press, Squat..." maxlength="60" autocomplete="off" />
-            </div>
-            <div class="gym-modal-row">
-                <div class="gym-modal-field">
-                    <label for="gymExerciseSetsInput">Sets</label>
-                    <input type="number" id="gymExerciseSetsInput" min="1" max="20" placeholder="3" />
-                </div>
-                <div class="gym-modal-field">
-                    <label for="gymExerciseRepsInput">Reps</label>
-                    <input type="number" id="gymExerciseRepsInput" min="1" max="200" placeholder="10" />
-                </div>
-                <div class="gym-modal-field">
-                    <label for="gymExerciseWeightInput">Weight (kg)</label>
-                    <input type="number" id="gymExerciseWeightInput" min="0" max="1000" step="0.5" placeholder="60" />
-                </div>
-            </div>
-            <span class="gym-modal-warmup-toggle" id="gymWarmupToggle">+ warm-up / progression</span>
-            <div class="gym-modal-row gym-modal-warmup-row" id="gymWarmupRow" style="display:none">
-                <div class="gym-modal-field">
-                    <label for="gymExerciseWarmupSetsInput">Warm-up sets</label>
-                    <input type="number" id="gymExerciseWarmupSetsInput" min="0" max="10" placeholder="0" />
-                </div>
-                <div class="gym-modal-field">
-                    <label for="gymExerciseWarmupWeightInput">Warm-up kg</label>
-                    <input type="number" id="gymExerciseWarmupWeightInput" min="0" max="1000" step="0.5" placeholder="0" />
-                </div>
-                <div class="gym-modal-field">
-                    <label for="gymExerciseSetWeightsInput">Prog. kg <span class="gym-modal-field-hint">(per set)</span></label>
-                    <input type="text" id="gymExerciseSetWeightsInput" placeholder="e.g. 40, 50, 60" autocomplete="off" />
-                </div>
-            </div>
-            <div class="gym-progress-section" id="gymProgressSection">
-                <p class="gym-progress-label">Weight Progress</p>
-                <div class="gym-graph-wrap">
-                    <div class="gym-graph-empty" id="gymGraphEmpty">No history yet</div>
-                    <svg class="gym-graph-svg" id="gymGraphSvg" viewBox="0 0 200 82" preserveAspectRatio="none"></svg>
-                </div>
-            </div>
-            <div class="gym-modal-actions">
-                <div class="gym-modal-actions-danger" id="gymExerciseDangerRow">
-                    <button type="button" class="gym-modal-remove-btn" id="gymExerciseDeleteBtn" style="display:none">Remove from day</button>
-                </div>
-                <div class="gym-modal-actions-primary">
-                    <button type="button" id="gymExerciseCloseBtn">Close</button>
-                    <button type="button" id="gymExerciseSaveBtn" style="display:none">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Gym Library Modal -->
     <div class="gym-modal" id="gymLibraryModal">
         <div class="gym-modal-card">
             <p class="gym-modal-title">Exercise Library</p>
-            <p class="gym-library-hint">These are all exercises you've ever created. Deleting here removes the exercise and its history from all days.</p>
+            <p class="gym-library-hint">All your exercises. Add, rename, or delete here.</p>
             <div id="gymLibraryList" class="gym-library-list"></div>
             <div class="gym-modal-actions">
                 <div class="gym-modal-actions-primary">
+                    <button type="button" id="gymLibraryAddBtn">+ New Exercise</button>
                     <button type="button" id="gymLibraryCloseBtn">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Gym Workout Modal -->
+    <!-- Gym Library Exercise (create/rename) Modal -->
+    <div class="gym-modal" id="gymLibExModal">
+        <div class="gym-modal-card">
+            <p class="gym-modal-title" id="gymLibExModalTitle">New Exercise</p>
+            <div class="gym-modal-field">
+                <label for="gymLibExNameInput">Exercise Name</label>
+                <input type="text" id="gymLibExNameInput" placeholder="e.g. Bench Press, Squat..." maxlength="60" autocomplete="off" />
+            </div>
+            <div class="gym-modal-actions">
+                <div class="gym-modal-actions-primary">
+                    <button type="button" id="gymLibExCloseBtn">Cancel</button>
+                    <button type="button" id="gymLibExSaveBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gym Add Exercise to Day Modal -->
+    <div class="gym-modal" id="gymAddToDayModal">
+        <div class="gym-modal-card">
+            <p class="gym-modal-title">Add Exercise to Day</p>
+            <p class="gym-library-hint">Tap to add or remove exercises from this day.</p>
+            <div id="gymAddToDayList" class="gym-library-list"></div>
+            <div class="gym-modal-actions">
+                <div class="gym-modal-actions-primary">
+                    <button type="button" id="gymAddToDayCloseBtn">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gym Stats Modal (view mode) -->
+    <div class="gym-modal" id="gymStatsModal">
+        <div class="gym-modal-card">
+            <p class="gym-modal-title" id="gymStatsModalTitle">Exercise Stats</p>
+            <div id="gymStatsContent" class="gym-stats-content"></div>
+            <div class="gym-progress-section" id="gymStatsProgressSection" style="display:none">
+                <p class="gym-progress-label">Weight Progress</p>
+                <div class="gym-graph-wrap">
+                    <div class="gym-graph-empty" id="gymStatsGraphEmpty">No history yet</div>
+                    <svg class="gym-graph-svg" id="gymStatsGraphSvg" viewBox="0 0 200 82" preserveAspectRatio="none"></svg>
+                </div>
+            </div>
+            <div id="gymStatsHistorySection"></div>
+            <div class="gym-modal-actions">
+                <div class="gym-modal-actions-primary">
+                    <button type="button" id="gymStatsCloseBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gym Workout Overview Modal -->
     <div class="gym-workout-modal" id="gymWorkoutModal">
         <div class="gym-workout-card">
             <div class="gym-workout-header">
                 <p class="gym-workout-title" id="gymWorkoutTitle">Workout</p>
                 <span class="gym-workout-progress" id="gymWorkoutProgress">0 / 0 done</span>
             </div>
-            <p class="gym-workout-hint">Adjust weight if needed, then tap the button to end each set. The last set says <strong>Done</strong>. Tap <strong>✓ Done</strong> to undo.</p>
+            <p class="gym-workout-hint">Tap an exercise to track sets. Mark it done when finished.</p>
             <div class="gym-workout-list" id="gymWorkoutList"></div>
             <div class="gym-workout-actions">
                 <button type="button" id="gymWorkoutContinueLaterBtn" class="gym-workout-continue-btn">Continue Later</button>
                 <button type="button" id="gymWorkoutCloseBtn">End Workout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gym Per-Exercise Workout Modal -->
+    <div class="gym-workout-modal" id="gymExWorkoutModal">
+        <div class="gym-workout-card">
+            <div class="gym-workout-header">
+                <p class="gym-workout-title" id="gymExWorkoutTitle">Exercise</p>
+                <button type="button" class="gym-workout-back-btn" id="gymExWorkoutBackBtn">← Back</button>
+            </div>
+            <div class="gym-ex-workout-sets" id="gymExWorkoutSets"></div>
+            <div class="gym-workout-actions">
+                <button type="button" id="gymExWorkoutDoneBtn" class="gym-ex-workout-done-btn">Mark Exercise Done</button>
             </div>
         </div>
     </div>
@@ -5991,13 +6244,13 @@
         let chessLastUpdatedAt = 0;
         let chessPendingPromotion = null;
         let openReactionPickerMessageId = null;
-        let gymPlanner = { ru: { library: [], days: [] }, kiki: { library: [], days: [] } };
+        let gymPlanner = { ru: { library: [], days: [], history: {} }, kiki: { library: [], days: [], history: {} } };
         let gymEditingDayId = null;
-        let gymEditingExerciseId = null;
         let gymEditingDayIdForEx = null;
-        let gymSelectedLibExId = null;
+        let gymEditingLibExId = null;
         let gymWorkoutDayId = null;      // day currently being worked out
-        let gymWorkoutDone = {};         // { exerciseId: true } for this session
+        let gymWorkoutSession = {};      // { exerciseId: { done, sets: [{weight,reps,isWarmup,checked}] } }
+        let gymCurrentExerciseId = null; // exercise being tracked in workout
         let gymEditMode = false;         // gym view/edit mode toggle
         let statusMoodEmojiGridOpen = false;
         let preserveChatScrollOnNextSync = false;
@@ -12048,71 +12301,58 @@
         // gymPlanner[userKey].days    = [{ id, name, exercises: [{exerciseId, sets, reps, weight}] }]
 
         function normalizeGymPlanner(value) {
-            const defaultPlan = { ru: { library: [], days: [] }, kiki: { library: [], days: [] } };
-            if (!value || typeof value !== 'object') return defaultPlan;
-            return {
-                ru: normalizeGymUserPlan(value.ru),
-                kiki: normalizeGymUserPlan(value.kiki)
-            };
+            const def = { ru: { library: [], days: [], history: {} }, kiki: { library: [], days: [], history: {} } };
+            if (!value || typeof value !== 'object') return def;
+            return { ru: normalizeGymUserPlan(value.ru), kiki: normalizeGymUserPlan(value.kiki) };
         }
 
         function normalizeGymUserPlan(plan) {
-            if (!plan || typeof plan !== 'object') return { library: [], days: [] };
+            if (!plan || typeof plan !== 'object') return { library: [], days: [], history: {} };
             const library = Array.isArray(plan.library)
-                ? plan.library.map(normalizeGymLibraryEx).filter(Boolean)
+                ? plan.library.map(ex => { if (!ex || !ex.id) return null; return { id: ex.id, name: ex.name || '' }; }).filter(Boolean)
                 : [];
             const days = Array.isArray(plan.days)
                 ? plan.days.map(d => normalizeGymDay(d, library)).filter(Boolean)
                 : [];
-            return { library, days };
-        }
-
-        function normalizeGymLibraryEx(ex) {
-            if (!ex || typeof ex !== 'object' || !ex.id) return null;
-            return {
-                id: ex.id,
-                name: ex.name || '',
-                history: Array.isArray(ex.history)
-                    ? ex.history.map(h => ({ ts: Number(h.ts) || 0, weight: Number(h.weight) || 0 })).filter(h => h.ts > 0)
-                    : []
-            };
+            let history = {};
+            if (plan.history && typeof plan.history === 'object' && !Array.isArray(plan.history)) {
+                Object.keys(plan.history).forEach(exId => {
+                    if (!library.some(l => l && l.id === exId)) return;
+                    const sessions = plan.history[exId];
+                    if (!Array.isArray(sessions)) return;
+                    history[exId] = sessions.map(s => {
+                        if (!s) return null;
+                        return { ts: Number(s.ts) || 0, sets: Array.isArray(s.sets) ? s.sets.map(set => ({ weight: Math.max(0, Number(set.weight) || 0), reps: Math.max(0, Number(set.reps) || 0), isWarmup: !!set.isWarmup })) : [] };
+                    }).filter(s => s && s.ts > 0);
+                });
+            }
+            // Migrate old library-level history [{ts, weight}] to new history store
+            if (Array.isArray(plan.library)) {
+                plan.library.forEach(ex => {
+                    if (!ex || !ex.id || !Array.isArray(ex.history) || !ex.history.length) return;
+                    if (history[ex.id]) return;
+                    history[ex.id] = ex.history.map(h => ({ ts: Number(h.ts) || 0, sets: [{ weight: Math.max(0, Number(h.weight) || 0), reps: 0, isWarmup: false }] })).filter(h => h.ts > 0);
+                });
+            }
+            return { library, days, history };
         }
 
         function normalizeGymDay(day, library) {
             if (!day || typeof day !== 'object') return null;
-            const exercises = Array.isArray(day.exercises)
-                ? day.exercises.map(ex => {
-                    if (!ex) return null;
-                    // New format: day-exercise has exerciseId referencing library
-                    if (ex.exerciseId) {
-                        return {
-                            exerciseId: ex.exerciseId,
-                            sets: Number(ex.sets) || 3,
-                            reps: Number(ex.reps) || 10,
-                            weight: Number(ex.weight) || 0,
-                            warmupSets: Number(ex.warmupSets) || 0,
-                            warmupWeight: Number(ex.warmupWeight) || 0,
-                            setWeights: Array.isArray(ex.setWeights) ? ex.setWeights.map(w => Math.max(0, Number(w) || 0)) : []
-                        };
-                    }
-                    // Old format (exercise embedded in day) — migrate to library
-                    if (ex.name) {
+            let exercises = [];
+            if (Array.isArray(day.exercises)) {
+                day.exercises.forEach(ex => {
+                    if (!ex) return;
+                    if (typeof ex === 'string') { exercises.push(ex); return; }
+                    if (typeof ex === 'object' && ex.exerciseId) { exercises.push(ex.exerciseId); return; }
+                    if (typeof ex === 'object' && ex.name) {
                         let libEx = library.find(l => l && l.name.toLowerCase() === ex.name.toLowerCase());
-                        if (!libEx) {
-                            libEx = {
-                                id: ex.id || `ex_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-                                name: ex.name,
-                                history: Array.isArray(ex.history)
-                                    ? ex.history.map(h => ({ ts: Number(h.ts) || 0, weight: Number(h.weight) || 0 })).filter(h => h.ts > 0)
-                                    : (ex.weight ? [{ ts: Date.now(), weight: Number(ex.weight) }] : [])
-                            };
-                            library.push(libEx);
-                        }
-                        return { exerciseId: libEx.id, sets: Number(ex.sets) || 3, reps: Number(ex.reps) || 10, weight: Number(ex.weight) || 0, warmupSets: 0, warmupWeight: 0, setWeights: [] };
+                        if (!libEx) { libEx = { id: ex.id || `ex_${Date.now()}_${Math.random().toString(36).slice(2,7)}`, name: ex.name }; library.push(libEx); }
+                        exercises.push(libEx.id);
                     }
-                    return null;
-                }).filter(Boolean)
-                : [];
+                });
+                exercises = [...new Set(exercises)].filter(id => library.some(l => l && l.id === id));
+            }
             return { id: day.id || String(Date.now()), name: day.name || 'Day', exercises };
         }
 
@@ -12124,8 +12364,8 @@
 
         function getGymUserPlan() {
             const key = getGymUserKey();
-            if (!key) return { library: [], days: [] };
-            return gymPlanner[key] || { library: [], days: [] };
+            if (!key) return { library: [], days: [], history: {} };
+            return gymPlanner[key] || { library: [], days: [], history: {} };
         }
 
         function saveGymPlanner() {
@@ -12142,23 +12382,19 @@
         function loadGymPlanner() {
             const saved = localStorage.getItem(GYM_STORAGE_KEY);
             if (saved) {
-                try {
-                    gymPlanner = normalizeGymPlanner(JSON.parse(saved));
-                } catch (e) {
-                    gymPlanner = normalizeGymPlanner(null);
-                }
+                try { gymPlanner = normalizeGymPlanner(JSON.parse(saved)); }
+                catch (e) { gymPlanner = normalizeGymPlanner(null); }
             }
         }
 
         function initGym() {
             if (gymInitialized) {
-                // Reset edit mode each time the view is opened
                 if (gymEditMode) {
                     gymEditMode = false;
                     const btn = document.getElementById('gymEditToggleBtn');
                     const addDayBtn = document.getElementById('gymAddDayBtn');
                     const libraryBtn = document.getElementById('gymLibraryBtn');
-                    if (btn) { btn.textContent = '✏️ Edit'; btn.classList.remove('gym-edit-active-btn'); }
+                    if (btn) { btn.textContent = '\u270f\ufe0f Edit'; btn.classList.remove('gym-edit-active-btn'); }
                     if (addDayBtn) addDayBtn.style.display = 'none';
                     if (libraryBtn) libraryBtn.style.display = 'none';
                 }
@@ -12167,9 +12403,7 @@
             }
             gymInitialized = true;
             const cloudReady = initFirebaseSync();
-            if (!cloudReady) {
-                loadGymPlanner();
-            }
+            if (!cloudReady) loadGymPlanner();
             setupGymModals();
             setupGymWorkoutModal();
             renderGymDays();
@@ -12184,12 +12418,12 @@
             if (!plan.days || !plan.days.length) {
                 const empty = document.createElement('p');
                 empty.className = 'gym-days-empty';
-                empty.textContent = 'No days yet. Add your first training day!';
+                empty.textContent = gymEditMode ? 'No days yet. Tap + Add Day.' : 'No days yet.';
                 list.appendChild(empty);
                 return;
             }
 
-            plan.days.forEach((day) => {
+            plan.days.forEach(day => {
                 if (!day) return;
                 const card = document.createElement('div');
                 card.className = 'gym-day-card';
@@ -12205,33 +12439,18 @@
                 actions.className = 'gym-day-actions';
 
                 if (gymEditMode) {
-                    // Edit mode: Edit Day + Add Exercise buttons
-                    nameEl.title = '';
-
                     const editBtn = document.createElement('button');
-                    editBtn.type = 'button';
-                    editBtn.textContent = 'Edit Day';
+                    editBtn.type = 'button'; editBtn.textContent = '\u270e'; editBtn.title = 'Rename';
+                    editBtn.style.cssText = 'padding:3px 8px;font-size:12px;';
                     editBtn.addEventListener('click', () => openGymDayModal(day.id));
-
-                    const addExBtn = document.createElement('button');
-                    addExBtn.type = 'button';
-                    addExBtn.textContent = '+ Exercise';
-                    addExBtn.className = 'gym-add-exercise-btn';
-                    addExBtn.addEventListener('click', () => openGymExerciseModal(day.id, null));
-
                     actions.appendChild(editBtn);
-                    actions.appendChild(addExBtn);
                 } else {
-                    // View mode: only Start/Resume workout button
-                    nameEl.title = 'Open workout';
-                    nameEl.addEventListener('click', () => openGymWorkout(day.id));
-
+                    const savedSession = loadGymWorkoutSession();
+                    const isResume = savedSession && savedSession.userKey === getGymUserKey() && savedSession.dayId === day.id;
                     const workoutBtn = document.createElement('button');
                     workoutBtn.type = 'button';
-                    const _activeSession = loadGymWorkoutSession();
-                    const _isResume = _activeSession && _activeSession.userKey === getGymUserKey() && _activeSession.dayId === day.id;
-                    workoutBtn.textContent = _isResume ? '▶ Resume' : '▶ Start';
-                    workoutBtn.className = 'gym-workout-day-btn' + (_isResume ? ' gym-workout-resume-btn' : '');
+                    workoutBtn.textContent = isResume ? '\u25b6 Resume' : '\u25b6 Start';
+                    workoutBtn.className = 'gym-workout-day-btn' + (isResume ? ' gym-workout-resume-btn' : '');
                     workoutBtn.addEventListener('click', () => openGymWorkout(day.id));
                     actions.appendChild(workoutBtn);
                 }
@@ -12241,51 +12460,72 @@
                 card.appendChild(header);
 
                 const exList = document.createElement('div');
-                exList.className = 'gym-exercises-list';
+                exList.className = 'gym-exercises-list' + (gymEditMode ? ' edit-mode' : '');
 
                 if (!day.exercises || !day.exercises.length) {
                     const emptyEx = document.createElement('p');
                     emptyEx.className = 'gym-day-empty';
-                    emptyEx.textContent = gymEditMode ? 'No exercises yet. Tap + Exercise to add.' : 'No exercises yet.';
+                    emptyEx.textContent = gymEditMode ? 'No exercises. Tap + Exercise.' : 'No exercises yet.';
                     exList.appendChild(emptyEx);
                 } else {
-                    day.exercises.forEach((dayEx) => {
-                        if (!dayEx) return;
-                        const libEx = (plan.library || []).find(l => l && l.id === dayEx.exerciseId);
+                    day.exercises.forEach(exId => {
+                        const libEx = (plan.library || []).find(l => l && l.id === exId);
                         if (!libEx) return;
 
                         const row = document.createElement('div');
-                        row.className = 'gym-exercise-row';
-
-                        const info = document.createElement('div');
-                        info.className = 'gym-exercise-info';
+                        row.className = 'gym-exercise-row' + (gymEditMode ? '' : ' clickable');
 
                         const exName = document.createElement('div');
-                        exName.className = 'gym-exercise-name gym-exercise-name-link';
+                        exName.className = 'gym-exercise-name' + (gymEditMode ? '' : ' gym-exercise-name-link');
                         exName.textContent = libEx.name;
 
-                        if (gymEditMode) {
-                            exName.title = 'Edit exercise';
-                            exName.addEventListener('click', () => openGymExerciseModal(day.id, dayEx.exerciseId));
-                        } else {
-                            exName.title = 'View details & progress';
-                            exName.addEventListener('click', () => openGymExerciseModal(day.id, dayEx.exerciseId, true));
+                        if (!gymEditMode) {
+                            row.title = 'View progress';
+                            row.addEventListener('click', () => openGymStatsModal(exId));
                         }
 
-                        const exMeta = document.createElement('div');
-                        exMeta.className = 'gym-exercise-meta';
-                        const _sw = dayEx.setWeights && dayEx.setWeights.length === dayEx.sets ? dayEx.setWeights : null;
-                        const _wStr = _sw ? _sw.join('/') + ' kg' : `${dayEx.weight} kg`;
-                        let _metaTxt = `${dayEx.sets} × ${dayEx.reps} reps @ ${_wStr}`;
-                        if (dayEx.warmupSets > 0) _metaTxt += ` (+${dayEx.warmupSets} warm-up @ ${dayEx.warmupWeight} kg)`;
-                        exMeta.textContent = _metaTxt;
+                        row.appendChild(exName);
 
-                        info.appendChild(exName);
-                        info.appendChild(exMeta);
+                        const history = (plan.history || {})[exId] || [];
+                        if (history.length) {
+                            const last = history[history.length - 1];
+                            const ms = last.sets.filter(s => !s.isWarmup);
+                            const maxW = ms.length ? Math.max(...ms.map(s => s.weight)) : 0;
+                            if (maxW) {
+                                const meta = document.createElement('div');
+                                meta.className = 'gym-exercise-meta';
+                                meta.textContent = maxW + ' kg';
+                                row.appendChild(meta);
+                            }
+                        }
 
-                        row.appendChild(info);
+                        if (gymEditMode) {
+                            const removeBtn = document.createElement('button');
+                            removeBtn.type = 'button';
+                            removeBtn.className = 'gym-exercise-remove-btn';
+                            removeBtn.textContent = '\u2715';
+                            removeBtn.title = 'Remove from day';
+                            removeBtn.addEventListener('click', () => {
+                                const key = getGymUserKey();
+                                const d = gymPlanner[key].days.find(d2 => d2 && d2.id === day.id);
+                                if (d) d.exercises = d.exercises.filter(id => id !== exId);
+                                saveGymPlanner();
+                                renderGymDays();
+                            });
+                            row.appendChild(removeBtn);
+                        }
+
                         exList.appendChild(row);
                     });
+                }
+
+                if (gymEditMode) {
+                    const addExBtn = document.createElement('button');
+                    addExBtn.type = 'button';
+                    addExBtn.textContent = '+ Exercise';
+                    addExBtn.className = 'gym-add-exercise-btn';
+                    addExBtn.addEventListener('click', () => openGymAddToDayModal(day.id));
+                    exList.appendChild(addExBtn);
                 }
 
                 card.appendChild(exList);
@@ -12296,23 +12536,16 @@
         // ---- Day Modal ----
         function openGymDayModal(dayId) {
             gymEditingDayId = dayId || null;
-            const modal = document.getElementById('gymDayModal');
             const title = document.getElementById('gymDayModalTitle');
             const nameInput = document.getElementById('gymDayNameInput');
             const deleteBtn = document.getElementById('gymDayDeleteBtn');
-
             if (dayId) {
-                const plan = getGymUserPlan();
-                const day = plan.days.find(d => d && d.id === dayId);
-                title.textContent = 'Edit Day';
-                nameInput.value = day ? day.name : '';
-                deleteBtn.style.display = '';
+                const day = getGymUserPlan().days.find(d => d && d.id === dayId);
+                title.textContent = 'Rename Day'; nameInput.value = day ? day.name : ''; deleteBtn.style.display = '';
             } else {
-                title.textContent = 'Add Day';
-                nameInput.value = '';
-                deleteBtn.style.display = 'none';
+                title.textContent = 'New Day'; nameInput.value = ''; deleteBtn.style.display = 'none';
             }
-            modal.classList.add('visible');
+            document.getElementById('gymDayModal').classList.add('visible');
             nameInput.focus();
         }
 
@@ -12322,736 +12555,29 @@
         }
 
         function saveGymDay() {
-            const nameInput = document.getElementById('gymDayNameInput');
-            const name = nameInput.value.trim();
+            const name = document.getElementById('gymDayNameInput').value.trim();
             if (!name) return;
-
-            const key = getGymUserKey();
-            if (!key) return;
-
-            if (!gymPlanner[key]) gymPlanner[key] = { library: [], days: [] };
-            if (!gymPlanner[key].library) gymPlanner[key].library = [];
-
+            const key = getGymUserKey(); if (!key) return;
+            if (!gymPlanner[key]) gymPlanner[key] = { library: [], days: [], history: {} };
             if (gymEditingDayId) {
                 const day = gymPlanner[key].days.find(d => d && d.id === gymEditingDayId);
                 if (day) day.name = name;
             } else {
                 gymPlanner[key].days.push({ id: `day_${Date.now()}`, name, exercises: [] });
             }
-
-            saveGymPlanner();
-            closeGymDayModal();
-            renderGymDays();
+            saveGymPlanner(); closeGymDayModal(); renderGymDays();
         }
 
         function deleteGymDay() {
             if (!gymEditingDayId) return;
-            const key = getGymUserKey();
-            if (!key) return;
+            const key = getGymUserKey(); if (!key) return;
             gymPlanner[key].days = gymPlanner[key].days.filter(d => d && d.id !== gymEditingDayId);
-            saveGymPlanner();
-            closeGymDayModal();
-            renderGymDays();
-        }
-
-        // ---- Exercise Picker ----
-        function renderGymExercisePicker() {
-            const section = document.getElementById('gymExercisePicker');
-            const chipsEl = document.getElementById('gymExercisePickerChips');
-            if (!section || !chipsEl) return;
-            const plan = getGymUserPlan();
-            chipsEl.innerHTML = '';
-            if (!plan.library || !plan.library.length) { section.style.display = 'none'; return; }
-            section.style.display = '';
-            plan.library.forEach(ex => {
-                if (!ex || !ex.name) return;
-                const chip = document.createElement('button');
-                chip.type = 'button';
-                chip.className = 'gym-exercise-chip' + (gymSelectedLibExId === ex.id ? ' selected' : '');
-                chip.textContent = ex.name;
-                chip.dataset.libExId = ex.id;
-                chip.addEventListener('click', () => selectGymLibraryExercise(ex.id));
-                chipsEl.appendChild(chip);
-            });
-        }
-
-        function selectGymLibraryExercise(libExId) {
-            gymSelectedLibExId = libExId;
-            const plan = getGymUserPlan();
-            const libEx = (plan.library || []).find(l => l && l.id === libExId);
-            if (!libEx) return;
-            document.getElementById('gymExerciseNameInput').value = libEx.name;
-            const day = plan.days.find(d => d && d.id === gymEditingDayIdForEx);
-            const dayEx = day && day.exercises.find(e => e && e.exerciseId === libExId);
-            document.getElementById('gymExerciseSetsInput').value = dayEx ? dayEx.sets : '';
-            document.getElementById('gymExerciseRepsInput').value = dayEx ? dayEx.reps : '';
-            document.getElementById('gymExerciseWeightInput').value = dayEx ? dayEx.weight : '';
-            if (libEx.history && libEx.history.length >= 2) {
-                renderGymProgressGraph(libEx.history);
-                document.getElementById('gymProgressSection').style.display = '';
-            } else {
-                document.getElementById('gymProgressSection').style.display = 'none';
-            }
-            document.querySelectorAll('.gym-exercise-chip').forEach(c => {
-                c.classList.toggle('selected', c.dataset.libExId === libExId);
-            });
-        }
-
-        // ---- Exercise Modal ----
-        function gymExSetInputsDisabled(disabled) {
-            ['gymExerciseNameInput','gymExerciseSetsInput','gymExerciseRepsInput','gymExerciseWeightInput',
-             'gymExerciseWarmupSetsInput','gymExerciseWarmupWeightInput','gymExerciseSetWeightsInput']
-                .forEach(id => { const el = document.getElementById(id); if (el) el.disabled = disabled; });
-        }
-
-        function gymExShowWarmupSection(show) {
-            const row = document.getElementById('gymWarmupRow');
-            const toggle = document.getElementById('gymWarmupToggle');
-            if (row) row.style.display = show ? '' : 'none';
-            if (toggle) toggle.textContent = show ? '− warm-up / progression' : '+ warm-up / progression';
-        }
-
-        function openGymExerciseModal(dayId, libExId, viewOnly = false) {
-            gymEditingDayIdForEx = dayId;
-            gymEditingExerciseId = libExId || null;
-            gymSelectedLibExId = null;
-
-            const modal = document.getElementById('gymExerciseModal');
-            const title = document.getElementById('gymExerciseModalTitle');
-            const nameInput = document.getElementById('gymExerciseNameInput');
-            const setsInput = document.getElementById('gymExerciseSetsInput');
-            const repsInput = document.getElementById('gymExerciseRepsInput');
-            const weightInput = document.getElementById('gymExerciseWeightInput');
-            const warmupSetsInput = document.getElementById('gymExerciseWarmupSetsInput');
-            const warmupWeightInput = document.getElementById('gymExerciseWarmupWeightInput');
-            const setWeightsInput = document.getElementById('gymExerciseSetWeightsInput');
-            const removeBtn = document.getElementById('gymExerciseDeleteBtn');
-            const pickerSection = document.getElementById('gymExercisePicker');
-            const progressSection = document.getElementById('gymProgressSection');
-            const saveBtn = document.getElementById('gymExerciseSaveBtn');
-            const closeBtn = document.getElementById('gymExerciseCloseBtn');
-
-            const plan = getGymUserPlan();
-            const day = plan.days.find(d => d && d.id === dayId);
-
-            if (libExId && day) {
-                const dayEx = day.exercises.find(e => e && e.exerciseId === libExId);
-                const libEx = (plan.library || []).find(l => l && l.id === libExId);
-                if (dayEx && libEx) {
-                    nameInput.value = libEx.name;
-                    setsInput.value = dayEx.sets;
-                    repsInput.value = dayEx.reps;
-                    weightInput.value = dayEx.weight;
-                    warmupSetsInput.value = dayEx.warmupSets || '';
-                    warmupWeightInput.value = dayEx.warmupWeight || '';
-                    setWeightsInput.value = (dayEx.setWeights && dayEx.setWeights.length) ? dayEx.setWeights.join(', ') : '';
-                    const hasWarmupData = (dayEx.warmupSets > 0) || (dayEx.setWeights && dayEx.setWeights.length > 0);
-                    gymExShowWarmupSection(hasWarmupData);
-                    if (libEx.history && libEx.history.length >= 2) {
-                        renderGymProgressGraph(libEx.history);
-                        progressSection.style.display = '';
-                    } else {
-                        progressSection.style.display = 'none';
-                    }
-                    pickerSection.style.display = 'none';
-
-                    if (viewOnly) {
-                        title.textContent = 'Exercise Details';
-                        gymExSetInputsDisabled(true);
-                        document.getElementById('gymWarmupToggle').style.display = 'none';
-                        removeBtn.style.display = 'none';
-                        saveBtn.style.display = 'none';
-                        closeBtn.textContent = 'Close';
-                    } else {
-                        title.textContent = 'Edit Exercise';
-                        gymExSetInputsDisabled(false);
-                        document.getElementById('gymWarmupToggle').style.display = '';
-                        removeBtn.style.display = '';
-                        saveBtn.style.display = '';
-                        closeBtn.textContent = 'Cancel';
-                    }
-                }
-            } else {
-                title.textContent = 'Add Exercise';
-                nameInput.value = '';
-                setsInput.value = '';
-                repsInput.value = '';
-                weightInput.value = '';
-                warmupSetsInput.value = '';
-                warmupWeightInput.value = '';
-                setWeightsInput.value = '';
-                gymExShowWarmupSection(false);
-                document.getElementById('gymWarmupToggle').style.display = '';
-                gymExSetInputsDisabled(false);
-                progressSection.style.display = 'none';
-                removeBtn.style.display = 'none';
-                saveBtn.style.display = '';
-                closeBtn.textContent = 'Cancel';
-                renderGymExercisePicker();
-            }
-
-            modal.classList.add('visible');
-            if (!viewOnly) nameInput.focus();
-        }
-
-        function closeGymExerciseModal() {
-            document.getElementById('gymExerciseModal').classList.remove('visible');
-            gymEditingExerciseId = null;
-            gymEditingDayIdForEx = null;
-            gymSelectedLibExId = null;
-        }
-
-        function saveGymExercise() {
-            const name = document.getElementById('gymExerciseNameInput').value.trim();
-            if (!name) return;
-            const sets = Math.max(1, parseInt(document.getElementById('gymExerciseSetsInput').value) || 3);
-            const reps = Math.max(1, parseInt(document.getElementById('gymExerciseRepsInput').value) || 10);
-            const weight = Math.max(0, parseFloat(document.getElementById('gymExerciseWeightInput').value) || 0);
-            const warmupSets = Math.max(0, parseInt(document.getElementById('gymExerciseWarmupSetsInput').value) || 0);
-            const warmupWeight = Math.max(0, parseFloat(document.getElementById('gymExerciseWarmupWeightInput').value) || 0);
-            const setWeightsRaw = document.getElementById('gymExerciseSetWeightsInput').value.trim();
-            const setWeights = setWeightsRaw
-                ? setWeightsRaw.split(/[,\/\s]+/).map(v => Math.max(0, parseFloat(v) || 0)).filter((_, i) => i < sets)
-                : [];
-            // Only use setWeights if count matches sets
-            const finalSetWeights = setWeights.length === sets ? setWeights : [];
-            // Effective top weight: last of progressive weights or uniform weight
-            const topWeight = finalSetWeights.length ? finalSetWeights[finalSetWeights.length - 1] : weight;
-
-            const key = getGymUserKey();
-            if (!key) return;
-            if (!gymPlanner[key]) gymPlanner[key] = { library: [], days: [] };
-            if (!gymPlanner[key].library) gymPlanner[key].library = [];
-
-            const day = gymPlanner[key].days.find(d => d && d.id === gymEditingDayIdForEx);
-            if (!day) return;
-            if (!day.exercises) day.exercises = [];
-
-            // Resolve library entry: chip selection > name match > new
-            let libEx = null;
-            if (gymSelectedLibExId) {
-                libEx = gymPlanner[key].library.find(l => l && l.id === gymSelectedLibExId);
-                if (libEx) libEx.name = name;
-            }
-            if (!libEx) libEx = gymPlanner[key].library.find(l => l && l.name.toLowerCase() === name.toLowerCase());
-            if (!libEx) {
-                libEx = { id: `ex_${Date.now()}`, name, history: [] };
-                gymPlanner[key].library.push(libEx);
-            } else {
-                libEx.name = name;
-            }
-
-            // If the user switched to a different exercise, remove the old day ref
-            if (gymEditingExerciseId && gymEditingExerciseId !== libEx.id) {
-                day.exercises = day.exercises.filter(e => e && e.exerciseId !== gymEditingExerciseId);
-            }
-
-            // Find (or prepare) the day-level reference for this library exercise
-            let dayEx = day.exercises.find(e => e && e.exerciseId === libEx.id);
-
-            // Record a history entry when top weight changes (or on first save)
-            if (!libEx.history) libEx.history = [];
-            const prevWeight = dayEx ? dayEx.weight : null;
-            if (prevWeight === null || prevWeight !== topWeight) {
-                libEx.history.push({ ts: Date.now(), weight: topWeight });
-            }
-
-            if (dayEx) {
-                dayEx.sets = sets;
-                dayEx.reps = reps;
-                dayEx.weight = weight;
-                dayEx.warmupSets = warmupSets;
-                dayEx.warmupWeight = warmupWeight;
-                dayEx.setWeights = finalSetWeights;
-            } else {
-                day.exercises.push({ exerciseId: libEx.id, sets, reps, weight, warmupSets, warmupWeight, setWeights: finalSetWeights });
-            }
-
-            gymSelectedLibExId = null;
-            saveGymPlanner();
-            closeGymExerciseModal();
-            renderGymDays();
-        }
-
-        function deleteGymExercise() {
-            // Remove from this day only; the library entry (and history) is preserved
-            if (!gymEditingExerciseId || !gymEditingDayIdForEx) return;
-            const key = getGymUserKey();
-            if (!key) return;
-            const day = gymPlanner[key].days.find(d => d && d.id === gymEditingDayIdForEx);
-            if (day) {
-                day.exercises = day.exercises.filter(e => e && e.exerciseId !== gymEditingExerciseId);
-            }
-            saveGymPlanner();
-            closeGymExerciseModal();
-            renderGymDays();
-        }
-
-        function deleteGymLibraryExercise(exerciseId) {
-            // Remove from library AND all days — clears all history
-            const idToDelete = exerciseId || gymEditingExerciseId;
-            if (!idToDelete) return;
-            const key = getGymUserKey();
-            if (!key) return;
-            if (gymPlanner[key].library) {
-                gymPlanner[key].library = gymPlanner[key].library.filter(l => l && l.id !== idToDelete);
-            }
-            if (gymPlanner[key].days) {
-                gymPlanner[key].days.forEach(day => {
-                    if (day && day.exercises)
-                        day.exercises = day.exercises.filter(e => e && e.exerciseId !== idToDelete);
-                });
-            }
-            saveGymPlanner();
-            if (!exerciseId) {
-                // Called from exercise modal — close it
-                closeGymExerciseModal();
-                renderGymDays();
-            }
-        }
-
-        // ---- Workout Mode ----
-        function saveGymWorkoutSession() {
-            const key = getGymUserKey();
-            if (!key || !gymWorkoutDayId) { localStorage.removeItem(GYM_WORKOUT_SESSION_KEY); return; }
-            localStorage.setItem(GYM_WORKOUT_SESSION_KEY, JSON.stringify({ userKey: key, dayId: gymWorkoutDayId, done: gymWorkoutDone }));
-        }
-
-        function loadGymWorkoutSession() {
-            try { const s = localStorage.getItem(GYM_WORKOUT_SESSION_KEY); return s ? JSON.parse(s) : null; }
-            catch (e) { return null; }
-        }
-
-        function clearGymWorkoutSession() {
-            localStorage.removeItem(GYM_WORKOUT_SESSION_KEY);
-        }
-
-        function openGymWorkout(dayId) {
-            const key = getGymUserKey();
-            const plan = getGymUserPlan();
-            const day = plan.days.find(d => d && d.id === dayId);
-            if (!day) return;
-
-            // Restore in-progress session for this day (survives page refresh / accidental close)
-            const savedSession = loadGymWorkoutSession();
-            if (savedSession && savedSession.userKey === key && savedSession.dayId === dayId) {
-                gymWorkoutDone = savedSession.done || {};
-            } else {
-                gymWorkoutDone = {};
-            }
-            gymWorkoutDayId = dayId;
-
-            document.getElementById('gymWorkoutTitle').textContent = '💪 ' + day.name;
-            renderGymWorkoutList();
-            document.getElementById('gymWorkoutModal').classList.add('visible');
-        }
-
-        function renderGymWorkoutList() {
-            const list = document.getElementById('gymWorkoutList');
-            if (!list) return;
-            list.innerHTML = '';
-            const plan = getGymUserPlan();
-            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
-            if (!day || !day.exercises || !day.exercises.length) {
-                const p = document.createElement('p');
-                p.style.cssText = 'color:#888;font-size:12px;text-align:center;padding:12px 0';
-                p.textContent = 'No exercises in this day.';
-                list.appendChild(p);
-                updateGymWorkoutProgress();
-                return;
-            }
-
-            day.exercises.forEach((dayEx) => {
-                if (!dayEx) return;
-                const libEx = (plan.library || []).find(l => l && l.id === dayEx.exerciseId);
-                if (!libEx) return;
-
-                // Build set descriptor list
-                const setRows = [];
-                const wSets = dayEx.warmupSets || 0;
-                const wWeight = dayEx.warmupWeight || 0;
-                for (let i = 0; i < wSets; i++) {
-                    setRows.push({ key: `${dayEx.exerciseId}__w${i}`, label: `W${i + 1}`, reps: dayEx.reps, weight: wWeight, isWarmup: true });
-                }
-                const hasProgression = dayEx.setWeights && dayEx.setWeights.length === dayEx.sets;
-                for (let i = 0; i < dayEx.sets; i++) {
-                    const w = hasProgression ? dayEx.setWeights[i] : dayEx.weight;
-                    setRows.push({ key: `${dayEx.exerciseId}__${i}`, label: `${i + 1}`, reps: dayEx.reps, weight: w, isWarmup: false, mainIndex: i, isLast: i === dayEx.sets - 1 });
-                }
-
-                const nextSet = setRows.find(s => !gymWorkoutDone[s.key]);
-                const totalDone = setRows.filter(s => gymWorkoutDone[s.key]).length;
-                const allDone = totalDone === setRows.length;
-
-                const row = document.createElement('div');
-                row.className = 'gym-workout-row'
-                    + (allDone ? ' done' : (nextSet && nextSet.isWarmup ? ' warmup' : ''));
-
-                // --- Info column ---
-                const info = document.createElement('div');
-                info.className = 'gym-workout-info';
-
-                const nameEl = document.createElement('div');
-                nameEl.className = 'gym-workout-name';
-                nameEl.textContent = libEx.name;
-
-                // Progress dots
-                const dotsRow = document.createElement('div');
-                dotsRow.className = 'gym-workout-progress-dots';
-                setRows.forEach((s, idx) => {
-                    if (!s.isWarmup && idx > 0 && setRows[idx - 1].isWarmup) {
-                        const sep = document.createElement('span');
-                        sep.className = 'gym-workout-dots-sep';
-                        sep.textContent = '|';
-                        dotsRow.appendChild(sep);
-                    }
-                    const dot = document.createElement('span');
-                    const isDone = !!gymWorkoutDone[s.key];
-                    dot.className = 'gym-workout-dot' + (s.isWarmup ? ' warmup' : '') + (isDone ? ' done' : '');
-                    dot.textContent = isDone ? '●' : '○';
-                    dotsRow.appendChild(dot);
-                });
-
-                // Next-set label
-                const setLbl = document.createElement('div');
-                setLbl.className = 'gym-workout-set-label';
-                if (allDone) {
-                    setLbl.textContent = 'All sets done';
-                } else if (nextSet) {
-                    if (nextSet.isWarmup) {
-                        const wIdx = setRows.filter(s => s.isWarmup).indexOf(nextSet);
-                        setLbl.textContent = `Warm-up ${wIdx + 1} of ${wSets}`;
-                    } else {
-                        const mIdx = setRows.filter(s => !s.isWarmup).indexOf(nextSet);
-                        setLbl.textContent = `Set ${mIdx + 1} of ${dayEx.sets}`;
-                    }
-                }
-
-                info.appendChild(nameEl);
-                info.appendChild(dotsRow);
-                info.appendChild(setLbl);
-
-                // --- Weight input ---
-                const weightWrap = document.createElement('div');
-                weightWrap.className = 'gym-workout-weight-wrap';
-
-                const weightInput = document.createElement('input');
-                weightInput.type = 'number';
-                weightInput.className = 'gym-workout-weight-input';
-                weightInput.min = '0';
-                weightInput.max = '1000';
-                weightInput.step = '0.5';
-                weightInput.value = nextSet ? nextSet.weight : (setRows.length ? setRows[setRows.length - 1].weight : dayEx.weight);
-                weightInput.disabled = allDone;
-
-                const weightLabel = document.createElement('span');
-                weightLabel.className = 'gym-workout-weight-label';
-                weightLabel.textContent = 'kg';
-                weightWrap.appendChild(weightInput);
-                weightWrap.appendChild(weightLabel);
-
-                // --- Done button ---
-                const doneBtn = document.createElement('button');
-                doneBtn.type = 'button';
-                doneBtn.className = 'gym-workout-done-btn' + (allDone ? ' is-done' : '');
-                if (allDone) {
-                    doneBtn.textContent = '✓ Done';
-                } else if (nextSet.isWarmup) {
-                    const wIdx = setRows.filter(s => s.isWarmup).indexOf(nextSet) + 1;
-                    doneBtn.textContent = `W${wIdx} ✓`;
-                } else {
-                    const mIdx = setRows.filter(s => !s.isWarmup).indexOf(nextSet) + 1;
-                    const isLast = mIdx === dayEx.sets;
-                    doneBtn.textContent = isLast ? `Set ${mIdx} — Done` : `Set ${mIdx} ✓`;
-                }
-                if (allDone) {
-                    // Allow undoing the last set by tapping ✓ Done
-                    const lastDone = [...setRows].reverse().find(s => gymWorkoutDone[s.key]);
-                    if (lastDone) doneBtn.addEventListener('click', () => gymMarkSetDone(lastDone, weightInput, dayEx));
-                } else {
-                    doneBtn.addEventListener('click', () => gymMarkSetDone(nextSet, weightInput, dayEx));
-                }
-
-                row.appendChild(info);
-                row.appendChild(weightWrap);
-                row.appendChild(doneBtn);
-                list.appendChild(row);
-            });
-
-            updateGymWorkoutProgress();
-        }
-
-        function gymMarkSetDone(setDescriptor, weightInputEl, dayEx) {
-            const key = getGymUserKey();
-            if (!key) return;
-
-            // Toggle off
-            if (gymWorkoutDone[setDescriptor.key]) {
-                delete gymWorkoutDone[setDescriptor.key];
-                // Re-enable the weight input
-                saveGymWorkoutSession();
-                renderGymWorkoutList();
-                return;
-            }
-
-            const newWeight = Math.max(0, parseFloat(weightInputEl.value) || 0);
-
-            // If this is a main set (not warm-up), persist weight changes
-            if (!setDescriptor.isWarmup) {
-                const day = gymPlanner[key].days.find(d => d && d.id === gymWorkoutDayId);
-                if (day) {
-                    const ex = day.exercises.find(e => e && e.exerciseId === dayEx.exerciseId);
-                    if (ex) {
-                        if (ex.setWeights && ex.setWeights.length === ex.sets) {
-                            ex.setWeights[setDescriptor.mainIndex] = newWeight;
-                        } else {
-                            ex.weight = newWeight;
-                        }
-                        // Record history entry on last main set if top weight changed
-                        if (setDescriptor.isLast) {
-                            const libEx = gymPlanner[key].library.find(l => l && l.id === dayEx.exerciseId);
-                            if (libEx) {
-                                if (!libEx.history) libEx.history = [];
-                                const topWeight = ex.setWeights && ex.setWeights.length ? ex.setWeights[ex.setWeights.length - 1] : ex.weight;
-                                const lastHistWeight = libEx.history.length ? libEx.history[libEx.history.length - 1].weight : null;
-                                if (lastHistWeight !== topWeight) {
-                                    libEx.history.push({ ts: Date.now(), weight: topWeight });
-                                }
-                            }
-                        }
-                        saveGymPlanner();
-                    }
-                }
-            }
-
-            gymWorkoutDone[setDescriptor.key] = true;
-            saveGymWorkoutSession();
-            renderGymWorkoutList();
-        }
-
-        function updateGymWorkoutProgress() {
-            const plan = getGymUserPlan();
-            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
-            let total = 0;
-            if (day && day.exercises) {
-                day.exercises.filter(e => e).forEach(ex => {
-                    total += (ex.warmupSets || 0) + (ex.sets || 0);
-                });
-            }
-            const done = Object.keys(gymWorkoutDone).length;
-            const el = document.getElementById('gymWorkoutProgress');
-            if (el) el.textContent = `${done} / ${total} sets done`;
-        }
-
-        function closeGymWorkout() {
-            const plan = getGymUserPlan();
-            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
-            let total = 0;
-            if (day && day.exercises) {
-                day.exercises.filter(e => e).forEach(ex => { total += (ex.warmupSets || 0) + (ex.sets || 0); });
-            }
-            const done = Object.keys(gymWorkoutDone).length;
-
-            if (total > 0 && done < total) {
-                if (!confirm(`${done} of ${total} sets done. End workout?\n\nYour progress and weights are already saved — you can resume this workout anytime.`)) return;
-            }
-
-            clearGymWorkoutSession();
-            document.getElementById('gymWorkoutModal').classList.remove('visible');
-            gymWorkoutDayId = null;
-            gymWorkoutDone = {};
-            renderGymDays(); // refresh to show updated weights
-        }
-
-        function continueLaterGymWorkout() {
-            // Save session and close — user can resume from the day card
-            saveGymWorkoutSession();
-            document.getElementById('gymWorkoutModal').classList.remove('visible');
-            gymWorkoutDayId = null;
-            gymWorkoutDone = {};
-            renderGymDays(); // refresh to show Resume button
-        }
-
-        function setupGymWorkoutModal() {
-            const closeBtn = document.getElementById('gymWorkoutCloseBtn');
-            if (closeBtn && !closeBtn._gymBound) {
-                closeBtn._gymBound = true;
-                closeBtn.addEventListener('click', closeGymWorkout);
-            }
-            const continueBtn = document.getElementById('gymWorkoutContinueLaterBtn');
-            if (continueBtn && !continueBtn._gymBound) {
-                continueBtn._gymBound = true;
-                continueBtn.addEventListener('click', continueLaterGymWorkout);
-            }
-            // Backdrop click intentionally disabled — prevents accidental workout close
-        }
-
-        // ---- Progress Graph ----
-        function gymFormatDate(ts) {
-            if (!ts) return '';
-            const d = new Date(ts);
-            return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]} ${d.getDate()}`;
-        }
-
-        function renderGymProgressGraph(history) {
-            const svgEl = document.getElementById('gymGraphSvg');
-            const emptyEl = document.getElementById('gymGraphEmpty');
-            if (!svgEl || !emptyEl) return;
-
-            const pts = (history || []).filter(h => h && h.ts > 0).slice();
-
-            if (pts.length < 2) {
-                svgEl.style.display = 'none';
-                emptyEl.style.display = '';
-                emptyEl.textContent = pts.length === 0 ? 'No history yet' : 'Only one data point';
-                return;
-            }
-
-            svgEl.style.display = '';
-            emptyEl.style.display = 'none';
-            svgEl.innerHTML = '';
-
-            const weights = pts.map(h => h.weight);
-            const minW = Math.min(...weights);
-            const maxW = Math.max(...weights);
-            const range = maxW - minW || 1;
-
-            // SVG coordinate space: 200 wide, 82 tall
-            // Bottom 14 units are reserved for date labels
-            const W = 200;
-            const H = 82;
-            const pad = 6;
-            const dateAreaH = 14;
-            const chartBottom = H - dateAreaH;
-            const innerW = W - pad * 2;
-            const innerH = chartBottom - pad;
-
-            const toX = (i) => pad + (pts.length > 1 ? (i / (pts.length - 1)) * innerW : innerW / 2);
-            const toY = (w) => pad + innerH - ((w - minW) / range) * innerH;
-
-            let d = '';
-            pts.forEach((h, i) => {
-                const x = toX(i);
-                const y = toY(h.weight);
-                d += i === 0 ? `M${x},${y}` : ` L${x},${y}`;
-            });
-
-            const ns = 'http://www.w3.org/2000/svg';
-
-            // Gradient defs
-            const defs = document.createElementNS(ns, 'defs');
-            const grad = document.createElementNS(ns, 'linearGradient');
-            grad.setAttribute('id', 'gymGrad');
-            grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0');
-            grad.setAttribute('x2', '0'); grad.setAttribute('y2', '1');
-            [['0%', '0.2'], ['100%', '0']].forEach(([offset, opacity]) => {
-                const s = document.createElementNS(ns, 'stop');
-                s.setAttribute('offset', offset);
-                s.setAttribute('stop-color', '#0054E3');
-                s.setAttribute('stop-opacity', opacity);
-                grad.appendChild(s);
-            });
-            defs.appendChild(grad);
-            svgEl.appendChild(defs);
-
-            // Area fill (down to chartBottom, not the full H)
-            const area = document.createElementNS(ns, 'path');
-            area.setAttribute('d', `${d} L${toX(pts.length - 1)},${chartBottom} L${toX(0)},${chartBottom} Z`);
-            area.setAttribute('fill', 'url(#gymGrad)');
-            svgEl.appendChild(area);
-
-            // Hairline separating chart from date strip
-            const sep = document.createElementNS(ns, 'line');
-            sep.setAttribute('x1', pad); sep.setAttribute('y1', chartBottom);
-            sep.setAttribute('x2', W - pad); sep.setAttribute('y2', chartBottom);
-            sep.setAttribute('stroke', '#cccccc'); sep.setAttribute('stroke-width', '0.5');
-            svgEl.appendChild(sep);
-
-            // Line
-            const lineEl = document.createElementNS(ns, 'path');
-            lineEl.setAttribute('d', d);
-            lineEl.setAttribute('fill', 'none');
-            lineEl.setAttribute('stroke', '#0054E3');
-            lineEl.setAttribute('stroke-width', '2');
-            lineEl.setAttribute('stroke-linejoin', 'round');
-            lineEl.setAttribute('stroke-linecap', 'round');
-            svgEl.appendChild(lineEl);
-
-            // Which points get labelled — always first & last, plus extremes; extras if not too crowded
-            const labelSet = new Set([0, pts.length - 1]);
-            const maxIdx = weights.indexOf(maxW);
-            const minIdx = weights.indexOf(minW);
-            [maxIdx, minIdx].forEach(ci => { if (ci > 0 && ci < pts.length - 1) labelSet.add(ci); });
-            const minGap = 30; // SVG units
-            [...Array(pts.length).keys()].filter(i => !labelSet.has(i)).forEach(i => {
-                const x = toX(i);
-                const tooClose = [...labelSet].some(li => Math.abs(toX(li) - x) < minGap);
-                if (!tooClose) labelSet.add(i);
-            });
-
-            pts.forEach((h, i) => {
-                const x = toX(i);
-                const y = toY(h.weight);
-
-                const dot = document.createElementNS(ns, 'circle');
-                dot.setAttribute('cx', x);
-                dot.setAttribute('cy', y);
-                dot.setAttribute('r', (i === 0 || i === pts.length - 1) ? '2.5' : '2');
-                dot.setAttribute('fill', '#0054E3');
-                svgEl.appendChild(dot);
-
-                if (labelSet.has(i)) {
-                    const anchor = i === pts.length - 1 ? 'end' : i === 0 ? 'start' : 'middle';
-
-                    // Weight label — flip above/below based on position in chart
-                    const wLabel = document.createElementNS(ns, 'text');
-                    wLabel.setAttribute('x', x);
-                    wLabel.setAttribute('y', y > pad + innerH * 0.55 ? y - 4 : y + 9);
-                    wLabel.setAttribute('text-anchor', anchor);
-                    wLabel.setAttribute('font-size', '7.5');
-                    wLabel.setAttribute('font-weight', 'bold');
-                    wLabel.setAttribute('fill', '#003C74');
-                    wLabel.textContent = `${h.weight}kg`;
-                    svgEl.appendChild(wLabel);
-
-                    // Date label in the strip below the chart
-                    const dLabel = document.createElementNS(ns, 'text');
-                    dLabel.setAttribute('x', x);
-                    dLabel.setAttribute('y', H - 2);
-                    dLabel.setAttribute('text-anchor', anchor);
-                    dLabel.setAttribute('font-size', '6.5');
-                    dLabel.setAttribute('fill', '#777777');
-                    dLabel.textContent = gymFormatDate(h.ts);
-                    svgEl.appendChild(dLabel);
-                }
-            });
-        }
-
-        // ---- Modal Setup ----
-        // ---- Edit mode toggle ----
-        function toggleGymEditMode() {
-            gymEditMode = !gymEditMode;
-            const btn = document.getElementById('gymEditToggleBtn');
-            const addDayBtn = document.getElementById('gymAddDayBtn');
-            const libraryBtn = document.getElementById('gymLibraryBtn');
-            if (btn) {
-                btn.textContent = gymEditMode ? '✓ Done' : '✏️ Edit';
-                btn.classList.toggle('gym-edit-active-btn', gymEditMode);
-            }
-            if (addDayBtn) addDayBtn.style.display = gymEditMode ? '' : 'none';
-            if (libraryBtn) libraryBtn.style.display = gymEditMode ? '' : 'none';
-            renderGymDays();
+            saveGymPlanner(); closeGymDayModal(); renderGymDays();
         }
 
         // ---- Library Modal ----
-        function openGymLibraryModal() {
-            renderGymLibraryList();
-            document.getElementById('gymLibraryModal').classList.add('visible');
-        }
-
-        function closeGymLibraryModal() {
-            document.getElementById('gymLibraryModal').classList.remove('visible');
-        }
+        function openGymLibraryModal() { renderGymLibraryList(); document.getElementById('gymLibraryModal').classList.add('visible'); }
+        function closeGymLibraryModal() { document.getElementById('gymLibraryModal').classList.remove('visible'); }
 
         function renderGymLibraryList() {
             const listEl = document.getElementById('gymLibraryList');
@@ -13061,154 +12587,526 @@
             if (!plan.library || !plan.library.length) {
                 const empty = document.createElement('p');
                 empty.className = 'gym-library-empty';
-                empty.textContent = 'No exercises in library yet.';
-                listEl.appendChild(empty);
-                return;
+                empty.textContent = 'No exercises yet. Tap + New Exercise.';
+                listEl.appendChild(empty); return;
             }
             plan.library.forEach(libEx => {
                 if (!libEx) return;
-                const row = document.createElement('div');
-                row.className = 'gym-library-row';
-
-                const info = document.createElement('div');
-                info.className = 'gym-library-row-info';
-
-                const name = document.createElement('div');
-                name.className = 'gym-library-row-name';
-                name.textContent = libEx.name;
-
-                const meta = document.createElement('div');
-                meta.className = 'gym-library-row-meta';
-                const histCount = (libEx.history || []).length;
-                meta.textContent = histCount === 0 ? 'No history' : `${histCount} session${histCount !== 1 ? 's' : ''} logged`;
-
-                info.appendChild(name);
-                info.appendChild(meta);
-
-                const delBtn = document.createElement('button');
-                delBtn.type = 'button';
-                delBtn.className = 'gym-library-delete-btn';
-                delBtn.textContent = 'Delete';
+                const row = document.createElement('div'); row.className = 'gym-library-row';
+                const info = document.createElement('div'); info.className = 'gym-library-row-info';
+                const name = document.createElement('div'); name.className = 'gym-library-row-name'; name.textContent = libEx.name;
+                const histCount = ((plan.history || {})[libEx.id] || []).length;
+                const meta = document.createElement('div'); meta.className = 'gym-library-row-meta';
+                meta.textContent = histCount === 0 ? 'No history' : histCount + ' session' + (histCount !== 1 ? 's' : '');
+                info.appendChild(name); info.appendChild(meta);
+                const btns = document.createElement('div'); btns.style.cssText = 'display:flex;gap:4px;flex-shrink:0;';
+                const renameBtn = document.createElement('button'); renameBtn.type = 'button';
+                renameBtn.textContent = '\u270e'; renameBtn.title = 'Rename'; renameBtn.style.cssText = 'padding:3px 8px;font-size:12px;';
+                renameBtn.addEventListener('click', () => openGymLibExModal(libEx.id));
+                const delBtn = document.createElement('button'); delBtn.type = 'button';
+                delBtn.className = 'gym-library-delete-btn'; delBtn.textContent = '\u2715'; delBtn.title = 'Delete';
                 delBtn.addEventListener('click', () => {
-                    if (!confirm(`Delete "${libEx.name}" from library? This will also remove it from all days and clear its history.`)) return;
-                    deleteGymLibraryExercise(libEx.id);
-                    renderGymLibraryList();
-                    renderGymDays();
+                    if (!confirm(`Delete "${libEx.name}"? Removes from all days and clears all history.`)) return;
+                    deleteGymLibraryExercise(libEx.id); renderGymLibraryList(); renderGymDays();
                 });
-
-                row.appendChild(info);
-                row.appendChild(delBtn);
-                listEl.appendChild(row);
+                btns.appendChild(renameBtn); btns.appendChild(delBtn);
+                row.appendChild(info); row.appendChild(btns); listEl.appendChild(row);
             });
+        }
+
+        function deleteGymLibraryExercise(exerciseId) {
+            if (!exerciseId) return;
+            const key = getGymUserKey(); if (!key) return;
+            if (gymPlanner[key].library) gymPlanner[key].library = gymPlanner[key].library.filter(l => l && l.id !== exerciseId);
+            if (gymPlanner[key].days) gymPlanner[key].days.forEach(day => { if (day && day.exercises) day.exercises = day.exercises.filter(id => id !== exerciseId); });
+            if (gymPlanner[key].history) delete gymPlanner[key].history[exerciseId];
+            saveGymPlanner();
+        }
+
+        // ---- Library Exercise Modal (create/rename) ----
+        function openGymLibExModal(libExId) {
+            gymEditingLibExId = libExId || null;
+            const title = document.getElementById('gymLibExModalTitle');
+            const nameInput = document.getElementById('gymLibExNameInput');
+            if (libExId) {
+                const libEx = getGymUserPlan().library.find(l => l && l.id === libExId);
+                title.textContent = 'Rename Exercise'; nameInput.value = libEx ? libEx.name : '';
+            } else {
+                title.textContent = 'New Exercise'; nameInput.value = '';
+            }
+            document.getElementById('gymLibExModal').classList.add('visible');
+            nameInput.focus();
+        }
+
+        function closeGymLibExModal() { document.getElementById('gymLibExModal').classList.remove('visible'); gymEditingLibExId = null; }
+
+        function saveGymLibEx() {
+            const name = document.getElementById('gymLibExNameInput').value.trim(); if (!name) return;
+            const key = getGymUserKey(); if (!key) return;
+            if (!gymPlanner[key]) gymPlanner[key] = { library: [], days: [], history: {} };
+            if (!gymPlanner[key].library) gymPlanner[key].library = [];
+            if (gymEditingLibExId) {
+                const libEx = gymPlanner[key].library.find(l => l && l.id === gymEditingLibExId);
+                if (libEx) libEx.name = name;
+            } else {
+                gymPlanner[key].library.push({ id: `ex_${Date.now()}`, name });
+            }
+            saveGymPlanner(); closeGymLibExModal(); renderGymLibraryList(); renderGymDays();
+        }
+
+        // ---- Add Exercise to Day Modal ----
+        function openGymAddToDayModal(dayId) {
+            gymEditingDayIdForEx = dayId;
+            renderGymAddToDayList();
+            document.getElementById('gymAddToDayModal').classList.add('visible');
+        }
+
+        function closeGymAddToDayModal() { document.getElementById('gymAddToDayModal').classList.remove('visible'); gymEditingDayIdForEx = null; }
+
+        function renderGymAddToDayList() {
+            const container = document.getElementById('gymAddToDayList'); if (!container) return;
+            container.innerHTML = '';
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === gymEditingDayIdForEx);
+            if (!day) return;
+            if (!plan.library || !plan.library.length) {
+                const p = document.createElement('p'); p.className = 'gym-library-empty';
+                p.textContent = 'No exercises in library. Add some from the Library first.';
+                container.appendChild(p); return;
+            }
+            plan.library.forEach(libEx => {
+                if (!libEx) return;
+                const isInDay = day.exercises.includes(libEx.id);
+                const row = document.createElement('div'); row.className = 'gym-library-row';
+                const nameEl = document.createElement('div'); nameEl.className = 'gym-library-row-name'; nameEl.textContent = libEx.name;
+                const btn = document.createElement('button'); btn.type = 'button';
+                if (isInDay) {
+                    btn.textContent = '\u2713 Added'; btn.className = 'gym-library-added-btn';
+                    btn.addEventListener('click', () => {
+                        const key = getGymUserKey();
+                        const d = gymPlanner[key].days.find(d2 => d2 && d2.id === gymEditingDayIdForEx);
+                        if (d) d.exercises = d.exercises.filter(id => id !== libEx.id);
+                        saveGymPlanner(); renderGymAddToDayList(); renderGymDays();
+                    });
+                } else {
+                    btn.textContent = '+ Add'; btn.className = 'gym-library-add-btn';
+                    btn.addEventListener('click', () => {
+                        const key = getGymUserKey();
+                        const d = gymPlanner[key].days.find(d2 => d2 && d2.id === gymEditingDayIdForEx);
+                        if (d && !d.exercises.includes(libEx.id)) d.exercises.push(libEx.id);
+                        saveGymPlanner(); renderGymAddToDayList(); renderGymDays();
+                    });
+                }
+                row.appendChild(nameEl); row.appendChild(btn); container.appendChild(row);
+            });
+        }
+
+        // ---- Stats Modal ----
+        function openGymStatsModal(exerciseId) {
+            const plan = getGymUserPlan();
+            const libEx = plan.library.find(l => l && l.id === exerciseId); if (!libEx) return;
+            const history = (plan.history || {})[exerciseId] || [];
+            document.getElementById('gymStatsModalTitle').textContent = libEx.name;
+            const content = document.getElementById('gymStatsContent'); content.innerHTML = '';
+            const histSection = document.getElementById('gymStatsHistorySection'); histSection.innerHTML = '';
+            if (!history.length) {
+                const p = document.createElement('p'); p.style.cssText = 'color:#888;font-size:12px;text-align:center;padding:8px 0';
+                p.textContent = 'No workout history yet.'; content.appendChild(p);
+                document.getElementById('gymStatsProgressSection').style.display = 'none';
+            } else {
+                const mainSets = s => s.sets.filter(set => !set.isWarmup);
+                const sessMax = s => { const ms = mainSets(s); return ms.length ? Math.max(...ms.map(set => set.weight)) : 0; };
+                const last = history[history.length - 1];
+                const lastMain = mainSets(last).filter(s => s.reps > 0 || s.weight > 0);
+                const pr = Math.max(...history.map(sessMax), 0);
+                const statsData = [{ value: history.length, label: 'sessions' }, { value: pr + ' kg', label: 'best weight' }];
+                if (lastMain.length) { const ls = lastMain[lastMain.length - 1]; statsData.push({ value: ls.weight + ' kg', label: ls.reps + ' reps (' + gymFormatDate(last.ts) + ')' }); }
+                const statsRow = document.createElement('div'); statsRow.className = 'gym-stats-row';
+                statsData.forEach(stat => {
+                    const item = document.createElement('div'); item.className = 'gym-stat-item';
+                    const val = document.createElement('div'); val.className = 'gym-stat-value'; val.textContent = stat.value;
+                    const lbl = document.createElement('div'); lbl.className = 'gym-stat-label'; lbl.textContent = stat.label;
+                    item.appendChild(val); item.appendChild(lbl); statsRow.appendChild(item);
+                });
+                content.appendChild(statsRow);
+                const graphPoints = history.map(s => ({ ts: s.ts, weight: sessMax(s) }));
+                if (graphPoints.length >= 2) {
+                    renderGymProgressGraphInEl(graphPoints, 'gymStatsGraphSvg', 'gymStatsGraphEmpty');
+                    document.getElementById('gymStatsProgressSection').style.display = '';
+                } else {
+                    document.getElementById('gymStatsProgressSection').style.display = 'none';
+                }
+                // History toggle
+                const toggle = document.createElement('span'); toggle.className = 'gym-stats-history-toggle';
+                toggle.textContent = 'Show history (' + history.length + ')';
+                let histOpen = false;
+                const histList = document.createElement('div'); histList.className = 'gym-stats-history-list'; histList.style.display = 'none';
+                toggle.addEventListener('click', () => {
+                    histOpen = !histOpen;
+                    histList.style.display = histOpen ? '' : 'none';
+                    toggle.textContent = (histOpen ? 'Hide history' : 'Show history') + ' (' + history.length + ')';
+                });
+                // Render sessions newest-first
+                [...history].reverse().forEach(sess => {
+                    const peak = sessMax(sess);
+                    const sessEl = document.createElement('div'); sessEl.className = 'gym-stats-session-row';
+                    const hdr = document.createElement('div'); hdr.className = 'gym-stats-session-header';
+                    const dateEl = document.createElement('span'); dateEl.className = 'gym-stats-session-date';
+                    dateEl.textContent = gymFormatDate(sess.ts);
+                    const peakEl = document.createElement('span'); peakEl.className = 'gym-stats-session-peak';
+                    peakEl.textContent = peak + ' kg';
+                    const arrow = document.createElement('span'); arrow.className = 'gym-stats-session-arrow'; arrow.textContent = '▶';
+                    hdr.appendChild(dateEl); hdr.appendChild(peakEl); hdr.appendChild(arrow);
+                    const detail = document.createElement('div'); detail.className = 'gym-stats-session-detail';
+                    // Build set table
+                    const table = document.createElement('table'); table.className = 'gym-stats-set-table';
+                    const thead = table.createTHead(); const hr = thead.insertRow();
+                    ['Set', 'Weight', 'Reps'].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
+                    const tbody = table.createTBody();
+                    let mainIdx = 0;
+                    (sess.sets || []).forEach(set => {
+                        const tr = tbody.insertRow();
+                        if (set.isWarmup) tr.className = 'warmup-row';
+                        else mainIdx++;
+                        const lbl = set.isWarmup ? 'W' : String(mainIdx);
+                        [lbl, (set.weight || 0) + ' kg', (set.reps || 0) + ' reps'].forEach(v => { const td = tr.insertCell(); td.textContent = v; });
+                    });
+                    detail.appendChild(table);
+                    hdr.addEventListener('click', () => {
+                        const isOpen = detail.classList.toggle('open');
+                        arrow.classList.toggle('open', isOpen);
+                    });
+                    sessEl.appendChild(hdr); sessEl.appendChild(detail);
+                    histList.appendChild(sessEl);
+                });
+                histSection.appendChild(toggle); histSection.appendChild(histList);
+            }
+            document.getElementById('gymStatsModal').classList.add('visible');
+        }
+
+        function closeGymStatsModal() { document.getElementById('gymStatsModal').classList.remove('visible'); }
+
+        // ---- Workout Session Storage ----
+        function saveGymWorkoutSession() {
+            const key = getGymUserKey();
+            if (!key || !gymWorkoutDayId) { localStorage.removeItem(GYM_WORKOUT_SESSION_KEY); return; }
+            localStorage.setItem(GYM_WORKOUT_SESSION_KEY, JSON.stringify({ userKey: key, dayId: gymWorkoutDayId, exercises: gymWorkoutSession }));
+        }
+
+        function loadGymWorkoutSession() {
+            try { const s = localStorage.getItem(GYM_WORKOUT_SESSION_KEY); return s ? JSON.parse(s) : null; }
+            catch (e) { return null; }
+        }
+
+        function clearGymWorkoutSession() { localStorage.removeItem(GYM_WORKOUT_SESSION_KEY); }
+
+        // ---- Workout Overview Modal ----
+        function openGymWorkout(dayId) {
+            const key = getGymUserKey();
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === dayId); if (!day) return;
+            const savedSession = loadGymWorkoutSession();
+            if (savedSession && savedSession.userKey === key && savedSession.dayId === dayId && savedSession.exercises) {
+                gymWorkoutSession = savedSession.exercises;
+            } else {
+                gymWorkoutSession = {};
+            }
+            gymWorkoutDayId = dayId;
+            document.getElementById('gymWorkoutTitle').textContent = '\ud83d\udcaa ' + day.name;
+            renderGymWorkoutList();
+            document.getElementById('gymWorkoutModal').classList.add('visible');
+        }
+
+        function renderGymWorkoutList() {
+            const list = document.getElementById('gymWorkoutList'); if (!list) return;
+            list.innerHTML = '';
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
+            if (!day || !day.exercises || !day.exercises.length) {
+                const p = document.createElement('p'); p.style.cssText = 'color:#888;font-size:12px;text-align:center;padding:12px 0';
+                p.textContent = 'No exercises in this day.'; list.appendChild(p);
+                updateGymWorkoutProgress(); return;
+            }
+            day.exercises.forEach(exId => {
+                const libEx = (plan.library || []).find(l => l && l.id === exId); if (!libEx) return;
+                const sessionEx = gymWorkoutSession[exId];
+                const isDone = sessionEx && sessionEx.done;
+                const completedSets = sessionEx ? (sessionEx.sets || []).filter(s => s.checked).length : 0;
+                const totalSets = sessionEx ? (sessionEx.sets || []).length : 0;
+                const item = document.createElement('div');
+                item.className = 'gym-workout-ex-item' + (isDone ? ' done' : '');
+                const check = document.createElement('span'); check.className = 'gym-workout-ex-check';
+                check.textContent = isDone ? '\u2713' : '\u25cb';
+                const nameEl = document.createElement('span'); nameEl.className = 'gym-workout-ex-name'; nameEl.textContent = libEx.name;
+                const meta = document.createElement('span'); meta.className = 'gym-workout-ex-meta';
+                if (isDone) { meta.textContent = completedSets + ' set' + (completedSets !== 1 ? 's' : '') + ' done'; }
+                else if (completedSets > 0) { meta.textContent = completedSets + ' / ' + totalSets; }
+                const arrow = document.createElement('span'); arrow.className = 'gym-workout-ex-arrow'; arrow.textContent = isDone ? '' : '\u2192';
+                item.appendChild(check); item.appendChild(nameEl); item.appendChild(meta); item.appendChild(arrow);
+                item.addEventListener('click', () => openGymExWorkout(exId));
+                list.appendChild(item);
+            });
+            updateGymWorkoutProgress();
+        }
+
+        function updateGymWorkoutProgress() {
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
+            const total = day ? day.exercises.filter(id => (plan.library || []).some(l => l && l.id === id)).length : 0;
+            const done = Object.values(gymWorkoutSession).filter(e => e && e.done).length;
+            const el = document.getElementById('gymWorkoutProgress');
+            if (el) el.textContent = done + ' / ' + total + ' done';
+        }
+
+        function closeGymWorkout() {
+            const plan = getGymUserPlan();
+            const day = plan.days.find(d => d && d.id === gymWorkoutDayId);
+            const total = day ? day.exercises.filter(id => (plan.library || []).some(l => l && l.id === id)).length : 0;
+            const done = Object.values(gymWorkoutSession).filter(e => e && e.done).length;
+            if (total > 0 && done < total) {
+                if (!confirm(done + ' of ' + total + ' exercises done. End workout anyway?')) return;
+            }
+            clearGymWorkoutSession();
+            document.getElementById('gymWorkoutModal').classList.remove('visible');
+            gymWorkoutDayId = null; gymWorkoutSession = {};
+            renderGymDays();
+        }
+
+        function continueLaterGymWorkout() {
+            saveGymWorkoutSession();
+            document.getElementById('gymWorkoutModal').classList.remove('visible');
+            gymWorkoutDayId = null; gymWorkoutSession = {};
+            renderGymDays();
+        }
+
+        // ---- Per-Exercise Workout Modal ----
+        function openGymExWorkout(exerciseId) {
+            const plan = getGymUserPlan();
+            const libEx = plan.library.find(l => l && l.id === exerciseId); if (!libEx) return;
+            gymCurrentExerciseId = exerciseId;
+            if (!gymWorkoutSession[exerciseId]) {
+                const lastWeight = (() => {
+                    const h = (plan.history || {})[exerciseId] || [];
+                    if (!h.length) return 0;
+                    const last = h[h.length - 1];
+                    const ms = last.sets.filter(s => !s.isWarmup);
+                    return ms.length ? ms[ms.length - 1].weight : 0;
+                })();
+                gymWorkoutSession[exerciseId] = { done: false, sets: [{ weight: lastWeight, reps: 0, isWarmup: false, checked: false }] };
+            }
+            document.getElementById('gymExWorkoutTitle').textContent = libEx.name;
+            const doneBtn = document.getElementById('gymExWorkoutDoneBtn');
+            const isDone = gymWorkoutSession[exerciseId].done;
+            if (doneBtn) { doneBtn.textContent = isDone ? '\u2713 Exercise Done' : 'Mark Exercise Done'; doneBtn.style.opacity = isDone ? '0.6' : '1'; }
+            renderGymExWorkoutSets();
+            document.getElementById('gymExWorkoutModal').classList.add('visible');
+        }
+
+        function closeGymExWorkout() {
+            document.getElementById('gymExWorkoutModal').classList.remove('visible');
+            gymCurrentExerciseId = null;
+            renderGymWorkoutList();
+        }
+
+        function renderGymExWorkoutSets() {
+            const container = document.getElementById('gymExWorkoutSets'); if (!container) return;
+            container.innerHTML = '';
+            const session = gymWorkoutSession[gymCurrentExerciseId]; if (!session) return;
+            let mainCount = 0;
+            session.sets.forEach((set, idx) => {
+                if (!set.isWarmup) mainCount++;
+                const warmupNum = set.isWarmup ? session.sets.slice(0, idx + 1).filter(s => s.isWarmup).length : 0;
+                const row = document.createElement('div');
+                row.className = 'gym-ex-set-row' + (set.checked ? ' done' : '');
+                const header = document.createElement('div'); header.className = 'gym-ex-set-header';
+                const label = document.createElement('span'); label.className = 'gym-ex-set-label';
+                label.textContent = set.isWarmup ? 'Warm-up ' + warmupNum : 'Set ' + mainCount;
+                const headerRight = document.createElement('div'); headerRight.className = 'gym-ex-set-header-right';
+                const warmupBtn = document.createElement('button'); warmupBtn.type = 'button';
+                warmupBtn.className = 'gym-ex-warmup-btn' + (set.isWarmup ? ' active' : '');
+                warmupBtn.textContent = 'Warm-up'; warmupBtn.disabled = set.checked;
+                warmupBtn.addEventListener('click', () => { set.isWarmup = !set.isWarmup; saveGymWorkoutSession(); renderGymExWorkoutSets(); });
+                headerRight.appendChild(warmupBtn);
+                if (session.sets.length > 1) {
+                    const removeBtn = document.createElement('button'); removeBtn.type = 'button';
+                    removeBtn.className = 'gym-ex-remove-set-btn'; removeBtn.textContent = '\u00d7';
+                    removeBtn.addEventListener('click', () => { session.sets.splice(idx, 1); saveGymWorkoutSession(); renderGymExWorkoutSets(); });
+                    headerRight.appendChild(removeBtn);
+                }
+                header.appendChild(label); header.appendChild(headerRight);
+                const inputs = document.createElement('div'); inputs.className = 'gym-ex-set-inputs';
+                // Weight field
+                const weightField = document.createElement('div'); weightField.className = 'gym-ex-field';
+                const wLbl = document.createElement('span'); wLbl.className = 'gym-ex-field-label'; wLbl.textContent = 'kg';
+                const weightInput = document.createElement('input'); weightInput.type = 'number';
+                weightInput.className = 'gym-ex-set-weight'; weightInput.min = '0'; weightInput.max = '1000'; weightInput.step = '0.5';
+                weightInput.placeholder = '\u2014'; weightInput.value = set.weight || ''; weightInput.disabled = set.checked;
+                weightInput.addEventListener('change', () => { set.weight = Math.max(0, parseFloat(weightInput.value) || 0); saveGymWorkoutSession(); });
+                weightField.appendChild(wLbl); weightField.appendChild(weightInput);
+                // Reps field
+                const repsField = document.createElement('div'); repsField.className = 'gym-ex-field';
+                const rLbl = document.createElement('span'); rLbl.className = 'gym-ex-field-label'; rLbl.textContent = 'reps';
+                const repsInput = document.createElement('input'); repsInput.type = 'number';
+                repsInput.className = 'gym-ex-set-reps'; repsInput.min = '0'; repsInput.max = '200';
+                repsInput.placeholder = '\u2014'; repsInput.value = set.reps || ''; repsInput.disabled = set.checked;
+                repsInput.addEventListener('change', () => { set.reps = Math.max(0, parseInt(repsInput.value) || 0); saveGymWorkoutSession(); });
+                repsField.appendChild(rLbl); repsField.appendChild(repsInput);
+                // Done button
+                const doneBtn = document.createElement('button'); doneBtn.type = 'button';
+                doneBtn.className = 'gym-ex-set-done-btn' + (set.checked ? ' is-done' : '');
+                doneBtn.textContent = '\u2713';
+                doneBtn.addEventListener('click', () => {
+                    if (set.checked) {
+                        set.checked = false;
+                    } else {
+                        set.weight = Math.max(0, parseFloat(weightInput.value) || 0);
+                        set.reps = Math.max(0, parseInt(repsInput.value) || 0);
+                        set.checked = true;
+                        const lastCheckedIdx = session.sets.reduce((acc, s, i) => s.checked ? i : acc, -1);
+                        if (lastCheckedIdx === session.sets.length - 1) {
+                            session.sets.push({ weight: set.weight, reps: set.reps, isWarmup: false, checked: false });
+                        }
+                    }
+                    saveGymWorkoutSession(); renderGymExWorkoutSets();
+                });
+                inputs.appendChild(weightField); inputs.appendChild(repsField); inputs.appendChild(doneBtn);
+                row.appendChild(header); row.appendChild(inputs); container.appendChild(row);
+            });
+            const addBtn = document.createElement('button'); addBtn.type = 'button';
+            addBtn.className = 'gym-ex-add-set-btn'; addBtn.textContent = '+ Add Set';
+            addBtn.addEventListener('click', () => {
+                const last = session.sets[session.sets.length - 1];
+                session.sets.push({ weight: last ? last.weight : 0, reps: last ? last.reps : 0, isWarmup: false, checked: false });
+                saveGymWorkoutSession(); renderGymExWorkoutSets();
+            });
+            container.appendChild(addBtn);
+        }
+
+        function gymMarkExerciseDone() {
+            const key = getGymUserKey(); if (!key || !gymCurrentExerciseId) return;
+            const session = gymWorkoutSession[gymCurrentExerciseId]; if (!session) return;
+            session.done = !session.done;
+            if (session.done) {
+                const completedSets = session.sets.filter(s => s.checked);
+                if (completedSets.length > 0) {
+                    if (!gymPlanner[key].history) gymPlanner[key].history = {};
+                    if (!gymPlanner[key].history[gymCurrentExerciseId]) gymPlanner[key].history[gymCurrentExerciseId] = [];
+                    gymPlanner[key].history[gymCurrentExerciseId].push({ ts: Date.now(), sets: completedSets.map(s => ({ weight: s.weight, reps: s.reps, isWarmup: s.isWarmup })) });
+                    saveGymPlanner();
+                }
+            }
+            saveGymWorkoutSession(); closeGymExWorkout();
+        }
+
+        // ---- Progress Graph ----
+        function gymFormatDate(ts) {
+            if (!ts) return '';
+            const d = new Date(ts);
+            return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getDate();
+        }
+
+        function renderGymProgressGraphInEl(pts, svgId, emptyId) {
+            const svgEl = document.getElementById(svgId);
+            const emptyEl = document.getElementById(emptyId);
+            if (!svgEl || !emptyEl) return;
+            const filtered = (pts || []).filter(h => h && h.ts > 0);
+            if (filtered.length < 2) {
+                svgEl.style.display = 'none'; emptyEl.style.display = '';
+                emptyEl.textContent = filtered.length === 0 ? 'No history yet' : 'Only one session'; return;
+            }
+            svgEl.style.display = ''; emptyEl.style.display = 'none'; svgEl.innerHTML = '';
+            const weights = filtered.map(h => h.weight);
+            const minW = Math.min(...weights), maxW = Math.max(...weights), range = maxW - minW || 1;
+            const W = 200, H = 82, pad = 6, dateAreaH = 14, chartBottom = H - dateAreaH;
+            const innerW = W - pad * 2, innerH = chartBottom - pad;
+            const toX = i => pad + (filtered.length > 1 ? (i / (filtered.length - 1)) * innerW : innerW / 2);
+            const toY = w => pad + innerH - ((w - minW) / range) * innerH;
+            let d = ''; filtered.forEach((h, i) => { d += i === 0 ? `M${toX(i)},${toY(h.weight)}` : ` L${toX(i)},${toY(h.weight)}`; });
+            const ns = 'http://www.w3.org/2000/svg';
+            const defs = document.createElementNS(ns, 'defs');
+            const grad = document.createElementNS(ns, 'linearGradient');
+            grad.setAttribute('id', svgId + 'Grad'); grad.setAttribute('x1','0'); grad.setAttribute('y1','0'); grad.setAttribute('x2','0'); grad.setAttribute('y2','1');
+            [['0%','0.2'],['100%','0']].forEach(([offset, opacity]) => { const s = document.createElementNS(ns,'stop'); s.setAttribute('offset',offset); s.setAttribute('stop-color','#0054E3'); s.setAttribute('stop-opacity',opacity); grad.appendChild(s); });
+            defs.appendChild(grad); svgEl.appendChild(defs);
+            const area = document.createElementNS(ns, 'path');
+            area.setAttribute('d', `${d} L${toX(filtered.length-1)},${chartBottom} L${toX(0)},${chartBottom} Z`);
+            area.setAttribute('fill', `url(#${svgId}Grad)`); svgEl.appendChild(area);
+            const sep = document.createElementNS(ns,'line'); sep.setAttribute('x1',pad); sep.setAttribute('y1',chartBottom); sep.setAttribute('x2',W-pad); sep.setAttribute('y2',chartBottom); sep.setAttribute('stroke','#ccc'); sep.setAttribute('stroke-width','0.5'); svgEl.appendChild(sep);
+            const lineEl = document.createElementNS(ns,'path'); lineEl.setAttribute('d',d); lineEl.setAttribute('fill','none'); lineEl.setAttribute('stroke','#0054E3'); lineEl.setAttribute('stroke-width','2'); lineEl.setAttribute('stroke-linejoin','round'); lineEl.setAttribute('stroke-linecap','round'); svgEl.appendChild(lineEl);
+            const labelSet = new Set([0, filtered.length-1]);
+            const maxIdx = weights.indexOf(maxW), minIdx = weights.indexOf(minW);
+            [maxIdx,minIdx].forEach(ci => { if (ci>0 && ci<filtered.length-1) labelSet.add(ci); });
+            const minGap = 30;
+            [...Array(filtered.length).keys()].filter(i => !labelSet.has(i)).forEach(i => { if (![...labelSet].some(li => Math.abs(toX(li)-toX(i)) < minGap)) labelSet.add(i); });
+            filtered.forEach((h, i) => {
+                const x = toX(i), y = toY(h.weight);
+                const dot = document.createElementNS(ns,'circle'); dot.setAttribute('cx',x); dot.setAttribute('cy',y); dot.setAttribute('r',(i===0||i===filtered.length-1)?'2.5':'2'); dot.setAttribute('fill','#0054E3'); svgEl.appendChild(dot);
+                if (labelSet.has(i)) {
+                    const anchor = i===filtered.length-1?'end':i===0?'start':'middle';
+                    const wl = document.createElementNS(ns,'text'); wl.setAttribute('x',x); wl.setAttribute('y',y>pad+innerH*0.55?y-4:y+9); wl.setAttribute('text-anchor',anchor); wl.setAttribute('font-size','7.5'); wl.setAttribute('font-weight','bold'); wl.setAttribute('fill','#003C74'); wl.textContent=h.weight+'kg'; svgEl.appendChild(wl);
+                    const dl = document.createElementNS(ns,'text'); dl.setAttribute('x',x); dl.setAttribute('y',H-2); dl.setAttribute('text-anchor',anchor); dl.setAttribute('font-size','6.5'); dl.setAttribute('fill','#777'); dl.textContent=gymFormatDate(h.ts); svgEl.appendChild(dl);
+                }
+            });
+        }
+
+        function renderGymProgressGraph(history) { renderGymProgressGraphInEl(history, 'gymStatsGraphSvg', 'gymStatsGraphEmpty'); }
+
+        // ---- Edit mode toggle ----
+        function toggleGymEditMode() {
+            gymEditMode = !gymEditMode;
+            const btn = document.getElementById('gymEditToggleBtn');
+            const addDayBtn = document.getElementById('gymAddDayBtn');
+            const libraryBtn = document.getElementById('gymLibraryBtn');
+            if (btn) { btn.textContent = gymEditMode ? '\u2713 Done' : '\u270f\ufe0f Edit'; btn.classList.toggle('gym-edit-active-btn', gymEditMode); }
+            if (addDayBtn) addDayBtn.style.display = gymEditMode ? '' : 'none';
+            if (libraryBtn) libraryBtn.style.display = gymEditMode ? '' : 'none';
+            renderGymDays();
+        }
+
+        function setupGymWorkoutModal() {
+            const closeBtn = document.getElementById('gymWorkoutCloseBtn');
+            if (closeBtn && !closeBtn._gymBound) { closeBtn._gymBound = true; closeBtn.addEventListener('click', closeGymWorkout); }
+            const continueBtn = document.getElementById('gymWorkoutContinueLaterBtn');
+            if (continueBtn && !continueBtn._gymBound) { continueBtn._gymBound = true; continueBtn.addEventListener('click', continueLaterGymWorkout); }
+            const backBtn = document.getElementById('gymExWorkoutBackBtn');
+            if (backBtn && !backBtn._gymBound) { backBtn._gymBound = true; backBtn.addEventListener('click', closeGymExWorkout); }
+            const exDoneBtn = document.getElementById('gymExWorkoutDoneBtn');
+            if (exDoneBtn && !exDoneBtn._gymBound) { exDoneBtn._gymBound = true; exDoneBtn.addEventListener('click', gymMarkExerciseDone); }
         }
 
         function setupGymModals() {
             const editToggleBtn = document.getElementById('gymEditToggleBtn');
-            if (editToggleBtn && !editToggleBtn._gymBound) {
-                editToggleBtn._gymBound = true;
-                editToggleBtn.addEventListener('click', toggleGymEditMode);
-            }
-
+            if (editToggleBtn && !editToggleBtn._gymBound) { editToggleBtn._gymBound = true; editToggleBtn.addEventListener('click', toggleGymEditMode); }
             const libraryBtn = document.getElementById('gymLibraryBtn');
-            if (libraryBtn && !libraryBtn._gymBound) {
-                libraryBtn._gymBound = true;
-                libraryBtn.addEventListener('click', openGymLibraryModal);
-            }
-
-            const libraryCloseBtn = document.getElementById('gymLibraryCloseBtn');
-            if (libraryCloseBtn && !libraryCloseBtn._gymBound) {
-                libraryCloseBtn._gymBound = true;
-                libraryCloseBtn.addEventListener('click', closeGymLibraryModal);
-            }
-
-            const warmupToggle = document.getElementById('gymWarmupToggle');
-            if (warmupToggle && !warmupToggle._gymBound) {
-                warmupToggle._gymBound = true;
-                warmupToggle.addEventListener('click', () => {
-                    const row = document.getElementById('gymWarmupRow');
-                    const isVisible = row && row.style.display !== 'none';
-                    gymExShowWarmupSection(!isVisible);
-                    if (isVisible) {
-                        // Clear fields when hiding
-                        const ids = ['gymExerciseWarmupSetsInput','gymExerciseWarmupWeightInput','gymExerciseSetWeightsInput'];
-                        ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-                    }
-                });
-            }
-
-            const gymLibModal = document.getElementById('gymLibraryModal');
-            if (gymLibModal && !gymLibModal._gymBound) {
-                gymLibModal._gymBound = true;
-                gymLibModal.addEventListener('click', (e) => {
-                    if (e.target === gymLibModal) closeGymLibraryModal();
-                });
-            }
-
+            if (libraryBtn && !libraryBtn._gymBound) { libraryBtn._gymBound = true; libraryBtn.addEventListener('click', openGymLibraryModal); }
             const addDayBtn = document.getElementById('gymAddDayBtn');
-            if (addDayBtn && !addDayBtn._gymBound) {
-                addDayBtn._gymBound = true;
-                addDayBtn.addEventListener('click', () => openGymDayModal(null));
-            }
-
+            if (addDayBtn && !addDayBtn._gymBound) { addDayBtn._gymBound = true; addDayBtn.addEventListener('click', () => openGymDayModal(null)); }
             const daySaveBtn = document.getElementById('gymDaySaveBtn');
-            if (daySaveBtn && !daySaveBtn._gymBound) {
-                daySaveBtn._gymBound = true;
-                daySaveBtn.addEventListener('click', saveGymDay);
-            }
-
+            if (daySaveBtn && !daySaveBtn._gymBound) { daySaveBtn._gymBound = true; daySaveBtn.addEventListener('click', saveGymDay); }
             const dayCloseBtn = document.getElementById('gymDayCloseBtn');
-            if (dayCloseBtn && !dayCloseBtn._gymBound) {
-                dayCloseBtn._gymBound = true;
-                dayCloseBtn.addEventListener('click', closeGymDayModal);
-            }
-
+            if (dayCloseBtn && !dayCloseBtn._gymBound) { dayCloseBtn._gymBound = true; dayCloseBtn.addEventListener('click', closeGymDayModal); }
             const dayDeleteBtn = document.getElementById('gymDayDeleteBtn');
-            if (dayDeleteBtn && !dayDeleteBtn._gymBound) {
-                dayDeleteBtn._gymBound = true;
-                dayDeleteBtn.addEventListener('click', deleteGymDay);
-            }
-
-            const exSaveBtn = document.getElementById('gymExerciseSaveBtn');
-            if (exSaveBtn && !exSaveBtn._gymBound) {
-                exSaveBtn._gymBound = true;
-                exSaveBtn.addEventListener('click', saveGymExercise);
-            }
-
-            const exCloseBtn = document.getElementById('gymExerciseCloseBtn');
-            if (exCloseBtn && !exCloseBtn._gymBound) {
-                exCloseBtn._gymBound = true;
-                exCloseBtn.addEventListener('click', closeGymExerciseModal);
-            }
-
-            const exDeleteBtn = document.getElementById('gymExerciseDeleteBtn');
-            if (exDeleteBtn && !exDeleteBtn._gymBound) {
-                exDeleteBtn._gymBound = true;
-                exDeleteBtn.addEventListener('click', deleteGymExercise);
-            }
-
-            const gymDayModal = document.getElementById('gymDayModal');
-            if (gymDayModal && !gymDayModal._gymBound) {
-                gymDayModal._gymBound = true;
-                gymDayModal.addEventListener('click', (e) => {
-                    if (e.target === gymDayModal) closeGymDayModal();
-                });
-            }
-
-            const gymExModal = document.getElementById('gymExerciseModal');
-            if (gymExModal && !gymExModal._gymBound) {
-                gymExModal._gymBound = true;
-                gymExModal.addEventListener('click', (e) => {
-                    if (e.target === gymExModal) closeGymExerciseModal();
-                });
-            }
-
+            if (dayDeleteBtn && !dayDeleteBtn._gymBound) { dayDeleteBtn._gymBound = true; dayDeleteBtn.addEventListener('click', deleteGymDay); }
+            const libCloseBtn = document.getElementById('gymLibraryCloseBtn');
+            if (libCloseBtn && !libCloseBtn._gymBound) { libCloseBtn._gymBound = true; libCloseBtn.addEventListener('click', closeGymLibraryModal); }
+            const libAddBtn = document.getElementById('gymLibraryAddBtn');
+            if (libAddBtn && !libAddBtn._gymBound) { libAddBtn._gymBound = true; libAddBtn.addEventListener('click', () => openGymLibExModal(null)); }
+            const libExSaveBtn = document.getElementById('gymLibExSaveBtn');
+            if (libExSaveBtn && !libExSaveBtn._gymBound) { libExSaveBtn._gymBound = true; libExSaveBtn.addEventListener('click', saveGymLibEx); }
+            const libExCloseBtn = document.getElementById('gymLibExCloseBtn');
+            if (libExCloseBtn && !libExCloseBtn._gymBound) { libExCloseBtn._gymBound = true; libExCloseBtn.addEventListener('click', closeGymLibExModal); }
+            const addToDayCloseBtn = document.getElementById('gymAddToDayCloseBtn');
+            if (addToDayCloseBtn && !addToDayCloseBtn._gymBound) { addToDayCloseBtn._gymBound = true; addToDayCloseBtn.addEventListener('click', closeGymAddToDayModal); }
+            const statsCloseBtn = document.getElementById('gymStatsCloseBtn');
+            if (statsCloseBtn && !statsCloseBtn._gymBound) { statsCloseBtn._gymBound = true; statsCloseBtn.addEventListener('click', closeGymStatsModal); }
+            ['gymDayModal','gymLibraryModal','gymLibExModal','gymAddToDayModal','gymStatsModal'].forEach(id => {
+                const modal = document.getElementById(id);
+                if (modal && !modal._gymBound) { modal._gymBound = true; modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('visible'); }); }
+            });
             const gymDayNameInput = document.getElementById('gymDayNameInput');
-            if (gymDayNameInput && !gymDayNameInput._gymBound) {
-                gymDayNameInput._gymBound = true;
-                gymDayNameInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') { e.preventDefault(); saveGymDay(); }
-                });
-            }
+            if (gymDayNameInput && !gymDayNameInput._gymBound) { gymDayNameInput._gymBound = true; gymDayNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveGymDay(); } }); }
+            const gymLibExNameInput = document.getElementById('gymLibExNameInput');
+            if (gymLibExNameInput && !gymLibExNameInput._gymBound) { gymLibExNameInput._gymBound = true; gymLibExNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveGymLibEx(); } }); }
         }
 
         // Initial No button click
@@ -13225,7 +13123,6 @@
             stopMobileJumping();
         });
 
-        // Create confetti with XP colors
         function createConfetti() {
             const colors = ['#0054E3', '#5B9BD5', '#ECE9D8', '#FFFFFF', '#FFD700', '#FF6B6B'];
             const confettiCount = 80;
