@@ -12681,7 +12681,7 @@
                 empty.textContent = 'No exercises yet. Tap + New Exercise.';
                 listEl.appendChild(empty); return;
             }
-            plan.library.forEach(libEx => {
+            [...plan.library].filter(Boolean).sort((a, b) => a.name.localeCompare(b.name)).forEach(libEx => {
                 if (!libEx) return;
                 const row = document.createElement('div'); row.className = 'gym-library-row gym-library-row-clickable';
                 const info = document.createElement('div'); info.className = 'gym-library-row-info';
@@ -12773,8 +12773,7 @@
                 p.textContent = 'No exercises in library yet. Tap + New Exercise to create one.';
                 container.appendChild(p); return;
             }
-            plan.library.forEach(libEx => {
-                if (!libEx) return;
+            [...plan.library].filter(Boolean).sort((a, b) => a.name.localeCompare(b.name)).forEach(libEx => {
                 const isInToday = todayExercises.includes(libEx.id);
                 const row = document.createElement('div'); row.className = 'gym-library-row';
                 const nameEl = document.createElement('div'); nameEl.className = 'gym-library-row-name'; nameEl.style.flex = '1'; nameEl.textContent = libEx.name;
