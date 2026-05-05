@@ -337,12 +337,66 @@
             color: #1d2b05;
         }
 
-        body[data-theme='nokia'] button:hover,
-        body[data-theme='nokia'] button:active {
+        body[data-theme='nokia'] button:hover {
             background: #c8ea56;
             border: 2px solid #253407;
             box-shadow: none;
+        }
+
+        body[data-theme='nokia'] button:active {
+            background: #b8d848;
+            border: 2px solid #253407;
+            box-shadow: none;
             padding: 6px 24px;
+        }
+
+        /* Keep chess squares unaffected by Nokia button hover */
+        body[data-theme='xp'] .chess-square,
+        body[data-theme='xp'] .chess-square:hover,
+        body[data-theme='xp'] .chess-square:active {
+            padding: 0;
+            box-shadow: none;
+        }
+
+        body[data-theme='nokia'] .chess-square,
+        body[data-theme='nokia'] .chess-square:hover,
+        body[data-theme='nokia'] .chess-square:active {
+            border: 0;
+            padding: 0;
+            box-shadow: none;
+        }
+
+        body[data-theme='nokia'] .chess-square-light,
+        body[data-theme='nokia'] .chess-square-light:hover {
+            background: #c5da5f;
+        }
+
+        body[data-theme='nokia'] .chess-square-dark,
+        body[data-theme='nokia'] .chess-square-dark:hover {
+            background: #7f9b0f;
+        }
+
+        /* Keep theme-icon-btn fixed size in Nokia */
+        body[data-theme='nokia'] .theme-icon-btn,
+        body[data-theme='nokia'] .theme-icon-btn:hover,
+        body[data-theme='nokia'] .theme-icon-btn:active {
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            min-height: 28px;
+        }
+
+        /* Keep small gym/library buttons from resizing */
+        body[data-theme='nokia'] .gym-library-add-btn,
+        body[data-theme='nokia'] .gym-library-add-btn:hover,
+        body[data-theme='nokia'] .gym-library-added-btn,
+        body[data-theme='nokia'] .gym-library-added-btn:hover,
+        body[data-theme='nokia'] .gym-today-ex-log-btn,
+        body[data-theme='nokia'] .gym-today-ex-log-btn:hover,
+        body[data-theme='nokia'] .gym-today-ex-remove-btn,
+        body[data-theme='nokia'] .gym-today-ex-remove-btn:hover {
+            padding: 3px 9px;
         }
 
         body[data-theme='nokia'] input,
@@ -353,6 +407,86 @@
             background: #d8f76a;
             color: #1d2b05;
             border-radius: 0;
+        }
+
+        body[data-theme='maroon'] {
+            background: #1e0505;
+            background-image:
+                radial-gradient(circle at 20% 15%, rgba(180, 30, 30, 0.18) 0%, transparent 40%),
+                radial-gradient(circle at 78% 80%, rgba(120, 10, 10, 0.22) 0%, transparent 40%),
+                linear-gradient(180deg, #2d0808 0%, #160303 100%);
+        }
+
+        body[data-theme='maroon'] .window,
+        body[data-theme='maroon'] .current-user-bar {
+            background: #3d0e0e;
+            border-color: #7a1a1a;
+            box-shadow: 0 0 10px rgba(120, 20, 20, 0.3);
+        }
+
+        body[data-theme='maroon'] .window-header {
+            background: linear-gradient(180deg, #7a1a1a 0%, #5c0e0e 100%);
+            border-bottom: 2px solid #9b2020;
+        }
+
+        body[data-theme='maroon'] .window-title {
+            color: #ffeaea;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        body[data-theme='maroon'] .window-content,
+        body[data-theme='maroon'] .section,
+        body[data-theme='maroon'] .feedback-panel,
+        body[data-theme='maroon'] .song-panel,
+        body[data-theme='maroon'] .taste-panel,
+        body[data-theme='maroon'] .movie-panel,
+        body[data-theme='maroon'] .mood-panel,
+        body[data-theme='maroon'] .quick-note-panel,
+        body[data-theme='maroon'] .music-full-panel,
+        body[data-theme='maroon'] .chess-panel,
+        body[data-theme='maroon'] .chat-messages,
+        body[data-theme='maroon'] .feedback-list,
+        body[data-theme='maroon'] .song-list,
+        body[data-theme='maroon'] .movie-list,
+        body[data-theme='maroon'] .quick-note-inbox {
+            background: #4a1212;
+            border-color: #7a1a1a;
+        }
+
+        body[data-theme='maroon'] h1,
+        body[data-theme='maroon'] .current-user-text,
+        body[data-theme='maroon'] .panel-title,
+        body[data-theme='maroon'] .question,
+        body[data-theme='maroon'] .section p,
+        body[data-theme='maroon'] .chat-line,
+        body[data-theme='maroon'] .chat-author {
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] button {
+            background: linear-gradient(180deg, #ffeaea 0%, #f5c0c0 100%);
+            border-color: #ffffff #7a1a1a #7a1a1a #ffffff;
+            color: #5c0e0e;
+            box-shadow: inset -1px -1px 0 #9b3030, inset 1px 1px 0 #fff;
+        }
+
+        body[data-theme='maroon'] button:hover {
+            background: linear-gradient(180deg, #fff0f0 0%, #f0aaaa 100%);
+        }
+
+        body[data-theme='maroon'] button:active {
+            border-color: #7a1a1a #ffffff #ffffff #7a1a1a;
+            box-shadow: inset 1px 1px 0 #9b3030;
+            padding: 7px 23px 5px 25px;
+        }
+
+        body[data-theme='maroon'] input,
+        body[data-theme='maroon'] textarea,
+        body[data-theme='maroon'] select,
+        body[data-theme='maroon'] .theme-icons {
+            border-color: #7a1a1a #3d0e0e #3d0e0e #7a1a1a;
+            background: #2d0808;
+            color: #ffeaea;
         }
 
 
@@ -500,6 +634,61 @@
         body[data-theme='nokia'] .chat-reaction-picker {
             background: #a7c31f;
             padding: 2px;
+        }
+
+        body[data-theme='maroon'] .chat-avatar {
+            border-color: #9b2020;
+            background: linear-gradient(180deg, #ffeaea 0%, #f5c0c0 100%);
+            color: #5c0e0e;
+        }
+
+        body[data-theme='maroon'] .chat-line {
+            border-color: #9b2020;
+            background: #5c1a1a;
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .chat-line-me {
+            background: #6b1e1e;
+            border-color: #c03030;
+        }
+
+        body[data-theme='maroon'] .chat-line-other {
+            background: #4d1212;
+            border-color: #9b2020;
+        }
+
+        body[data-theme='maroon'] .chat-line-other::before {
+            border-right-color: #9b2020;
+        }
+
+        body[data-theme='maroon'] .chat-line-me::after {
+            border-left-color: #c03030;
+        }
+
+        body[data-theme='maroon'] .chat-reaction-chip {
+            background: #4d1212;
+            border-color: #9b2020;
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .chat-reaction-chip.active {
+            background: #6b1e1e;
+            border-color: #c03030;
+            color: #fff0f0;
+        }
+
+        body[data-theme='maroon'] .chat-reaction-action,
+        body[data-theme='maroon'] .chat-reaction-picker {
+            background: #3d0e0e;
+            border-color: #9b2020;
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .chat-reaction-picker button {
+            background: #5c1a1a;
+            border-color: #9b2020;
+            color: #ffeaea;
         }
 
         .container {
@@ -2545,6 +2734,41 @@
 
         body[data-theme='nokia'] .chess-square-dark {
             background: #7f9b0f;
+        }
+
+        body[data-theme='maroon'] .chess-board {
+            background: #3d0e0e;
+            border-color: #7a1a1a;
+        }
+
+        body[data-theme='maroon'] .chess-square-light {
+            background: #f5e0d0;
+        }
+
+        body[data-theme='maroon'] .chess-square-dark {
+            background: #7a2020;
+        }
+
+        /* Override theme button box-shadow so chess move indicators are always visible */
+        body[data-theme='xp'] .chess-square-legal,
+        body[data-theme='maroon'] .chess-square-legal {
+            box-shadow: inset 0 0 0 3px #2E7D32;
+        }
+
+        body[data-theme='nokia'] .chess-square-legal {
+            box-shadow: inset 0 0 0 3px #ffffff;
+        }
+
+        body[data-theme='xp'] .chess-square-last-from,
+        body[data-theme='nokia'] .chess-square-last-from,
+        body[data-theme='maroon'] .chess-square-last-from {
+            box-shadow: inset 0 0 0 3px rgba(251, 191, 36, 0.95);
+        }
+
+        body[data-theme='xp'] .chess-square-last-to,
+        body[data-theme='nokia'] .chess-square-last-to,
+        body[data-theme='maroon'] .chess-square-last-to {
+            box-shadow: inset 0 0 0 3px rgba(249, 115, 22, 0.95);
         }
 
         .chess-square-selected {
@@ -4886,10 +5110,68 @@
             color: #4a6a10;
         }
 
+        body[data-theme='maroon'] .gym-panel {
+            background: #3d0e0e;
+            border-color: #7a1a1a;
+        }
 
+        body[data-theme='maroon'] .gym-modal-card {
+            background: #3d0e0e;
+            border-color: #7a1a1a;
+        }
 
+        body[data-theme='maroon'] .gym-modal-title,
+        body[data-theme='maroon'] .gym-day-name {
+            color: #ffeaea;
+        }
 
+        body[data-theme='maroon'] .gym-exercise-row {
+            background: #4d1212;
+            border-color: #7a1a1a;
+        }
 
+        body[data-theme='maroon'] .gym-exercise-name {
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .gym-modal-field label {
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .gym-modal-field input {
+            background: #2d0808;
+            border-color: #7a1a1a;
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .gym-graph-wrap {
+            background: #2d0808;
+            border-color: #7a1a1a;
+        }
+
+        body[data-theme='maroon'] .gym-library-row {
+            background: #4d1212;
+            border-color: #7a1a1a;
+        }
+
+        body[data-theme='maroon'] .gym-library-row-name {
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .gym-today-ex-row {
+            background: #4d1212;
+            border-color: #7a1a1a;
+        }
+
+        body[data-theme='maroon'] .gym-today-ex-name {
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .gym-past-toggle {
+            background: #3d0e0e !important;
+            border-color: #7a1a1a !important;
+            color: #ffeaea !important;
+        }
         body[data-theme='xp'] .home-status-bar {
             background: #ece9d8;
             border-color: #ffffff #7f7f7f #7f7f7f #ffffff;
@@ -4917,6 +5199,25 @@
         body[data-theme='nokia'] .home-tile-group-label {
             color: #253407;
             border-color: #253407;
+        }
+
+        body[data-theme='maroon'] .home-status-bar {
+            background: #3d0e0e;
+            border-color: #7a1a1a;
+        }
+
+        body[data-theme='maroon'] .home-status-bar .home-status-name,
+        body[data-theme='maroon'] .home-status-bar .status-compact-meta {
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .home-status-sep {
+            background: #7a1a1a;
+        }
+
+        body[data-theme='maroon'] .home-tile-group-label {
+            color: #ffc0c0;
+            border-color: #7a1a1a;
         }
 
         /* ============================================
@@ -4992,6 +5293,39 @@
         }
 
         .gym-past-section { margin-top: 12px; }
+
+        .gym-past-header {
+            display: flex;
+            align-items: stretch;
+            gap: 4px;
+        }
+
+        .gym-past-header .gym-past-toggle {
+            flex: 1;
+        }
+
+        .gym-data-edit-btn {
+            font-size: 14px;
+            padding: 0 10px !important;
+            min-width: 0 !important;
+            opacity: 0.6;
+        }
+
+        .gym-data-edit-btn.active {
+            opacity: 1;
+            background: linear-gradient(180deg, #fff3cd 0%, #ffc107 100%) !important;
+            border-color: #ffffff #856404 #856404 #ffffff !important;
+        }
+
+        .gym-past-delete-btn {
+            font-size: 12px;
+            padding: 2px 8px;
+            min-width: 0;
+            color: #c00;
+            border-color: #ffffff #a00 #a00 #ffffff;
+            background: linear-gradient(180deg, #fff0f0 0%, #ffcccc 100%);
+            flex-shrink: 0;
+        }
 
         .gym-past-toggle {
             width: 100%;
@@ -5102,6 +5436,7 @@
             <fieldset class="theme-icons" aria-label="Select app theme">
                 <legend class="sr-only">Select app theme</legend>
                 <button type="button" class="theme-icon-btn" data-theme-id="y2k" title="Y2K">💿</button>
+                <button type="button" class="theme-icon-btn" data-theme-id="maroon" title="Maroon">🍷</button>
                 <button type="button" class="theme-icon-btn" data-theme-id="xp" title="Windows XP Classic">🪟</button>
                 <button type="button" class="theme-icon-btn" data-theme-id="nokia" title="Nokia Pixel">📟</button>
             </fieldset>
@@ -5832,7 +6167,10 @@
                         </div>
                     </div>
                     <div class="gym-past-section">
-                        <button type="button" id="gymPastToggleBtn" class="gym-past-toggle">▶ Past Workouts (0)</button>
+                        <div class="gym-past-header">
+                            <button type="button" id="gymPastToggleBtn" class="gym-past-toggle">▶ Past Workouts (0)</button>
+                            <button type="button" id="gymDataEditBtn" class="gym-data-edit-btn" title="Edit/delete workout data">✏️</button>
+                        </div>
                         <div id="gymPastList" class="gym-past-list" style="display:none"></div>
                     </div>
                 </div>
@@ -5921,6 +6259,7 @@
             <div class="gym-modal-actions">
                 <div class="gym-modal-actions-danger">
                     <button type="button" id="gymStatsBackToLibBtn" style="font-size:12px;padding:3px 9px;display:none">← Library</button>
+                    <button type="button" id="gymStatsEditBtn" class="gym-data-edit-btn" title="Delete history sessions">✏️</button>
                 </div>
                 <div class="gym-modal-actions-primary">
                     <button type="button" id="gymStatsCloseBtn">Close</button>
@@ -6189,11 +6528,11 @@
             const hasUser = Boolean(currentUser);
 
             if (musicBar) {
-                musicBar.classList.toggle('hidden', !hasUser || activeViewId === 'musicView');
+                musicBar.classList.toggle('hidden', !hasUser || activeViewId === 'musicView' || activeViewId === 'chessView');
             }
 
             if (chatLauncherBtn) {
-                chatLauncherBtn.classList.toggle('hidden', !hasUser || activeViewId === 'chatView');
+                chatLauncherBtn.classList.toggle('hidden', !hasUser || activeViewId === 'chatView' || activeViewId === 'chessView');
             }
         }
 
@@ -6289,6 +6628,10 @@
         let chessInitialized = false;
         let gymInitialized = false;
         let gymPastOpen = false;
+        let gymDataEditMode = false;
+        let gymStatsEditMode = false;
+        let gymStatsCurrentExerciseId = null;
+        let gymStatsFromLibrary = false;
         let chessBoardState = [];
         let chessEngine = null;
         let chessTurn = 'w';
@@ -6343,6 +6686,7 @@
         const FIREBASE_BOARD_ID = 'rugile-shared-board';
         const PUSH_BACKEND_BASE_URL = 'https://push-notif-521j.onrender.com';
         const PUSH_BACKEND_API_KEY = 'xeZYEdRynoBhFKnpNpisOku5JfslqKlC';
+
         const PRIORITY_LABELS = {
             super: 'Really really want to do it',
             want: 'Want to do',
@@ -6380,6 +6724,7 @@
         ];
         const THEME_LABELS = {
             y2k: 'Y2K',
+            maroon: 'Maroon',
             xp: 'Windows XP Classic',
             nokia: 'Nokia Pixel'
         };
@@ -8424,6 +8769,7 @@
             const currentTheme = normalizeTheme(document.body.dataset.theme || 'y2k');
             const palettes = {
                 y2k: ['#E9D6FF', '#D6E9FF', '#FFD6F2', '#CFF7D3', '#FFF2BF'],
+                maroon: ['#ffeaea', '#ffd6d6', '#ffe0c8', '#ffd6e8', '#ffe8d6'],
                 xp: ['#d9d9d9', '#c8d0db', '#e6e6e6', '#bfc7d4', '#f2f2f2'],
                 nokia: ['#d8f76a', '#cde86a', '#c3df61', '#b7d259', '#d2ef73']
             };
@@ -12579,9 +12925,20 @@
                 const arrowEl = document.createElement('span');
                 arrowEl.className = 'gym-past-workout-arrow';
                 arrowEl.textContent = '\u25b6';
-                header.appendChild(dateEl);
-                header.appendChild(summaryEl);
-                header.appendChild(arrowEl);
+                if (gymDataEditMode) {
+                    const delBtn = document.createElement('button');
+                    delBtn.type = 'button';
+                    delBtn.className = 'gym-past-delete-btn';
+                    delBtn.textContent = '\u00d7 Delete';
+                    delBtn.addEventListener('click', e => { e.stopPropagation(); deleteGymPastWorkout(pw.id); });
+                    header.appendChild(dateEl);
+                    header.appendChild(summaryEl);
+                    header.appendChild(delBtn);
+                } else {
+                    header.appendChild(dateEl);
+                    header.appendChild(summaryEl);
+                    header.appendChild(arrowEl);
+                }
                 const detail = document.createElement('div');
                 detail.className = 'gym-past-workout-detail';
                 (pw.exercises || []).forEach(ex => {
@@ -12602,12 +12959,16 @@
                     exEl.appendChild(setsEl);
                     detail.appendChild(exEl);
                 });
-                header.addEventListener('click', () => {
-                    const isOpen = detail.classList.toggle('open');
-                    arrowEl.classList.toggle('open', isOpen);
-                });
-                row.appendChild(header);
-                row.appendChild(detail);
+                if (!gymDataEditMode) {
+                    header.addEventListener('click', () => {
+                        const isOpen = detail.classList.toggle('open');
+                        arrowEl.classList.toggle('open', isOpen);
+                    });
+                    row.appendChild(header);
+                    row.appendChild(detail);
+                } else {
+                    row.appendChild(header);
+                }
                 list.appendChild(row);
             });
         }
@@ -12617,6 +12978,35 @@
             const list = document.getElementById('gymPastList');
             if (list) list.style.display = gymPastOpen ? 'flex' : 'none';
             renderGymPastWorkouts();
+        }
+
+        function toggleGymDataEditMode() {
+            gymDataEditMode = !gymDataEditMode;
+            const btn = document.getElementById('gymDataEditBtn');
+            if (btn) btn.classList.toggle('active', gymDataEditMode);
+            if (gymDataEditMode && !gymPastOpen) {
+                gymPastOpen = true;
+                const list = document.getElementById('gymPastList');
+                if (list) list.style.display = 'flex';
+            }
+            renderGymPastWorkouts();
+        }
+
+        function deleteGymPastWorkout(workoutId) {
+            const key = getGymUserKey(); if (!key) return;
+            const plan = gymPlanner[key]; if (!plan) return;
+            plan.pastWorkouts = (plan.pastWorkouts || []).filter(pw => pw.id !== workoutId);
+            saveGymPlanner();
+            renderGymPastWorkouts();
+        }
+
+        function deleteGymHistorySession(exerciseId, sessionTs) {
+            const key = getGymUserKey(); if (!key) return;
+            const plan = gymPlanner[key]; if (!plan || !plan.history) return;
+            if (plan.history[exerciseId]) {
+                plan.history[exerciseId] = plan.history[exerciseId].filter(s => s.ts !== sessionTs);
+            }
+            saveGymPlanner();
         }
 
         function addExerciseToToday(exerciseId) {
@@ -12791,12 +13181,16 @@
 
         // ---- Stats Modal ----
         function openGymStatsModal(exerciseId, fromLibrary) {
+            gymStatsCurrentExerciseId = exerciseId;
+            gymStatsFromLibrary = !!fromLibrary;
             const plan = getGymUserPlan();
             const libEx = plan.library.find(l => l && l.id === exerciseId); if (!libEx) return;
             const history = (plan.history || {})[exerciseId] || [];
             document.getElementById('gymStatsModalTitle').textContent = libEx.name;
             const content = document.getElementById('gymStatsContent'); content.innerHTML = '';
             const histSection = document.getElementById('gymStatsHistorySection'); histSection.innerHTML = '';
+            const editBtn = document.getElementById('gymStatsEditBtn');
+            if (editBtn) editBtn.classList.toggle('active', gymStatsEditMode);
             if (!history.length) {
                 const p = document.createElement('p'); p.style.cssText = 'color:#888;font-size:12px;text-align:center;padding:8px 0';
                 p.textContent = 'No workout history yet.'; content.appendChild(p);
@@ -12841,27 +13235,41 @@
                     dateEl.textContent = gymFormatDate(sess.ts);
                     const peakEl = document.createElement('span'); peakEl.className = 'gym-stats-session-peak';
                     peakEl.textContent = peak + ' kg';
-                    const arrow = document.createElement('span'); arrow.className = 'gym-stats-session-arrow'; arrow.textContent = '\u25b6';
-                    hdr.appendChild(dateEl); hdr.appendChild(peakEl); hdr.appendChild(arrow);
-                    const detail = document.createElement('div'); detail.className = 'gym-stats-session-detail';
-                    const table = document.createElement('table'); table.className = 'gym-stats-set-table';
-                    const thead = table.createTHead(); const hr = thead.insertRow();
-                    ['Set', 'Weight', 'Reps'].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
-                    const tbody = table.createTBody();
-                    let mainIdx = 0;
-                    (sess.sets || []).forEach(set => {
-                        const tr = tbody.insertRow();
-                        if (set.isWarmup) tr.className = 'warmup-row';
-                        else mainIdx++;
-                        const lbl = set.isWarmup ? 'W' : String(mainIdx);
-                        [lbl, (set.weight || 0) + ' kg', (set.reps || 0) + ' reps'].forEach(v => { const td = tr.insertCell(); td.textContent = v; });
-                    });
-                    detail.appendChild(table);
-                    hdr.addEventListener('click', () => {
-                        const isOpen = detail.classList.toggle('open');
-                        arrow.classList.toggle('open', isOpen);
-                    });
-                    sessEl.appendChild(hdr); sessEl.appendChild(detail);
+                    if (gymStatsEditMode) {
+                        const delBtn = document.createElement('button');
+                        delBtn.type = 'button'; delBtn.className = 'gym-past-delete-btn';
+                        delBtn.textContent = '\u00d7';
+                        delBtn.style.cssText = 'font-size:11px;padding:1px 6px;';
+                        delBtn.addEventListener('click', e => {
+                            e.stopPropagation();
+                            deleteGymHistorySession(exerciseId, sess.ts);
+                            openGymStatsModal(exerciseId, fromLibrary);
+                        });
+                        hdr.appendChild(dateEl); hdr.appendChild(peakEl); hdr.appendChild(delBtn);
+                    } else {
+                        const arrow = document.createElement('span'); arrow.className = 'gym-stats-session-arrow'; arrow.textContent = '\u25b6';
+                        hdr.appendChild(dateEl); hdr.appendChild(peakEl); hdr.appendChild(arrow);
+                        const detail = document.createElement('div'); detail.className = 'gym-stats-session-detail';
+                        const table = document.createElement('table'); table.className = 'gym-stats-set-table';
+                        const thead = table.createTHead(); const hr = thead.insertRow();
+                        ['Set', 'Weight', 'Reps'].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
+                        const tbody = table.createTBody();
+                        let mainIdx = 0;
+                        (sess.sets || []).forEach(set => {
+                            const tr = tbody.insertRow();
+                            if (set.isWarmup) tr.className = 'warmup-row';
+                            else mainIdx++;
+                            const lbl = set.isWarmup ? 'W' : String(mainIdx);
+                            [lbl, (set.weight || 0) + ' kg', (set.reps || 0) + ' reps'].forEach(v => { const td = tr.insertCell(); td.textContent = v; });
+                        });
+                        detail.appendChild(table);
+                        hdr.addEventListener('click', () => {
+                            const isOpen = detail.classList.toggle('open');
+                            arrow.classList.toggle('open', isOpen);
+                        });
+                        sessEl.appendChild(detail);
+                    }
+                    sessEl.appendChild(hdr);
                     histList.appendChild(sessEl);
                 });
                 histSection.appendChild(toggle); histSection.appendChild(histList);
@@ -12871,7 +13279,15 @@
             if (backBtn) backBtn.style.display = fromLibrary ? '' : 'none';
         }
 
-        function closeGymStatsModal() { document.getElementById('gymStatsModal').classList.remove('visible'); }
+        function closeGymStatsModal() {
+            gymStatsEditMode = false;
+            document.getElementById('gymStatsModal').classList.remove('visible');
+        }
+
+        function toggleGymStatsEditMode() {
+            gymStatsEditMode = !gymStatsEditMode;
+            if (gymStatsCurrentExerciseId) openGymStatsModal(gymStatsCurrentExerciseId, gymStatsFromLibrary);
+        }
 
         // ---- Workout Session Storage ----
         function saveGymWorkoutSession() {
@@ -13079,6 +13495,8 @@
             if (finishBtn && !finishBtn._gymBound) { finishBtn._gymBound = true; finishBtn.addEventListener('click', finishGymWorkout); }
             const pastToggleBtn = document.getElementById('gymPastToggleBtn');
             if (pastToggleBtn && !pastToggleBtn._gymBound) { pastToggleBtn._gymBound = true; pastToggleBtn.addEventListener('click', toggleGymPastWorkouts); }
+            const dataEditBtn = document.getElementById('gymDataEditBtn');
+            if (dataEditBtn && !dataEditBtn._gymBound) { dataEditBtn._gymBound = true; dataEditBtn.addEventListener('click', toggleGymDataEditMode); }
             const libCloseBtn = document.getElementById('gymLibraryCloseBtn');
             if (libCloseBtn && !libCloseBtn._gymBound) { libCloseBtn._gymBound = true; libCloseBtn.addEventListener('click', closeGymLibraryModal); }
             const libAddBtn = document.getElementById('gymLibraryAddBtn');
@@ -13093,6 +13511,8 @@
             if (addToDayCloseBtn && !addToDayCloseBtn._gymBound) { addToDayCloseBtn._gymBound = true; addToDayCloseBtn.addEventListener('click', closeGymAddTodayModal); }
             const statsCloseBtn = document.getElementById('gymStatsCloseBtn');
             if (statsCloseBtn && !statsCloseBtn._gymBound) { statsCloseBtn._gymBound = true; statsCloseBtn.addEventListener('click', closeGymStatsModal); }
+            const statsEditBtn = document.getElementById('gymStatsEditBtn');
+            if (statsEditBtn && !statsEditBtn._gymBound) { statsEditBtn._gymBound = true; statsEditBtn.addEventListener('click', toggleGymStatsEditMode); }
             const statsBackBtn = document.getElementById('gymStatsBackToLibBtn');
             if (statsBackBtn && !statsBackBtn._gymBound) { statsBackBtn._gymBound = true; statsBackBtn.addEventListener('click', () => { closeGymStatsModal(); openGymLibraryModal(); }); }
             ['gymLibraryModal','gymLibExModal','gymAddToDayModal','gymStatsModal'].forEach(id => {
