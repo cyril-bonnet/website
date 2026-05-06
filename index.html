@@ -13657,11 +13657,10 @@
                 const inputs = document.createElement('div'); inputs.className = 'gym-ex-set-inputs';
                 const weightField = document.createElement('div'); weightField.className = 'gym-ex-field';
                 const wLbl = document.createElement('span'); wLbl.className = 'gym-ex-field-label'; wLbl.textContent = 'kg';
-                const weightInput = document.createElement('input'); weightInput.type = 'number';
-                weightInput.className = 'gym-ex-set-weight'; weightInput.min = '0'; weightInput.max = '1000'; weightInput.step = '0.5';
-                weightInput.inputMode = 'decimal';
+                const weightInput = document.createElement('input'); weightInput.type = 'text';
+                weightInput.className = 'gym-ex-set-weight'; weightInput.inputMode = 'decimal';
                 weightInput.placeholder = '\u2014'; weightInput.value = set.weight || ''; weightInput.disabled = set.checked;
-                weightInput.addEventListener('change', () => { set.weight = Math.max(0, parseFloat(weightInput.value) || 0); saveGymWorkoutSession(); });
+                weightInput.addEventListener('change', () => { set.weight = Math.max(0, parseFloat(weightInput.value.replace(',', '.')) || 0); weightInput.value = set.weight || ''; saveGymWorkoutSession(); });
                 weightField.appendChild(wLbl); weightField.appendChild(weightInput);
                 const repsField = document.createElement('div'); repsField.className = 'gym-ex-field';
                 const rLbl = document.createElement('span'); rLbl.className = 'gym-ex-field-label'; rLbl.textContent = 'reps';
@@ -13678,7 +13677,7 @@
                     if (set.checked) {
                         set.checked = false;
                     } else {
-                        set.weight = Math.max(0, parseFloat(weightInput.value) || 0);
+                        set.weight = Math.max(0, parseFloat(weightInput.value.replace(',', '.')) || 0);
                         set.reps = Math.max(0, parseInt(repsInput.value) || 0);
                         set.checked = true;
                         const lastCheckedIdx = session.sets.reduce((acc, s, i) => s.checked ? i : acc, -1);
