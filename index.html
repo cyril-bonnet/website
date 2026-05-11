@@ -2431,6 +2431,17 @@
             color: #333;
         }
 
+        #tasteModalDeleteBtn {
+            background: linear-gradient(180deg, #FFAAAA 0%, #CC2200 100%);
+            border-color: #FFFFFF #800000 #800000 #FFFFFF;
+            color: #FFFFFF;
+            margin-right: auto;
+        }
+
+        #tasteModalDeleteBtn:hover {
+            background: linear-gradient(180deg, #FFCCCC 0%, #EE3311 100%);
+        }
+
         .taste-form {
             margin-top: 8px;
             display: grid;
@@ -4475,6 +4486,10 @@
             background: linear-gradient(180deg, #BDE5FF 0%, #7BABD5 100%);
         }
 
+        body.modal-open {
+            overflow: hidden;
+        }
+
         /* Date create/edit modal */
         .date-modal {
             position: fixed;
@@ -4485,6 +4500,7 @@
             justify-content: center;
             z-index: 2050;
             padding: 20px;
+            overflow-y: auto;
         }
 
         .date-modal.visible {
@@ -4522,6 +4538,8 @@
         .date-modal-field input,
         .date-modal-field textarea {
             width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
             padding: 6px;
             font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
             font-size: 13px;
@@ -4552,6 +4570,7 @@
             justify-content: center;
             z-index: 2100;
             padding: 20px;
+            overflow-y: auto;
         }
 
         .date-reconsider-modal.visible {
@@ -6963,6 +6982,7 @@
             <textarea id="tasteModalReviewInput" class="taste-modal-review" maxlength="280" placeholder="Write your thoughts..."></textarea>
 
             <div class="taste-modal-actions">
+                <button type="button" id="tasteModalDeleteBtn">Delete</button>
                 <button type="button" id="tasteModalCloseBtn">Close</button>
                 <button type="button" id="tasteModalSaveBtn">Save Review</button>
             </div>
@@ -10715,6 +10735,12 @@
             reviewInput.placeholder = canEdit
                 ? 'Write your thoughts...'
                 : 'Pick a user to leave a review';
+
+            const deleteBtn = document.getElementById('tasteModalDeleteBtn');
+            if (deleteBtn) {
+                const isOwner = canEdit && item.from === userKey;
+                deleteBtn.style.display = isOwner ? 'inline-flex' : 'none';
+            }
         }
 
         function openTasteModal(itemId) {
@@ -12051,6 +12077,7 @@
 
             document.getElementById('dateModalDeleteBtn').style.display = 'none';
             modal.classList.add('visible');
+            document.body.classList.add('modal-open');
         }
 
         function openDateModalForEdit(dateId) {
@@ -12066,10 +12093,12 @@
             document.getElementById('dateModalDatetimeInput').value = item.datetime;
             document.getElementById('dateModalDeleteBtn').style.display = 'inline-flex';
             modal.classList.add('visible');
+            document.body.classList.add('modal-open');
         }
 
         function closeDateModal() {
             document.getElementById('dateModal').classList.remove('visible');
+            document.body.classList.remove('modal-open');
             activeDateModalId = null;
         }
 
@@ -12187,10 +12216,12 @@
             activeDateReconsiderId = dateId;
             document.getElementById('dateReconsiderInput').value = '';
             document.getElementById('dateReconsiderModal').classList.add('visible');
+            document.body.classList.add('modal-open');
         }
 
         function closeReconsiderModal() {
             document.getElementById('dateReconsiderModal').classList.remove('visible');
+            document.body.classList.remove('modal-open');
             activeDateReconsiderId = null;
         }
 
@@ -13005,6 +13036,17 @@
         });
 
         document.getElementById('tasteModalCloseBtn').addEventListener('click', closeTasteModal);
+
+        document.getElementById('tasteModalDeleteBtn').addEventListener('click', () => {
+            if (!currentUser || activeTasteItemId == null) return;
+            const item = tasteItems.find((e) => String(e.id) === String(activeTasteItemId));
+            if (!item || item.from !== currentUser.key) return;
+            if (!confirm(`Delete "${item.name}"?`)) return;
+            tasteItems = tasteItems.filter((e) => String(e.id) !== String(activeTasteItemId));
+            saveTasteItems();
+            closeTasteModal();
+            renderTasteItems();
+        });
 
         document.getElementById('tasteModal').addEventListener('click', (event) => {
             if (event.target.id === 'tasteModal') {
