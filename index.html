@@ -1741,6 +1741,26 @@
             grid-template-columns: repeat(3, 1fr);
         }
 
+        .home-extras-link {
+            display: block;
+            width: 100%;
+            margin: 12px 0 0;
+            background: none;
+            border: none;
+            padding: 4px;
+            font-family: inherit;
+            font-size: 11px;
+            color: #667799;
+            cursor: pointer;
+            text-align: center;
+            letter-spacing: 0.05em;
+            opacity: 0.6;
+        }
+        .home-extras-link:hover {
+            opacity: 1;
+            color: #003C74;
+        }
+
         .period-status {
             font-size: 11px;
             color: #003C74;
@@ -6027,10 +6047,10 @@
                                 <span>💪</span>
                                 <span>Gym Planner</span>
                             </button>
-                            <button class="option-button" onclick="showView('todoView')">
-                                <span>📝</span>
-                                <span>To-Do List</span>
-                                <span class="chat-option-badge" id="todoUnreadBadge">NEW</span>
+                            <button class="option-button" onclick="showView('datesView')">
+                                <span>💑</span>
+                                <span>Dates</span>
+                                <span class="chat-option-badge" id="datesUnreadBadge">NEW</span>
                             </button>
                         </div>
                     </div>
@@ -6043,13 +6063,14 @@
                                 <span>Restaurants & Food</span>
                                 <span class="chat-option-badge" id="tasteUnreadBadge">NEW</span>
                             </button>
-                            <button class="option-button" onclick="showView('songView')">
-                                <span>🎧</span>
-                                <span>Song Recs</span>
-                            </button>
                             <button class="option-button" onclick="showView('movieView')">
                                 <span>🎬</span>
                                 <span>Movie List</span>
+                            </button>
+                            <button class="option-button" onclick="showView('todoView')">
+                                <span>📝</span>
+                                <span>To-Do List</span>
+                                <span class="chat-option-badge" id="todoUnreadBadge">NEW</span>
                             </button>
                         </div>
                     </div>
@@ -6057,11 +6078,6 @@
                     <div class="home-tile-group">
                         <p class="home-tile-group-label">✨ Extras</p>
                         <div class="home-options">
-                            <button class="option-button" onclick="showView('datesView')">
-                                <span>💑</span>
-                                <span>Dates</span>
-                                <span class="chat-option-badge" id="datesUnreadBadge">NEW</span>
-                            </button>
                             <button class="option-button" onclick="showView('invitationView')">
                                 <span>📅</span>
                                 <span>Invitation</span>
@@ -6077,6 +6093,8 @@
                             </button>
                         </div>
                     </div>
+
+                    <button class="home-extras-link" onclick="showView('extrasView')">⋯ other</button>
 
                     <div class="home-bottom-stack">
                         <div class="mood-panel">
@@ -6132,6 +6150,42 @@
                             <button type="button" class="dates-plan-btn" id="datesPlanBtn">💑 Plan a Date</button>
                         </div>
                         <div class="dates-list" id="datesList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Extras View -->
+        <div class="view" id="extrasView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>✨</span>
+                        <span>extras.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Extras</h1>
+                    <div class="home-options">
+                        <button class="option-button" onclick="showView('songView')">
+                            <span>🎧</span>
+                            <span>Song Recs</span>
+                        </button>
+                        <button class="option-button" onclick="showView('chatView')">
+                            <span>💬</span>
+                            <span>Chat</span>
+                        </button>
+                        <button class="option-button" onclick="showView('musicView')">
+                            <span>🎵</span>
+                            <span>Music Player</span>
+                        </button>
                     </div>
                 </div>
             </div>
