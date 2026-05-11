@@ -4288,6 +4288,331 @@
         }
 
         /* ============================================
+           DATES STYLES
+           ============================================ */
+        .dates-panel {
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .dates-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .dates-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+            min-height: 60px;
+        }
+
+        .dates-empty {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        .date-card {
+            background: #FFFFFF;
+            border: 2px solid #808080;
+            padding: 10px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .date-card-past {
+            background: #F5F5F5;
+            border-color: #B0B0B0;
+        }
+
+        .date-card-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .date-card-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #003C74;
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        .date-card-status {
+            display: inline-block;
+            padding: 2px 7px;
+            border: 1px solid;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .date-status-pending {
+            background: #FFF4C2;
+            border-color: #D4A000;
+            color: #7A5800;
+        }
+
+        .date-status-accepted {
+            background: #D6FFE2;
+            border-color: #2E7D32;
+            color: #1B5E20;
+        }
+
+        .date-status-reconsidering {
+            background: #FFE7CC;
+            border-color: #E65100;
+            color: #B03A00;
+        }
+
+        .date-card-datetime {
+            font-size: 12px;
+            color: #003C74;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .date-card-desc {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 4px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .date-card-meta {
+            font-size: 11px;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .date-card-reconsider-note {
+            margin-top: 4px;
+            margin-bottom: 6px;
+            padding: 5px 8px;
+            background: #FFF8EC;
+            border: 1px solid #E6C97A;
+            font-size: 11px;
+            color: #5A3D00;
+            word-break: break-word;
+        }
+
+        .date-card-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        .date-action-btn {
+            min-width: auto;
+            padding: 3px 10px;
+            font-size: 11px;
+        }
+
+        .date-action-btn-accept {
+            background: linear-gradient(180deg, #A8E6A3 0%, #3A9A34 100%);
+            border-color: #FFFFFF #1A5E18 #1A5E18 #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        .date-action-btn-accept:hover {
+            background: linear-gradient(180deg, #C2EFC0 0%, #2E8A28 100%);
+            color: #FFFFFF;
+        }
+
+        .date-action-btn-reconsider {
+            background: linear-gradient(180deg, #FFE7CC 0%, #F0B060 100%);
+            border-color: #FFFFFF #8A4000 #8A4000 #FFFFFF;
+            color: #5A2800;
+        }
+
+        .date-action-btn-delete {
+            background: linear-gradient(180deg, #FFD6D6 0%, #FF9B9B 100%);
+            border-color: #FFFFFF #9B1C1C #9B1C1C #FFFFFF;
+            color: #9B1C1C;
+        }
+
+        .dates-plan-btn {
+            background: linear-gradient(180deg, #9DD5FF 0%, #5B9BD5 100%);
+            border-color: #FFFFFF #003C74 #003C74 #FFFFFF;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .dates-plan-btn:hover {
+            background: linear-gradient(180deg, #BDE5FF 0%, #7BABD5 100%);
+        }
+
+        /* Date create/edit modal */
+        .date-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2050;
+            padding: 20px;
+        }
+
+        .date-modal.visible {
+            display: flex;
+        }
+
+        .date-modal-card {
+            width: min(100%, 480px);
+            border: 3px solid #0054E3;
+            background: #ECE9D8;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+            padding: 14px;
+        }
+
+        .date-modal-title {
+            color: #003C74;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .date-modal-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .date-modal-field label {
+            font-size: 11px;
+            color: #003C74;
+            font-weight: bold;
+        }
+
+        .date-modal-field input,
+        .date-modal-field textarea {
+            width: 100%;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 13px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+        }
+
+        .date-modal-field textarea {
+            min-height: 72px;
+            resize: vertical;
+        }
+
+        .date-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+
+        /* Reconsider modal */
+        .date-reconsider-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2100;
+            padding: 20px;
+        }
+
+        .date-reconsider-modal.visible {
+            display: flex;
+        }
+
+        .date-reconsider-card {
+            width: min(100%, 400px);
+            border: 3px solid #E65100;
+            background: #ECE9D8;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+            padding: 14px;
+        }
+
+        .date-reconsider-title {
+            color: #B03A00;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .date-reconsider-hint {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .date-reconsider-input {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            padding: 6px;
+            font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+            font-size: 13px;
+            border: 2px solid #808080;
+            background: #FFFFFF;
+            margin-bottom: 10px;
+        }
+
+        .date-reconsider-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* Theme overrides for dates */
+        body[data-theme='xp'] .dates-panel,
+        body[data-theme='xp'] .date-card {
+            background: #ece9d8;
+            border-color: #7f7f7f;
+        }
+
+        body[data-theme='nokia'] .dates-panel,
+        body[data-theme='nokia'] .date-card {
+            background: #a7c31f;
+            border-color: #253407;
+        }
+
+        body[data-theme='nokia'] .date-card-title,
+        body[data-theme='nokia'] .date-card-datetime,
+        body[data-theme='nokia'] .date-card-meta {
+            color: #1d2b05;
+        }
+
+        body[data-theme='maroon'] .dates-panel,
+        body[data-theme='maroon'] .date-card {
+            background: #4a1212;
+            border-color: #7a1a1a;
+        }
+
+        body[data-theme='maroon'] .date-card-title,
+        body[data-theme='maroon'] .date-card-datetime,
+        body[data-theme='maroon'] .date-card-meta {
+            color: #ffeaea;
+        }
+
+        body[data-theme='maroon'] .date-card-desc {
+            color: #f5c0c0;
+        }
+
+        /* ============================================
            GYM PLANNER STYLES
            ============================================ */
         .gym-view-header {
@@ -5732,6 +6057,11 @@
                     <div class="home-tile-group">
                         <p class="home-tile-group-label">✨ Extras</p>
                         <div class="home-options">
+                            <button class="option-button" onclick="showView('datesView')">
+                                <span>💑</span>
+                                <span>Dates</span>
+                                <span class="chat-option-badge" id="datesUnreadBadge">NEW</span>
+                            </button>
                             <button class="option-button" onclick="showView('invitationView')">
                                 <span>📅</span>
                                 <span>Invitation</span>
@@ -5774,6 +6104,34 @@
                             <p class="status-current-activity" id="statusCurrentActivityKiki">🗓️ Kiki: no scheduled activity right now.</p>
                             <p class="mood-note" id="moodNote" style="display:none"></p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dates View -->
+        <div class="view" id="datesView">
+            <button class="back-button" onclick="showView('homeView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>💑</span>
+                        <span>dates.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Date Plans</h1>
+                    <div class="dates-panel">
+                        <div class="dates-toolbar">
+                            <button type="button" class="dates-plan-btn" id="datesPlanBtn">💑 Plan a Date</button>
+                        </div>
+                        <div class="dates-list" id="datesList"></div>
                     </div>
                 </div>
             </div>
@@ -6036,6 +6394,7 @@
                         <label class="notification-pref-item"><input type="checkbox" data-notification-type="taste" checked /> Food/restaurant additions</label>
                         <label class="notification-pref-item"><input type="checkbox" data-notification-type="mood" checked /> Mood changes</label>
                         <label class="notification-pref-item"><input type="checkbox" data-notification-type="status" checked /> Status changes</label>
+                        <label class="notification-pref-item"><input type="checkbox" data-notification-type="date" checked /> Date invitations &amp; responses</label>
                     </div>
                 </div>
             </div>
@@ -6468,6 +6827,43 @@
         </div>
     </div>
 
+    <!-- Date Create/Edit Modal -->
+    <div class="date-modal" id="dateModal">
+        <div class="date-modal-card">
+            <p class="date-modal-title" id="dateModalTitle">Plan a Date 💑</p>
+            <div class="date-modal-field">
+                <label for="dateModalTitleInput">Date title</label>
+                <input type="text" id="dateModalTitleInput" maxlength="80" placeholder="e.g. Dinner, Movie Night, Walk..." autocomplete="off" />
+            </div>
+            <div class="date-modal-field">
+                <label for="dateModalDescInput">Description (optional)</label>
+                <textarea id="dateModalDescInput" maxlength="300" placeholder="Where? Any ideas? Special notes..."></textarea>
+            </div>
+            <div class="date-modal-field">
+                <label for="dateModalDatetimeInput">Date &amp; time</label>
+                <input type="datetime-local" id="dateModalDatetimeInput" />
+            </div>
+            <div class="date-modal-actions">
+                <button type="button" id="dateModalDeleteBtn" style="display:none" class="date-action-btn date-action-btn-delete">Delete</button>
+                <button type="button" id="dateModalCancelBtn">Cancel</button>
+                <button type="button" id="dateModalSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Reconsider Modal -->
+    <div class="date-reconsider-modal" id="dateReconsiderModal">
+        <div class="date-reconsider-card">
+            <p class="date-reconsider-title">Reconsider 🤔</p>
+            <p class="date-reconsider-hint">Let them know what you'd like to change — maybe the time, place, or something else.</p>
+            <textarea id="dateReconsiderInput" class="date-reconsider-input" maxlength="200" placeholder="e.g. Could we do it a bit later? Or maybe somewhere else..."></textarea>
+            <div class="date-reconsider-actions">
+                <button type="button" id="dateReconsiderCancelBtn">Cancel</button>
+                <button type="button" id="dateReconsiderSendBtn" class="date-action-btn date-action-btn-reconsider">Send</button>
+            </div>
+        </div>
+    </div>
+
     <div class="chess-modal" id="chessWinnerModal">
         <div class="chess-modal-card">
             <p class="chess-modal-title">Game Over</p>
@@ -6642,6 +7038,7 @@
                 initMoods();
                 initSocial();
                 renderMoods();
+                renderDatesUnreadBadge();
             }
 
             if (viewId === 'chatView') {
@@ -6684,6 +7081,11 @@
 
             if (viewId === 'gymView') {
                 initGym();
+            }
+
+            if (viewId === 'datesView') {
+                initDates();
+                initDateModals();
             }
 
             if (viewId === 'musicView') {
@@ -6755,6 +7157,7 @@
         let lillianModeDbRef = null;
         let chessDbRef = null;
         let gymDbRef = null;
+        let datesDbRef = null;
         let firebaseUnsubscribe = null;
         let weeklyUnsubscribe = null;
         let moodsUnsubscribe = null;
@@ -6768,6 +7171,7 @@
         let lillianModeUnsubscribe = null;
         let chessUnsubscribe = null;
         let gymUnsubscribe = null;
+        let datesUnsubscribe = null;
         let firebaseAuth = null;
         let weeklyItems = [];
         let userMoods = {
@@ -6781,6 +7185,11 @@
         let feedbackDoneCollapsed = true;
         let tasteItems = [];
         let movieItems = [];
+        let dateItems = [];
+        let datesInitialized = false;
+        let datesHasSyncedOnce = false;
+        let activeDateModalId = null;
+        let activeDateReconsiderId = null;
         let tasteTriedCollapsed = false;
         let movieWatchedVisible = false;
         let tasteBubbleAnimationId = null;
@@ -6859,6 +7268,7 @@
         const CHESS_STORAGE_KEY = 'rugile_chess_state';
         const GYM_STORAGE_KEY = 'rugile_gym_planner';
         const GYM_WORKOUT_SESSION_KEY = 'rugile_gym_workout_session';
+        const DATES_STORAGE_KEY = 'rugile_date_items';
         const USER_STATUS_STORAGE_KEY = 'rugile_user_status';
         const USER_STORAGE_KEY = 'rugile_current_user';
         const THEME_STORAGE_KEY = 'rugile_app_theme';
@@ -6922,7 +7332,8 @@
             feedback: 'Feedback posts',
             taste: 'Food/restaurant additions',
             mood: 'Mood changes',
-            status: 'Status changes'
+            status: 'Status changes',
+            date: 'Date invitations & responses'
         };
         const NOTIFICATION_TYPES = Object.keys(NOTIFICATION_TYPE_LABELS);
         const CHAT_REACTION_OPTIONS = ['👍', '👎', '❤️', '😂', '🔥', '🎉', '👏', '😮', '😢', '😡'];
@@ -7309,7 +7720,8 @@
                 feedback: true,
                 taste: true,
                 mood: true,
-                status: true
+                status: true,
+                date: true
             };
         }
 
@@ -11020,6 +11432,7 @@
                 chessDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/chess`);
                 gymDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/gym`);
                 usersDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/users`);
+                datesDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/dates`);
 
                 if (firebaseUnsubscribe) {
                     firebaseUnsubscribe();
@@ -11059,6 +11472,9 @@
                 }
                 if (gymUnsubscribe) {
                     gymUnsubscribe();
+                }
+                if (datesUnsubscribe) {
+                    datesUnsubscribe();
                 }
 
                 const listener = firebaseDbRef.on('value', (snapshot) => {
@@ -11287,6 +11703,25 @@
                 });
                 gymUnsubscribe = () => gymDbRef.off('value', gymListener);
 
+                const datesListener = datesDbRef.on('value', (snapshot) => {
+                    const previousDateItems = dateItems;
+                    const value = snapshot.val();
+                    dateItems = normalizeDateItems(Array.isArray(value) ? value : []);
+
+                    if (currentUser && datesHasSyncedOnce) {
+                        const prevIncoming = latestIncomingDateTimestamp(currentUser.key, previousDateItems);
+                        const nextIncoming = latestIncomingDateTimestamp(currentUser.key, dateItems);
+                        if (nextIncoming > prevIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    datesHasSyncedOnce = true;
+                    renderDates();
+                    renderDatesUnreadBadge();
+                });
+                datesUnsubscribe = () => datesDbRef.off('value', datesListener);
+
                 return true;
             } catch (error) {
                 console.error('Firebase init failed, using local storage fallback:', error);
@@ -11303,8 +11738,458 @@
                 lillianModeDbRef = null;
                 chessDbRef = null;
                 gymDbRef = null;
+                datesDbRef = null;
                 return false;
             }
+        }
+
+        // ============================================
+        // DATES FEATURE
+        // ============================================
+
+        function normalizeDateItems(raw) {
+            if (!Array.isArray(raw)) return [];
+            return raw.filter(Boolean).map((item) => ({
+                id: Number(item.id) || Date.now(),
+                title: typeof item.title === 'string' ? item.title : '',
+                description: typeof item.description === 'string' ? item.description : '',
+                datetime: typeof item.datetime === 'string' ? item.datetime : '',
+                createdBy: typeof item.createdBy === 'string' ? item.createdBy : '',
+                status: ['pending', 'accepted', 'reconsidering'].includes(item.status) ? item.status : 'pending',
+                reconsiderNote: typeof item.reconsiderNote === 'string' ? item.reconsiderNote : '',
+                createdAt: Number(item.createdAt) || Date.now(),
+                updatedAt: Number(item.updatedAt) || Date.now()
+            }));
+        }
+
+        function latestIncomingDateTimestamp(userKey, items = dateItems) {
+            if (!userKey || !Array.isArray(items)) return 0;
+            return items.reduce((latest, item) => {
+                // Notify creator when other person responds, and vice versa for new invites
+                const actor = item?.createdBy;
+                if (!actor || actor === userKey) return latest;
+                const ts = Number(item?.updatedAt || item?.createdAt) || 0;
+                return ts > latest ? ts : latest;
+            }, 0);
+        }
+
+        function saveDates() {
+            if (datesDbRef) {
+                datesDbRef.set(dateItems).catch((error) => {
+                    console.error('Firebase dates save failed, fallback to localStorage:', error);
+                    localStorage.setItem(DATES_STORAGE_KEY, JSON.stringify(dateItems));
+                });
+                return;
+            }
+            localStorage.setItem(DATES_STORAGE_KEY, JSON.stringify(dateItems));
+        }
+
+        function loadDates() {
+            const saved = localStorage.getItem(DATES_STORAGE_KEY);
+            if (saved) {
+                try {
+                    dateItems = normalizeDateItems(JSON.parse(saved));
+                } catch (e) {
+                    dateItems = [];
+                }
+            }
+        }
+
+        function formatDatetimeForDisplay(datetimeStr) {
+            if (!datetimeStr) return 'No date set';
+            try {
+                const dt = new Date(datetimeStr);
+                if (isNaN(dt.getTime())) return datetimeStr;
+                return dt.toLocaleDateString('en-GB', {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                return datetimeStr;
+            }
+        }
+
+        function isDatePast(datetimeStr) {
+            if (!datetimeStr) return false;
+            try {
+                return new Date(datetimeStr).getTime() < Date.now();
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function renderDates() {
+            const list = document.getElementById('datesList');
+            if (!list) return;
+
+            if (!dateItems.length) {
+                list.innerHTML = '<p class="dates-empty">No dates planned yet. Plan one!</p>';
+                return;
+            }
+
+            // Sort: upcoming first, then past; within each group latest first
+            const upcoming = dateItems.filter((d) => !isDatePast(d.datetime));
+            const past = dateItems.filter((d) => isDatePast(d.datetime));
+
+            upcoming.sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime());
+            past.sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime());
+
+            const sorted = [...upcoming, ...past];
+
+            list.innerHTML = '';
+            sorted.forEach((item) => {
+                const card = buildDateCard(item);
+                list.appendChild(card);
+            });
+        }
+
+        function buildDateCard(item) {
+            const isPast = isDatePast(item.datetime);
+            const isCreator = currentUser && currentUser.key === item.createdBy;
+            const creatorUser = USER_MAP[item.createdBy];
+
+            const card = document.createElement('div');
+            card.className = 'date-card' + (isPast ? ' date-card-past' : '');
+            card.dataset.dateId = item.id;
+
+            // Head row: title + status badge
+            const head = document.createElement('div');
+            head.className = 'date-card-head';
+
+            const title = document.createElement('span');
+            title.className = 'date-card-title';
+            title.textContent = item.title || '(no title)';
+
+            const statusBadge = document.createElement('span');
+            statusBadge.className = `date-card-status date-status-${item.status}`;
+            const statusLabels = { pending: '⏳ Pending', accepted: '✅ Accepted', reconsidering: '🤔 Reconsidering' };
+            statusBadge.textContent = statusLabels[item.status] || item.status;
+
+            head.appendChild(title);
+            head.appendChild(statusBadge);
+            card.appendChild(head);
+
+            // Datetime
+            const dt = document.createElement('p');
+            dt.className = 'date-card-datetime';
+            dt.textContent = '📅 ' + formatDatetimeForDisplay(item.datetime);
+            card.appendChild(dt);
+
+            // Description
+            if (item.description) {
+                const desc = document.createElement('p');
+                desc.className = 'date-card-desc';
+                desc.textContent = item.description;
+                card.appendChild(desc);
+            }
+
+            // Meta: who proposed
+            const meta = document.createElement('p');
+            meta.className = 'date-card-meta';
+            meta.textContent = `Proposed by ${creatorUser ? creatorUser.emoji + ' ' + creatorUser.name : item.createdBy}`;
+            card.appendChild(meta);
+
+            // Reconsider note
+            if (item.status === 'reconsidering' && item.reconsiderNote) {
+                const note = document.createElement('div');
+                note.className = 'date-card-reconsider-note';
+                note.textContent = '🤔 ' + item.reconsiderNote;
+                card.appendChild(note);
+            }
+
+            // Action buttons
+            if (currentUser && !isGuestMode) {
+                const actions = document.createElement('div');
+                actions.className = 'date-card-actions';
+
+                if (isCreator) {
+                    // Creator: Edit, Delete
+                    const editBtn = document.createElement('button');
+                    editBtn.type = 'button';
+                    editBtn.className = 'date-action-btn';
+                    editBtn.textContent = '✏️ Edit';
+                    editBtn.addEventListener('click', () => openDateModalForEdit(item.id));
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.type = 'button';
+                    deleteBtn.className = 'date-action-btn date-action-btn-delete';
+                    deleteBtn.textContent = '🗑️ Delete';
+                    deleteBtn.addEventListener('click', () => deleteDate(item.id));
+
+                    actions.appendChild(editBtn);
+                    actions.appendChild(deleteBtn);
+                } else {
+                    // Other user: Accept / Reconsider (if pending or reconsidering)
+                    if (item.status !== 'accepted') {
+                        const acceptBtn = document.createElement('button');
+                        acceptBtn.type = 'button';
+                        acceptBtn.className = 'date-action-btn date-action-btn-accept';
+                        acceptBtn.textContent = '✅ Accept';
+                        acceptBtn.addEventListener('click', () => acceptDate(item.id));
+
+                        const reconsiderBtn = document.createElement('button');
+                        reconsiderBtn.type = 'button';
+                        reconsiderBtn.className = 'date-action-btn date-action-btn-reconsider';
+                        reconsiderBtn.textContent = '🤔 Reconsider';
+                        reconsiderBtn.addEventListener('click', () => openReconsiderModal(item.id));
+
+                        actions.appendChild(acceptBtn);
+                        actions.appendChild(reconsiderBtn);
+                    }
+                }
+
+                if (actions.children.length) {
+                    card.appendChild(actions);
+                }
+            }
+
+            return card;
+        }
+
+        function renderDatesUnreadBadge() {
+            const badge = document.getElementById('datesUnreadBadge');
+            if (!badge || !currentUser) {
+                if (badge) badge.style.display = 'none';
+                return;
+            }
+            // Show badge if there are pending date invitations from the other person
+            const hasPending = dateItems.some(
+                (d) => d.createdBy !== currentUser.key && d.status === 'pending'
+            );
+            badge.style.display = hasPending ? 'flex' : 'none';
+        }
+
+        function initDates() {
+            if (datesInitialized) {
+                renderDates();
+                renderDatesUnreadBadge();
+                return;
+            }
+
+            datesInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadDates();
+            }
+            renderDates();
+            renderDatesUnreadBadge();
+        }
+
+        function openDateModalForCreate() {
+            if (!currentUser || isGuestMode) return;
+            activeDateModalId = null;
+            const modal = document.getElementById('dateModal');
+            document.getElementById('dateModalTitle').textContent = 'Plan a Date 💑';
+            document.getElementById('dateModalTitleInput').value = '';
+            document.getElementById('dateModalDescInput').value = '';
+
+            // Default datetime to tomorrow at 19:00
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(19, 0, 0, 0);
+            const pad = (n) => String(n).padStart(2, '0');
+            document.getElementById('dateModalDatetimeInput').value =
+                `${tomorrow.getFullYear()}-${pad(tomorrow.getMonth() + 1)}-${pad(tomorrow.getDate())}T${pad(tomorrow.getHours())}:${pad(tomorrow.getMinutes())}`;
+
+            document.getElementById('dateModalDeleteBtn').style.display = 'none';
+            modal.classList.add('visible');
+        }
+
+        function openDateModalForEdit(dateId) {
+            if (!currentUser || isGuestMode) return;
+            const item = dateItems.find((d) => d.id === dateId);
+            if (!item || item.createdBy !== currentUser.key) return;
+
+            activeDateModalId = dateId;
+            const modal = document.getElementById('dateModal');
+            document.getElementById('dateModalTitle').textContent = 'Edit Date ✏️';
+            document.getElementById('dateModalTitleInput').value = item.title;
+            document.getElementById('dateModalDescInput').value = item.description;
+            document.getElementById('dateModalDatetimeInput').value = item.datetime;
+            document.getElementById('dateModalDeleteBtn').style.display = 'inline-flex';
+            modal.classList.add('visible');
+        }
+
+        function closeDateModal() {
+            document.getElementById('dateModal').classList.remove('visible');
+            activeDateModalId = null;
+        }
+
+        function saveDateModal() {
+            if (!currentUser || isGuestMode) return;
+
+            const titleVal = document.getElementById('dateModalTitleInput').value.trim();
+            const descVal = document.getElementById('dateModalDescInput').value.trim();
+            const datetimeVal = document.getElementById('dateModalDatetimeInput').value;
+
+            if (!titleVal) {
+                document.getElementById('dateModalTitleInput').focus();
+                return;
+            }
+
+            const now = Date.now();
+            const otherUser = currentUser.key === 'ru' ? USER_MAP.kiki : USER_MAP.ru;
+
+            if (activeDateModalId !== null) {
+                // Edit existing
+                const idx = dateItems.findIndex((d) => d.id === activeDateModalId);
+                if (idx === -1) return;
+                const existing = dateItems[idx];
+                if (existing.createdBy !== currentUser.key) return;
+
+                dateItems[idx] = {
+                    ...existing,
+                    title: titleVal,
+                    description: descVal,
+                    datetime: datetimeVal,
+                    status: 'pending',
+                    reconsiderNote: '',
+                    updatedAt: now
+                };
+
+                saveDates();
+                closeDateModal();
+                renderDates();
+
+                // Notify other user that date was updated
+                notifyBackendAboutEvent({
+                    type: 'date',
+                    to: otherUser.key,
+                    title: `${currentUser.name} updated a date plan`,
+                    body: `"${titleVal}" on ${formatDatetimeForDisplay(datetimeVal)}`
+                }).catch(() => {});
+
+            } else {
+                // Create new
+                const newDate = {
+                    id: now,
+                    title: titleVal,
+                    description: descVal,
+                    datetime: datetimeVal,
+                    createdBy: currentUser.key,
+                    status: 'pending',
+                    reconsiderNote: '',
+                    createdAt: now,
+                    updatedAt: now
+                };
+
+                dateItems = [...dateItems, newDate];
+                saveDates();
+                closeDateModal();
+                renderDates();
+
+                // Notify the other user
+                const dateLabel = titleVal.toLowerCase();
+                notifyBackendAboutEvent({
+                    type: 'date',
+                    to: otherUser.key,
+                    title: `${currentUser.name} is inviting you on a date! 💑`,
+                    body: `"${titleVal}" date on ${formatDatetimeForDisplay(datetimeVal)} — open app to accept`
+                }).catch(() => {});
+            }
+        }
+
+        function deleteDate(dateId) {
+            if (!currentUser || isGuestMode) return;
+            const item = dateItems.find((d) => d.id === dateId);
+            if (!item || item.createdBy !== currentUser.key) return;
+
+            if (!confirm('Delete this date plan?')) return;
+            dateItems = dateItems.filter((d) => d.id !== dateId);
+            saveDates();
+            closeDateModal();
+            renderDates();
+        }
+
+        function acceptDate(dateId) {
+            if (!currentUser || isGuestMode) return;
+            const idx = dateItems.findIndex((d) => d.id === dateId);
+            if (idx === -1) return;
+            const item = dateItems[idx];
+            if (item.createdBy === currentUser.key) return;
+
+            dateItems[idx] = { ...item, status: 'accepted', reconsiderNote: '', updatedAt: Date.now() };
+            saveDates();
+            renderDates();
+
+            const creator = USER_MAP[item.createdBy];
+            notifyBackendAboutEvent({
+                type: 'date',
+                to: item.createdBy,
+                title: `${currentUser.name} accepted your date! 🎉`,
+                body: `"${item.title}" on ${formatDatetimeForDisplay(item.datetime)}`
+            }).catch(() => {});
+        }
+
+        function openReconsiderModal(dateId) {
+            if (!currentUser || isGuestMode) return;
+            const item = dateItems.find((d) => d.id === dateId);
+            if (!item || item.createdBy === currentUser.key) return;
+
+            activeDateReconsiderId = dateId;
+            document.getElementById('dateReconsiderInput').value = '';
+            document.getElementById('dateReconsiderModal').classList.add('visible');
+        }
+
+        function closeReconsiderModal() {
+            document.getElementById('dateReconsiderModal').classList.remove('visible');
+            activeDateReconsiderId = null;
+        }
+
+        function sendReconsider() {
+            if (!currentUser || isGuestMode || activeDateReconsiderId === null) return;
+            const note = document.getElementById('dateReconsiderInput').value.trim();
+
+            const idx = dateItems.findIndex((d) => d.id === activeDateReconsiderId);
+            if (idx === -1) return;
+            const item = dateItems[idx];
+            if (item.createdBy === currentUser.key) return;
+
+            dateItems[idx] = {
+                ...item,
+                status: 'reconsidering',
+                reconsiderNote: note,
+                updatedAt: Date.now()
+            };
+
+            saveDates();
+            closeReconsiderModal();
+            renderDates();
+
+            notifyBackendAboutEvent({
+                type: 'date',
+                to: item.createdBy,
+                title: `${currentUser.name} wants to reconsider the date 🤔`,
+                body: note || `"${item.title}" — check the app for details`
+            }).catch(() => {});
+        }
+
+        let datesModalInitialized = false;
+
+        function initDateModals() {
+            if (datesModalInitialized) return;
+            datesModalInitialized = true;
+
+            document.getElementById('datesPlanBtn').addEventListener('click', openDateModalForCreate);
+            document.getElementById('dateModalCancelBtn').addEventListener('click', closeDateModal);
+            document.getElementById('dateModalSaveBtn').addEventListener('click', saveDateModal);
+            document.getElementById('dateModalDeleteBtn').addEventListener('click', () => {
+                if (activeDateModalId !== null) deleteDate(activeDateModalId);
+            });
+            document.getElementById('dateReconsiderCancelBtn').addEventListener('click', closeReconsiderModal);
+            document.getElementById('dateReconsiderSendBtn').addEventListener('click', sendReconsider);
+
+            // Close modals on backdrop click
+            document.getElementById('dateModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeDateModal();
+            });
+            document.getElementById('dateReconsiderModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeReconsiderModal();
+            });
         }
 
         function saveTasks() {
