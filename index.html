@@ -5964,6 +5964,448 @@
             border-color: #253407 !important;
             color: #1d2b05 !important;
         }
+
+        /* ============================================
+           TRIP PLANNER
+           ============================================ */
+        .trip-panel { display: flex; flex-direction: column; gap: 14px; }
+
+        .trip-intro {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .trip-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+            gap: 8px;
+        }
+
+        .trip-stat {
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 8px 10px;
+            box-shadow: 2px 2px 0 #333;
+        }
+
+        .trip-stat .sl {
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #888;
+            margin-bottom: 3px;
+        }
+
+        .trip-stat .sv {
+            font-size: 14px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .trip-block-title {
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #555;
+            margin: 6px 0 2px;
+        }
+
+        .trip-anchors,
+        .trip-transport {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 10px 12px;
+            box-shadow: 2px 2px 0 #333;
+        }
+
+        .trip-anchor-item,
+        .trip-transport-item {
+            font-size: 12px;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .trip-anchor-item strong { color: #111; }
+
+        .trip-anchor-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .trip-phase-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #222;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin: 14px 0 4px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #333;
+        }
+
+        .trip-day {
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 2px 2px 0 #333;
+        }
+
+        .trip-day.type-travel { background: linear-gradient(to right, #f6f9ff, #fff); }
+        .trip-day.type-anchor { border-left: 6px solid #f97316; }
+        .trip-day.type-rest { border-left: 6px solid #10b981; }
+
+        .trip-day-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+
+        .trip-day-num {
+            font-size: 11px;
+            font-weight: bold;
+            color: #fff;
+            background: #333;
+            border-radius: 6px;
+            padding: 2px 7px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .trip-day-title {
+            font-size: 13.5px;
+            font-weight: bold;
+            color: #1e293b;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .trip-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+
+        .trip-badge {
+            font-size: 9px;
+            font-weight: bold;
+            padding: 2px 7px;
+            border-radius: 20px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+
+        .trip-day-desc {
+            font-size: 12.5px;
+            color: #475569;
+            line-height: 1.55;
+            white-space: pre-wrap;
+        }
+
+        .trip-day-desc ul { padding-left: 18px; margin-top: 6px; }
+        .trip-day-desc li { margin-bottom: 4px; }
+        .trip-day-desc strong { color: #1e293b; }
+
+        .trip-tip {
+            font-size: 11.5px;
+            color: #7a5a00;
+            margin-top: 8px;
+            padding: 7px 10px;
+            background: #fffbeb;
+            border-left: 3px solid #f59e0b;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .trip-sleep { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+
+        .trip-sleep-pill {
+            font-size: 10.5px;
+            font-weight: 500;
+            padding: 2px 9px;
+            border-radius: 20px;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .trip-sleep-pill.free {
+            background: #ecfdf5;
+            color: #065f46;
+            border-color: #a7f3d0;
+        }
+
+        .trip-day-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .trip-mini-btn {
+            font-family: inherit;
+            font-size: 10.5px;
+            font-weight: bold;
+            padding: 4px 9px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 1px 1px 0 #333;
+        }
+
+        .trip-mini-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+
+        .trip-edited-flag {
+            font-size: 9.5px;
+            color: #b45309;
+            font-style: italic;
+            margin-left: auto;
+            align-self: center;
+        }
+
+        /* Comments + suggestions */
+        .trip-thread {
+            margin-top: 10px;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .trip-thread-title {
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+        }
+
+        .trip-comment {
+            font-size: 12px;
+            color: #334155;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 6px 9px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .trip-comment.suggestion {
+            background: #f0f9ff;
+            border-color: #bae6fd;
+        }
+
+        .trip-comment-emoji { flex-shrink: 0; }
+        .trip-comment-body { flex: 1; line-height: 1.45; word-break: break-word; }
+        .trip-comment-meta { font-size: 9.5px; color: #94a3b8; margin-top: 2px; }
+
+        .trip-comment-del {
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 1;
+            padding: 0 2px;
+        }
+        .trip-comment-del:hover { color: #ef4444; }
+
+        .trip-inline-form {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .trip-inline-form input {
+            flex: 1;
+            font-family: inherit;
+            font-size: 12px;
+            padding: 6px 9px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            min-width: 0;
+        }
+
+        .trip-inline-form button {
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 6px 11px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .trip-day-edit textarea {
+            width: 100%;
+            font-family: inherit;
+            font-size: 12.5px;
+            line-height: 1.5;
+            padding: 8px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            resize: vertical;
+            min-height: 90px;
+            box-sizing: border-box;
+        }
+
+        .trip-day-edit-title {
+            width: 100%;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 7px 8px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            box-sizing: border-box;
+        }
+
+        .trip-field-label {
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin: 8px 0 3px;
+        }
+
+        .trip-edit-input {
+            width: 100%;
+            font-family: inherit;
+            font-size: 12.5px;
+            padding: 7px 8px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .trip-block-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .trip-block-head > .trip-block-title,
+        .trip-block-head > .trip-phase-label {
+            flex: 1;
+            margin: 0;
+        }
+
+        .trip-block-head .trip-mini-btn {
+            padding: 3px 8px;
+            flex-shrink: 0;
+        }
+
+        .trip-section-editor {
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 2px 2px 0 #333;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .trip-edit-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .trip-edit-row input[type="text"] {
+            flex: 1;
+            font-family: inherit;
+            font-size: 12px;
+            padding: 6px 8px;
+            border: 2px solid #333;
+            border-radius: 6px;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .trip-edit-row input.trip-edit-label { flex: 0 0 42%; }
+
+        .trip-edit-row input[type="color"] {
+            flex: 0 0 34px;
+            height: 30px;
+            padding: 0;
+            border: 2px solid #333;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .trip-row-del {
+            flex-shrink: 0;
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 6px;
+            color: #ef4444;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+        }
+        .trip-row-del:active { transform: translate(1px, 1px); }
+
+        .trip-editor-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .trip-budget {
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 2px 2px 0 #333;
+        }
+
+        .trip-budget table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+        .trip-budget td { padding: 7px 4px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+        .trip-budget tr:last-child td {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 13.5px;
+            padding-top: 12px;
+        }
+        .trip-budget td:last-child { text-align: right; font-weight: bold; white-space: nowrap; }
+
+        .trip-suggest-global {
+            position: sticky;
+            bottom: 0;
+            background: #fff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 2px 2px 0 #333;
+        }
     </style>
 </head>
 <body>
@@ -6204,6 +6646,10 @@
                         <button class="option-button" onclick="showView('musicView')">
                             <span>🎵</span>
                             <span>Music Player</span>
+                        </button>
+                        <button class="option-button" onclick="showView('tripView')">
+                            <span>🍁</span>
+                            <span>Trip Planner</span>
                         </button>
                     </div>
                 </div>
@@ -6537,6 +6983,39 @@
                             <input type="text" id="songNoteInput" placeholder="Short message (optional)" maxlength="180" />
                             <button type="submit">Add</button>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trip Planner View -->
+        <div class="view" id="tripView">
+            <button class="back-button" onclick="showView('extrasView')">← Back</button>
+
+            <div class="window chat-view-window">
+                <div class="window-header">
+                    <div class="window-title">
+                        <span>🍁</span>
+                        <span>trip_planner.exe</span>
+                    </div>
+                    <div class="window-controls">
+                        <div class="window-button">_</div>
+                        <div class="window-button">□</div>
+                        <div class="window-button">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <h1>Canada Trip Planner</h1>
+                    <div class="trip-panel">
+                        <p class="trip-intro">Our Canada itinerary — comment on any day, edit the plan, and drop suggestions. Everything syncs between Kiki & Ru. 🐮</p>
+                        <div id="tripContent"></div>
+                        <div class="trip-suggest-global">
+                            <div class="trip-block-title">Suggest something new</div>
+                            <form class="trip-inline-form" id="tripSuggestForm">
+                                <input type="text" id="tripSuggestInput" placeholder="A new idea, a swap, anything…" maxlength="240" required />
+                                <button type="submit">Suggest</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -7135,6 +7614,10 @@
                 initSongs();
             }
 
+            if (viewId === 'tripView') {
+                initTrip();
+            }
+
             if (viewId === 'tasteView') {
                 initTaste();
                 markSectionSeen('taste');
@@ -7232,6 +7715,7 @@
         let chessDbRef = null;
         let gymDbRef = null;
         let datesDbRef = null;
+        let tripDbRef = null;
         let firebaseUnsubscribe = null;
         let weeklyUnsubscribe = null;
         let moodsUnsubscribe = null;
@@ -7246,6 +7730,7 @@
         let chessUnsubscribe = null;
         let gymUnsubscribe = null;
         let datesUnsubscribe = null;
+        let tripUnsubscribe = null;
         let firebaseAuth = null;
         let weeklyItems = [];
         let userMoods = {
@@ -7262,6 +7747,11 @@
         let dateItems = [];
         let datesInitialized = false;
         let datesHasSyncedOnce = false;
+        let tripData = null;
+        let tripInitialized = false;
+        let tripHasSyncedOnce = false;
+        let tripEditingDayId = null;
+        let tripEditingSection = null;
         let activeDateModalId = null;
         let activeDateReconsiderId = null;
         let tasteTriedCollapsed = false;
@@ -7343,6 +7833,7 @@
         const GYM_STORAGE_KEY = 'rugile_gym_planner';
         const GYM_WORKOUT_SESSION_KEY = 'rugile_gym_workout_session';
         const DATES_STORAGE_KEY = 'rugile_date_items';
+        const TRIP_STORAGE_KEY = 'rugile_trip_data';
         const USER_STATUS_STORAGE_KEY = 'rugile_user_status';
         const USER_STORAGE_KEY = 'rugile_current_user';
         const THEME_STORAGE_KEY = 'rugile_app_theme';
@@ -7407,7 +7898,8 @@
             taste: 'Food/restaurant additions',
             mood: 'Mood changes',
             status: 'Status changes',
-            date: 'Date invitations & responses'
+            date: 'Date invitations & responses',
+            trip: 'Trip planner comments & suggestions'
         };
         const NOTIFICATION_TYPES = Object.keys(NOTIFICATION_TYPE_LABELS);
         const CHAT_REACTION_OPTIONS = ['👍', '👎', '❤️', '😂', '🔥', '🎉', '👏', '😮', '😢', '😡'];
@@ -10092,6 +10584,1368 @@
             renderFeedbackItems();
         }
 
+        // ============================================
+        // TRIP PLANNER FEATURE
+        // ============================================
+
+        const TRIP_SUMMARY = [
+            { label: 'Departure', value: 'Sep 1' },
+            { label: 'Return', value: 'Sep 22' },
+            { label: 'Total days', value: '22' },
+            { label: 'Paid nights', value: '~9' },
+            { label: 'Free nights', value: '~10' },
+            { label: 'Est. total (2 pax)', value: '~€3–4k' }
+        ];
+
+        const TRIP_ANCHORS = [
+            { color: '#f97316', text: '**Sep 17** — Cyril\'s birthday 🎂 → Ottawa' },
+            { color: '#f97316', text: '**Sep 21** — Grandma\'s birthday 🎂 + Senators vs Leafs 🏒 3pm → Ottawa' },
+            { color: '#3b82f6', text: '**Sep 22** — Fly home → Paris (concert Sep 23 ✅)' }
+        ];
+
+        const TRIP_TRANSPORT = [
+            '✈️ CDG→YUL→YYC — Sep 1',
+            '✈️ YYC→YUL — Sep 7',
+            '🚌 YUL→Quebec City — Sep 10',
+            '🚌 Quebec City→YUL — Sep 12',
+            '🚗 Sister: MTL→Ottawa — Sep 13',
+            '🚗 Family car: Ottawa loop — Sep 15–17',
+            '✈️ YUL→CDG — Sep 22 morning',
+            '🚗 Car rental: YYC only (~5 days)'
+        ];
+
+        const TRIP_BUDGET = [
+            ['✈️ CDG→YUL→YYC (×2)', '~€800'],
+            ['✈️ YYC→YUL internal (×2)', '~€300–400'],
+            ['✈️ YUL→CDG (×2)', '~€600'],
+            ['🚗 Car rental Alberta — 6 days (YYC)', '~€250–350'],
+            ['🚌 Buses (MTL↔QC ×2 return, ×2 pax)', '~€100–130'],
+            ['🏨 Hotels ~9 paid nights (×2 pax)', '~€900–1 400'],
+            ['🏒 Hockey tickets (×2)', '~€100–160'],
+            ['🎿 Activities (Gondola, Spirit Island, Maid of the Mist, etc.)', '~€300–500'],
+            ['🍽️ Food & misc', '~€600–900'],
+            ['Total estimate, 2 people', '~€3 950–5 240']
+        ];
+
+        const TRIP_PHASES = [
+            {
+                label: 'Phase 1 — The Rockies 🏔️',
+                days: [
+                    {
+                        id: 'd-sep1', dayLabel: 'Sep 1', type: 'travel',
+                        title: 'Fly Paris → Montreal → Calgary',
+                        badges: ['CDG→YUL→YYC'],
+                        desc: [{ p: 'Morning departure CDG. Connect in Montreal (YUL), same-day onward to Calgary (~4h). Arrive Calgary early evening. Pick up rental car. Drive into the city, check in downtown. Quick dinner on 17 Ave, early bed — long travel day.' }],
+                        sleep: [{ label: 'Calgary hotel — night 1' }],
+                        tip: '💡 Book a hotel near the YYC airport or downtown. 17 Ave SW area is the best neighbourhood for food and walking.'
+                    },
+                    {
+                        id: 'd-sep2', dayLabel: 'Sep 2', type: 'rest',
+                        title: 'Calgary — morning explore, afternoon drive to Banff',
+                        badges: ['~1.5h drive'],
+                        desc: [
+                            { p: 'Sleep in, slow morning. Walk to the Calgary Central Library (free, architecture is stunning), grab breakfast on 17 Ave. Around noon: drive to Banff (1.5h on Trans-Canada). Arrive mid-afternoon. Walk Banff Ave, Bow River, settle in. Easy dinner in town.' },
+                            { list: ['**Central Library** — swooping wood atrium, totally free', '**17 Ave SW** — best cafés and brunch spots', '**Calgary Tower** — optional, good city views'] }
+                        ],
+                        sleep: [{ label: 'Banff hotel — night 2' }],
+                        tip: '💡 Calgary is Canada\'s sunniest city — great for a morning walk. Don\'t rush it, Banff is only 1.5h away.'
+                    },
+                    {
+                        id: 'd-sep3', dayLabel: 'Sep 3', type: '',
+                        title: 'Banff National Park — full day',
+                        badges: [],
+                        desc: [{ list: ['**Moraine Lake** — leave hotel by 5:30am. Most photographed lake in Canada. Take the park shuttle or arrive before 6am or you won\'t get in. Worth every second.', '**Lake Louise** — iconic turquoise water, 45min from Moraine Lake', '**Johnston Canyon** — beautiful canyon hike, 2–3h return', '**Banff Gondola** — sunset views over the Rockies. Book in advance.'] }],
+                        sleep: [{ label: 'Banff hotel — night 3' }],
+                        tip: '💡 September means thinner crowds than summer and possible first snow dusting on the peaks — spectacular for photos.'
+                    },
+                    {
+                        id: 'd-sep4', dayLabel: 'Sep 4', type: '',
+                        title: 'Banff — free day / rest',
+                        badges: [],
+                        desc: [{ p: 'Slower pace. Options: Banff Hot Springs (perfect after 2 days of hiking), walk to Vermilion Lakes at sunrise (elk and fog), Bow Falls. Afternoon: browse Banff Ave, good lunch, nap. This buffer day matters — the Icefields drive tomorrow is long.' }],
+                        sleep: [{ label: 'Banff hotel — night 4' }],
+                        tip: ''
+                    },
+                    {
+                        id: 'd-sep5', dayLabel: 'Sep 5', type: 'travel',
+                        title: 'Icefields Parkway — Banff → Jasper',
+                        badges: ['~3.5h driving + stops = full day'],
+                        desc: [
+                            { p: 'One of the world\'s great drives. Leave Banff by 9am.' },
+                            { list: ['**Peyto Lake** — wolf-shaped turquoise lake, short uphill walk', '**Athabasca Glacier** — walk to the ice edge, allow 1h', '**Sunwapta Falls** — 10min stop, gorgeous gorge', '**Jasper town** — arrive ~4–5pm. Elk roam the streets in September. Small, relaxed mountain town.'] }
+                        ],
+                        sleep: [{ label: 'Jasper hotel — night 5' }],
+                        tip: ''
+                    },
+                    {
+                        id: 'd-sep6', dayLabel: 'Sep 6', type: '',
+                        title: 'Jasper — full day',
+                        badges: [],
+                        desc: [
+                            { list: ['**Maligne Lake & Spirit Island** — book the boat tour in advance, one of the most iconic views in Canada', '**Maligne Canyon** — short but dramatic hike along a narrow gorge', '**Pyramid Lake** — easy walk, beautiful reflection of the mountains'] },
+                            { p: 'Last evening in the mountains. Good dinner out — celebrate the Rockies leg.' }
+                        ],
+                        sleep: [{ label: 'Jasper hotel — night 6' }],
+                        tip: '💡 Spirit Island boat tour books out weeks in advance in September — reserve before you leave France.'
+                    },
+                    {
+                        id: 'd-sep7', dayLabel: 'Sep 7', type: 'travel',
+                        title: 'Jasper → Calgary → Fly to Montreal',
+                        badges: ['5h drive', 'YYC→YUL'],
+                        desc: [{ p: 'Early start — leave Jasper by 6:30am. Drive to Calgary (~5h), arrive ~11:30am. Return rental car at YYC. Afternoon flight YYC→YUL (~4h). Arrive Montreal evening. Cousin\'s place. This is a long transit day — don\'t plan anything else.' }],
+                        sleep: [{ label: 'Montreal — cousin\'s place (free)', free: true }],
+                        tip: '💡 Book an early-afternoon YYC→YUL flight to give buffer on the drive. Air Canada and WestJet both serve this route — book early for ~€100–150pp.'
+                    }
+                ]
+            },
+            {
+                label: 'Phase 2 — Quebec 🥐',
+                days: [
+                    {
+                        id: 'd-sep8', dayLabel: 'Sep 8', type: 'rest',
+                        title: 'Montreal — recovery day',
+                        badges: [],
+                        desc: [{ p: 'You\'ve just done 7 intense days. Slow morning — St-Viateur bagels in Mile End, coffee on a terrasse. Plateau-Mont-Royal walk in the afternoon. Easy dinner with your cousin. No agenda.' }],
+                        sleep: [{ label: 'Montreal — cousin\'s place (free)', free: true }],
+                        tip: ''
+                    },
+                    {
+                        id: 'd-sep9', dayLabel: 'Sep 9', type: '',
+                        title: 'Montreal — full day',
+                        badges: [],
+                        desc: [{ list: ['**Old Montreal** — cobblestones, Notre-Dame Basilica (book a visit), waterfront', '**Mount Royal Park** — hike or walk up for city views', '**Jean-Talon Market** — best food market in Canada', '**Dinner** — Montreal\'s restaurant scene is world-class, book somewhere good'] }],
+                        sleep: [{ label: 'Montreal — cousin\'s place (free)', free: true }],
+                        tip: ''
+                    },
+                    {
+                        id: 'd-sep10', dayLabel: 'Sep 10', type: 'travel',
+                        title: 'Montreal → Quebec City',
+                        badges: ['Orléans Express bus — 3h'],
+                        desc: [{ p: 'Morning bus from Gare d\'autocars Montreal (~€25pp, hourly departures, book in advance). Arrive Quebec City by lunch. Check into hotel — stay inside the Old Town walls if budget allows, it makes a big difference. Afternoon walk: Petit-Champlain, Château Frontenac, the ramparts.' }],
+                        sleep: [{ label: 'Quebec City hotel — night 1' }],
+                        tip: '💡 Orléans Express is the main operator. Book online at orleansexpress.com. Buses run hourly from 6am–10pm.'
+                    },
+                    {
+                        id: 'd-sep11', dayLabel: 'Sep 11', type: '',
+                        title: 'Quebec City — full day',
+                        badges: [],
+                        desc: [{ list: ['**Old Quebec walking tour** — Upper Town, the walls, Plains of Abraham', '**Montmorency Falls** — Bus #800 from city centre (~30min, ~$3.50 CAD) or tourist shuttle (~€12pp, includes park entry). Falls are 1.5x taller than Niagara. Cable car optional (~$16 CAD).', '**Quartier Petit-Champlain** — most charming street in Canada, great for dinner'] }],
+                        sleep: [{ label: 'Quebec City hotel — night 2' }],
+                        tip: '💡 Tourist shuttle departs 10:45am from near Château Frontenac, returns on flexible schedule. Book at the tourist office or online day before.'
+                    },
+                    {
+                        id: 'd-sep12', dayLabel: 'Sep 12', type: 'travel',
+                        title: 'Quebec City → Montreal → Ottawa',
+                        badges: ['Bus QC→MTL 3h', 'Sister picks up MTL→Ottawa 2h'],
+                        desc: [{ p: 'Morning bus back to Montreal (~€25pp). Arrive Montreal ~noon. Your sister drives from Ottawa, meets you in Montreal early/mid afternoon, drives everyone back to Ottawa (~2h). In Ottawa by 5–6pm. Home. Family dinner.' }],
+                        sleep: [{ label: 'Ottawa — family\'s place (free)', free: true }],
+                        tip: '💡 Coordinate with your sister in advance — she\'s driving ~4h round trip. Could also bus to Ottawa directly (~5h with connection) if easier for her.'
+                    }
+                ]
+            },
+            {
+                label: 'Phase 3 — Ottawa home base 🏠',
+                days: [
+                    {
+                        id: 'd-sep13', dayLabel: 'Sep 13', type: 'rest',
+                        title: 'Ottawa — rest day',
+                        badges: [],
+                        desc: [{ p: 'First proper rest at home base. Sleep in. ByWard Market for brunch. Rideau Canal walk. National Gallery if curious. Book your birthday restaurant for Sept 17 today if you haven\'t already. Family time in the evening.' }],
+                        sleep: [{ label: 'Ottawa — family\'s place (free)', free: true }],
+                        tip: ''
+                    },
+                    {
+                        id: 'd-sep14', dayLabel: 'Sep 14', type: 'travel',
+                        title: 'Ottawa → Toronto',
+                        badges: ['~4.5h', 'Family car'],
+                        desc: [
+                            { p: 'Leave 8am, arrive Toronto ~12:30pm. Afternoon:' },
+                            { list: ['**Distillery District** — historic Victorian industrial area, great for photos', '**St Lawrence Market** — top 10 food markets in the world', '**CN Tower** — optional, iconic view', '**Kensington Market** — bohemian neighbourhood, great for a wander', '**Dinner** — Queen West or Chinatown'] }
+                        ],
+                        sleep: [{ label: 'Toronto hotel — 1 night' }],
+                        tip: ''
+                    },
+                    {
+                        id: 'd-sep15', dayLabel: 'Sep 15', type: 'travel',
+                        title: 'Toronto → Niagara-on-the-Lake → Niagara Falls',
+                        badges: ['~1.5h total'],
+                        desc: [
+                            { p: 'Morning: Scarborough Bluffs (dramatic cliffs over Lake Ontario, 30min from downtown — worth the detour). Then drive to **Niagara-on-the-Lake** (~1h) — charming town, wine country, good lunch. 20min on to Niagara Falls. Arrive ~3pm.' },
+                            { list: ['See the falls from the Canadian side (much better than American)', '**Falls at sunset** — spectacular', '**Falls at night** — lit up in colour, stay for this', '**Maid of the Mist** boat ride — optional, book day-of'] }
+                        ],
+                        sleep: [{ label: 'Niagara Falls hotel — 1 night' }],
+                        tip: '💡 Stay on Fallsview Blvd for the best views from your room — worth it for one night.'
+                    },
+                    {
+                        id: 'd-sep16', dayLabel: 'Sep 16', type: 'travel',
+                        title: 'Niagara → Ottawa',
+                        badges: ['~5h30', 'Longest drive'],
+                        desc: [{ p: 'Morning at the falls (they\'re beautiful in early light too). Leave by 10:30am. Stop in **Kingston** for lunch (~2.5h from Niagara) — lovely town on Lake Ontario, stretch your legs. Back in Ottawa by 5–6pm. Rest evening — birthday tomorrow.' }],
+                        sleep: [{ label: 'Ottawa — family\'s place (free)', free: true }],
+                        tip: '💡 Kingston is worth a 45min lunch stop — 1000 Islands waterfront, historic downtown. Better than eating at a highway rest stop.'
+                    },
+                    {
+                        id: 'd-sep17', dayLabel: 'Sep 17', type: 'anchor',
+                        title: 'Your birthday 🎂',
+                        badges: ['Sep 17'],
+                        desc: [{ p: 'Your day, completely. Options: boat on the Rideau, spa afternoon, Parliament Hill, Museum of History across the river in Gatineau. **Birthday dinner — book in advance**. Ottawa has a genuinely good restaurant scene: Fauna, Beckta, Supply and Demand are all excellent.' }],
+                        sleep: [{ label: 'Ottawa — family\'s place (free)', free: true }],
+                        tip: ''
+                    },
+                    {
+                        id: 'd-sep18', dayLabel: 'Sep 18–20', type: 'rest',
+                        title: 'Ottawa — free days',
+                        badges: ['3 nights'],
+                        desc: [
+                            { p: 'No agenda. You\'ve covered a lot of ground. Ideas:' },
+                            { list: ['**Gatineau Park** — 30min from Ottawa, fall colours start mid-September, great hiking', '**Montebello** — 1.5h drive, beautiful Fairmont chateau in the forest', '**Rideau Canal** — kayak or paddleboard', 'Or just: family time, farmers markets, do nothing'] }
+                        ],
+                        sleep: [{ label: 'Ottawa — family\'s place (free) ×3', free: true }],
+                        tip: ''
+                    },
+                    {
+                        id: 'd-sep21', dayLabel: 'Sep 21', type: 'anchor',
+                        title: 'Grandma\'s birthday + Hockey 🎂🏒',
+                        badges: ['Sep 21', '3pm tip-off'],
+                        desc: [{ p: '**Ottawa Senators vs Toronto Maple Leafs** — preseason — Canadian Tire Centre — 3pm. Buy tickets in advance (~$80–150 CAD each). Game ends ~5:30pm. Family birthday dinner for grandma in the evening. One of the best days of the trip.' }],
+                        sleep: [{ label: 'Ottawa — family\'s place (free)', free: true }],
+                        tip: '💡 Canadian Tire Centre is ~20min drive from downtown Ottawa. Uber works fine, or family can drive.'
+                    }
+                ]
+            },
+            {
+                label: 'Phase 4 — Home ✈️',
+                days: [
+                    {
+                        id: 'd-sep22', dayLabel: 'Sep 22', type: 'travel',
+                        title: 'Fly home → Paris',
+                        badges: ['YUL→CDG'],
+                        desc: [{ p: 'Drive to Montreal YUL early morning (~2h from Ottawa). Direct flight to Paris CDG (~7h). Arrive Paris evening Sep 22. Concert Sep 23 is safe — you gain 6 hours flying east.' }],
+                        sleep: [],
+                        tip: '💡 Air Transat and Air France both fly YUL→CDG direct. Book early for best price on the ~€300pp return leg.'
+                    }
+                ]
+            }
+        ];
+
+        function tripGetBaseDay(dayId) {
+            for (const phase of TRIP_PHASES) {
+                const found = phase.days.find((d) => d.id === dayId);
+                if (found) return found;
+            }
+            return null;
+        }
+
+        function tripDefaultData() {
+            return { comments: {}, edits: {}, suggestions: [] };
+        }
+
+        function tripLatestIncomingTimestamp(data, userKey) {
+            if (!data || typeof data !== 'object') return 0;
+            let latest = 0;
+            const consider = (actor, ts) => {
+                if (!actor || actor === userKey) return;
+                const value = Number(ts) || 0;
+                if (value > latest) latest = value;
+            };
+            const comments = data.comments || {};
+            Object.keys(comments).forEach((dayId) => {
+                (comments[dayId] || []).forEach((c) => consider(c.from, c.timestamp));
+            });
+            const edits = data.edits || {};
+            Object.keys(edits).forEach((dayId) => {
+                const edit = edits[dayId];
+                if (edit) consider(edit.updatedBy, edit.updatedAt);
+            });
+            (data.suggestions || []).forEach((s) => consider(s.from, s.timestamp));
+            return latest;
+        }
+
+        function normalizeTripComment(item) {
+            if (!item || typeof item !== 'object') return null;
+            const text = String(item.text || '').trim().slice(0, 400);
+            if (!text) return null;
+            return {
+                id: Number(item.id) || Date.now(),
+                text,
+                from: item.from === 'ru' || item.from === 'kiki' ? item.from : null,
+                emoji: typeof item.emoji === 'string' ? item.emoji : '❓',
+                timestamp: Number(item.timestamp) || Date.now()
+            };
+        }
+
+        function normalizeTripData(raw) {
+            const data = tripDefaultData();
+            if (!raw || typeof raw !== 'object') return data;
+
+            if (raw.comments && typeof raw.comments === 'object') {
+                Object.keys(raw.comments).forEach((dayId) => {
+                    const list = Array.isArray(raw.comments[dayId]) ? raw.comments[dayId] : [];
+                    const cleaned = list.map(normalizeTripComment).filter(Boolean).slice(-50);
+                    if (cleaned.length) data.comments[dayId] = cleaned;
+                });
+            }
+
+            if (raw.edits && typeof raw.edits === 'object') {
+                Object.keys(raw.edits).forEach((dayId) => {
+                    const edit = raw.edits[dayId];
+                    if (!edit || typeof edit !== 'object') return;
+                    const title = String(edit.title || '').trim().slice(0, 200);
+                    const descText = String(edit.descText || '').slice(0, 4000);
+                    const dayLabel = String(edit.dayLabel || '').trim().slice(0, 40);
+                    const tip = String(edit.tip || '').slice(0, 400);
+                    let badges = [];
+                    if (Array.isArray(edit.badges)) {
+                        badges = edit.badges
+                            .map((b) => String(b || '').trim().slice(0, 40))
+                            .filter(Boolean)
+                            .slice(0, 6);
+                    }
+                    let sleep = [];
+                    if (Array.isArray(edit.sleep)) {
+                        sleep = edit.sleep
+                            .map((s) => {
+                                if (!s || typeof s !== 'object') return null;
+                                const label = String(s.label || '').trim().slice(0, 120);
+                                if (!label) return null;
+                                return { label, free: Boolean(s.free) };
+                            })
+                            .filter(Boolean)
+                            .slice(0, 6);
+                    }
+                    if (!title && !descText && !dayLabel && !tip && !badges.length && !sleep.length) return;
+                    data.edits[dayId] = {
+                        title,
+                        descText,
+                        dayLabel,
+                        tip,
+                        badges,
+                        sleep,
+                        updatedBy: edit.updatedBy === 'ru' || edit.updatedBy === 'kiki' ? edit.updatedBy : null,
+                        updatedAt: Number(edit.updatedAt) || Date.now()
+                    };
+                });
+            }
+
+            if (Array.isArray(raw.suggestions)) {
+                data.suggestions = raw.suggestions
+                    .map((item) => {
+                        const base = normalizeTripComment(item);
+                        if (!base) return null;
+                        return { ...base, dayId: typeof item.dayId === 'string' ? item.dayId : null };
+                    })
+                    .filter(Boolean)
+                    .slice(-100);
+            }
+
+            if (Array.isArray(raw.summary)) {
+                const cleaned = raw.summary
+                    .map((s) => {
+                        if (!s || typeof s !== 'object') return null;
+                        const label = String(s.label || '').trim().slice(0, 40);
+                        const value = String(s.value || '').trim().slice(0, 40);
+                        if (!label && !value) return null;
+                        return { label, value };
+                    })
+                    .filter(Boolean)
+                    .slice(0, 12);
+                if (cleaned.length) data.summary = cleaned;
+            }
+
+            if (Array.isArray(raw.anchors)) {
+                const cleaned = raw.anchors
+                    .map((a) => {
+                        if (!a || typeof a !== 'object') return null;
+                        const text = String(a.text || '').trim().slice(0, 200);
+                        if (!text) return null;
+                        let color = String(a.color || '').trim();
+                        if (!/^#[0-9a-fA-F]{3,8}$/.test(color)) color = '#f97316';
+                        return { color, text };
+                    })
+                    .filter(Boolean)
+                    .slice(0, 20);
+                if (cleaned.length) data.anchors = cleaned;
+            }
+
+            if (Array.isArray(raw.transport)) {
+                const cleaned = raw.transport
+                    .map((t) => String(t || '').trim().slice(0, 80))
+                    .filter(Boolean)
+                    .slice(0, 20);
+                if (cleaned.length) data.transport = cleaned;
+            }
+
+            if (Array.isArray(raw.budget)) {
+                const cleaned = raw.budget
+                    .map((b) => {
+                        let label;
+                        let value;
+                        if (Array.isArray(b)) {
+                            label = b[0];
+                            value = b[1];
+                        } else if (b && typeof b === 'object') {
+                            label = b.label;
+                            value = b.value;
+                        } else {
+                            return null;
+                        }
+                        label = String(label || '').trim().slice(0, 120);
+                        value = String(value || '').trim().slice(0, 40);
+                        if (!label && !value) return null;
+                        return { label, value };
+                    })
+                    .filter(Boolean)
+                    .slice(0, 40);
+                if (cleaned.length) data.budget = cleaned;
+            }
+
+            return data;
+        }
+
+        function saveTripData() {
+            if (!tripData) tripData = tripDefaultData();
+            if (tripDbRef) {
+                tripDbRef.set(tripData).catch((error) => {
+                    console.error('Firebase trip save failed, fallback to localStorage:', error);
+                    localStorage.setItem(TRIP_STORAGE_KEY, JSON.stringify(tripData));
+                });
+                return;
+            }
+            localStorage.setItem(TRIP_STORAGE_KEY, JSON.stringify(tripData));
+        }
+
+        function loadTripData() {
+            const saved = localStorage.getItem(TRIP_STORAGE_KEY);
+            if (!saved) {
+                tripData = tripDefaultData();
+                return;
+            }
+            try {
+                tripData = normalizeTripData(JSON.parse(saved));
+            } catch {
+                tripData = tripDefaultData();
+            }
+        }
+
+        function tripAppendRichText(parent, text) {
+            // Renders plain text with **bold** segments safely via DOM nodes.
+            const parts = String(text).split(/(\*\*[^*]+\*\*)/g);
+            parts.forEach((part) => {
+                if (!part) return;
+                const boldMatch = part.match(/^\*\*([^*]+)\*\*$/);
+                if (boldMatch) {
+                    const strong = document.createElement('strong');
+                    strong.textContent = boldMatch[1];
+                    parent.appendChild(strong);
+                } else {
+                    parent.appendChild(document.createTextNode(part));
+                }
+            });
+        }
+
+        function tripRenderDesc(container, day, edit) {
+            container.innerHTML = '';
+            if (edit && edit.descText) {
+                container.textContent = edit.descText;
+                return;
+            }
+            (day.desc || []).forEach((block) => {
+                if (block.p) {
+                    const p = document.createElement('div');
+                    tripAppendRichText(p, block.p);
+                    container.appendChild(p);
+                } else if (Array.isArray(block.list)) {
+                    const ul = document.createElement('ul');
+                    block.list.forEach((li) => {
+                        const item = document.createElement('li');
+                        tripAppendRichText(item, li);
+                        ul.appendChild(item);
+                    });
+                    container.appendChild(ul);
+                }
+            });
+        }
+
+        function tripDescToPlainText(day) {
+            const lines = [];
+            (day.desc || []).forEach((block) => {
+                if (block.p) lines.push(block.p.replace(/\*\*/g, ''));
+                else if (Array.isArray(block.list)) {
+                    block.list.forEach((li) => lines.push('• ' + li.replace(/\*\*/g, '')));
+                }
+            });
+            return lines.join('\n');
+        }
+
+        function tripNotifyOther(body) {
+            const target = getOtherUserKey();
+            if (!target) return;
+            notifyBackendAboutEvent({
+                type: 'trip',
+                to: target,
+                title: getNotificationTitleForCurrentUser(),
+                body
+            }).catch((error) => {
+                console.warn('Trip notification failed.', error);
+            });
+        }
+
+        function tripAddComment(dayId, text) {
+            if (!currentUser) return;
+            const clean = String(text || '').trim().slice(0, 400);
+            if (!clean) return;
+            if (!tripData) tripData = tripDefaultData();
+            const list = Array.isArray(tripData.comments[dayId]) ? tripData.comments[dayId] : [];
+            tripData.comments = {
+                ...tripData.comments,
+                [dayId]: [...list, {
+                    id: Date.now(),
+                    text: clean,
+                    from: currentUser.key,
+                    emoji: currentUser.emoji,
+                    timestamp: Date.now()
+                }].slice(-50)
+            };
+            saveTripData();
+            renderTrip();
+            const base = tripGetBaseDay(dayId);
+            tripNotifyOther(`💬 ${base ? base.dayLabel : 'Trip'}: ${clean.length > 120 ? clean.slice(0, 120) + '…' : clean}`);
+        }
+
+        function tripDeleteComment(dayId, commentId) {
+            if (!tripData || !tripData.comments[dayId]) return;
+            const next = tripData.comments[dayId].filter((c) => c.id !== commentId);
+            if (next.length) tripData.comments[dayId] = next;
+            else delete tripData.comments[dayId];
+            tripData.comments = { ...tripData.comments };
+            saveTripData();
+            renderTrip();
+        }
+
+        function tripParseBadges(text) {
+            return String(text || '')
+                .split(',')
+                .map((b) => b.trim().slice(0, 40))
+                .filter(Boolean)
+                .slice(0, 6);
+        }
+
+        function tripParseSleep(text) {
+            return String(text || '')
+                .split('\n')
+                .map((line) => line.trim().slice(0, 120))
+                .filter(Boolean)
+                .slice(0, 6)
+                .map((label) => ({ label, free: /free/i.test(label) }));
+        }
+
+        function tripBaseFields(base) {
+            return {
+                title: base ? base.title : '',
+                descText: base ? tripDescToPlainText(base).trim() : '',
+                dayLabel: base ? base.dayLabel : '',
+                tip: base && base.tip ? base.tip : '',
+                badges: base && Array.isArray(base.badges) ? base.badges.slice() : [],
+                sleep: base && Array.isArray(base.sleep)
+                    ? base.sleep.map((s) => ({ label: s.label, free: Boolean(s.free) }))
+                    : []
+            };
+        }
+
+        function tripSerializeFields(fields) {
+            return JSON.stringify({
+                title: fields.title,
+                descText: fields.descText,
+                dayLabel: fields.dayLabel,
+                tip: fields.tip,
+                badges: fields.badges,
+                sleep: fields.sleep
+            });
+        }
+
+        function tripSaveEdit(dayId, fields) {
+            if (!currentUser) return;
+            if (!tripData) tripData = tripDefaultData();
+            const base = tripGetBaseDay(dayId);
+
+            const cleaned = {
+                title: String(fields.title || '').trim().slice(0, 200) || (base ? base.title : ''),
+                descText: String(fields.descText || '').trim().slice(0, 4000),
+                dayLabel: String(fields.dayLabel || '').trim().slice(0, 40) || (base ? base.dayLabel : ''),
+                tip: String(fields.tip || '').trim().slice(0, 400),
+                badges: Array.isArray(fields.badges) ? fields.badges.slice(0, 6) : [],
+                sleep: Array.isArray(fields.sleep) ? fields.sleep.slice(0, 6) : []
+            };
+
+            const baseFields = tripBaseFields(base);
+            // Compare against base; normalize descText so an untouched edit equals base.
+            const compare = {
+                ...cleaned,
+                descText: cleaned.descText || baseFields.descText
+            };
+            const isDefault = base && tripSerializeFields(compare) === tripSerializeFields(baseFields);
+
+            if (isDefault) {
+                delete tripData.edits[dayId];
+            } else {
+                tripData.edits[dayId] = {
+                    ...cleaned,
+                    updatedBy: currentUser.key,
+                    updatedAt: Date.now()
+                };
+            }
+            tripData.edits = { ...tripData.edits };
+            tripEditingDayId = null;
+            saveTripData();
+            renderTrip();
+            if (tripData.edits[dayId]) {
+                tripNotifyOther(`✏️ Edited ${cleaned.dayLabel || (base ? base.dayLabel : 'a day')}: ${cleaned.title}`);
+            }
+        }
+
+        function tripResetEdit(dayId) {
+            if (!tripData || !tripData.edits[dayId]) return;
+            delete tripData.edits[dayId];
+            tripData.edits = { ...tripData.edits };
+            saveTripData();
+            renderTrip();
+        }
+
+        function tripAddSuggestion(text) {
+            if (!currentUser) return;
+            const clean = String(text || '').trim().slice(0, 240);
+            if (!clean) return;
+            if (!tripData) tripData = tripDefaultData();
+            tripData.suggestions = [...(tripData.suggestions || []), {
+                id: Date.now(),
+                text: clean,
+                dayId: null,
+                from: currentUser.key,
+                emoji: currentUser.emoji,
+                timestamp: Date.now()
+            }].slice(-100);
+            saveTripData();
+            renderTrip();
+            tripNotifyOther(`💡 Suggestion: ${clean.length > 130 ? clean.slice(0, 130) + '…' : clean}`);
+        }
+
+        function tripDeleteSuggestion(id) {
+            if (!tripData) return;
+            tripData.suggestions = (tripData.suggestions || []).filter((s) => s.id !== id);
+            saveTripData();
+            renderTrip();
+        }
+
+        // ---- Editable sections (summary, anchors, transport, budget) ----
+
+        function tripBudgetDefaults() {
+            return TRIP_BUDGET.map((r) => ({ label: r[0], value: r[1] }));
+        }
+
+        function tripEffSummary() {
+            return Array.isArray(tripData.summary) ? tripData.summary : TRIP_SUMMARY;
+        }
+
+        function tripEffAnchors() {
+            return Array.isArray(tripData.anchors) ? tripData.anchors : TRIP_ANCHORS;
+        }
+
+        function tripEffTransport() {
+            return Array.isArray(tripData.transport) ? tripData.transport : TRIP_TRANSPORT;
+        }
+
+        function tripEffBudget() {
+            return Array.isArray(tripData.budget) ? tripData.budget : tripBudgetDefaults();
+        }
+
+        function tripBlockHead(titleText, sectionKey, isPhaseLabel) {
+            const head = document.createElement('div');
+            head.className = 'trip-block-head';
+            const title = document.createElement('div');
+            title.className = isPhaseLabel ? 'trip-phase-label' : 'trip-block-title';
+            title.textContent = titleText;
+            head.appendChild(title);
+            if (tripEditingSection !== sectionKey) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'trip-mini-btn';
+                btn.textContent = '✏️';
+                btn.title = 'Edit section';
+                btn.addEventListener('click', () => {
+                    tripEditingSection = sectionKey;
+                    tripEditingDayId = null;
+                    renderTrip();
+                });
+                head.appendChild(btn);
+            }
+            return head;
+        }
+
+        function tripSaveSection(key, value, defaults, label) {
+            if (!currentUser) return;
+            if (!tripData) tripData = tripDefaultData();
+            if (JSON.stringify(value) === JSON.stringify(defaults)) {
+                delete tripData[key];
+            } else {
+                tripData[key] = value;
+            }
+            tripEditingSection = null;
+            saveTripData();
+            renderTrip();
+            if (tripData[key]) {
+                tripNotifyOther(`✏️ Updated ${label}`);
+            }
+        }
+
+        function tripResetSection(key) {
+            if (!tripData) return;
+            delete tripData[key];
+            tripEditingSection = null;
+            saveTripData();
+            renderTrip();
+        }
+
+        function tripEditorActions(key, onSave) {
+            const actions = document.createElement('div');
+            actions.className = 'trip-editor-actions';
+
+            const saveBtn = document.createElement('button');
+            saveBtn.type = 'button';
+            saveBtn.className = 'trip-mini-btn';
+            saveBtn.textContent = '💾 Save';
+            saveBtn.addEventListener('click', onSave);
+            actions.appendChild(saveBtn);
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.type = 'button';
+            cancelBtn.className = 'trip-mini-btn';
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.addEventListener('click', () => {
+                tripEditingSection = null;
+                renderTrip();
+            });
+            actions.appendChild(cancelBtn);
+
+            if (Array.isArray(tripData[key])) {
+                const resetBtn = document.createElement('button');
+                resetBtn.type = 'button';
+                resetBtn.className = 'trip-mini-btn';
+                resetBtn.textContent = '↺ Reset to original';
+                resetBtn.addEventListener('click', () => tripResetSection(key));
+                actions.appendChild(resetBtn);
+            }
+
+            return actions;
+        }
+
+        function tripMakeDelButton(onClick) {
+            const del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'trip-row-del';
+            del.textContent = '×';
+            del.title = 'Remove';
+            del.addEventListener('click', onClick);
+            return del;
+        }
+
+        function tripMakeAddButton(text, onClick) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'trip-mini-btn';
+            btn.textContent = text;
+            btn.addEventListener('click', onClick);
+            return btn;
+        }
+
+        function tripEditorSummary() {
+            const items = tripEffSummary().map((s) => ({ label: s.label, value: s.value }));
+            const wrap = document.createElement('div');
+            wrap.className = 'trip-section-editor';
+            const rows = document.createElement('div');
+            wrap.appendChild(rows);
+
+            const renderRows = () => {
+                rows.innerHTML = '';
+                items.forEach((item, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'trip-edit-row';
+                    const labelInput = document.createElement('input');
+                    labelInput.type = 'text';
+                    labelInput.className = 'trip-edit-label';
+                    labelInput.placeholder = 'Label';
+                    labelInput.maxLength = 40;
+                    labelInput.value = item.label;
+                    labelInput.addEventListener('input', () => { item.label = labelInput.value; });
+                    const valueInput = document.createElement('input');
+                    valueInput.type = 'text';
+                    valueInput.placeholder = 'Value';
+                    valueInput.maxLength = 40;
+                    valueInput.value = item.value;
+                    valueInput.addEventListener('input', () => { item.value = valueInput.value; });
+                    row.appendChild(labelInput);
+                    row.appendChild(valueInput);
+                    row.appendChild(tripMakeDelButton(() => { items.splice(idx, 1); renderRows(); }));
+                    rows.appendChild(row);
+                });
+            };
+            renderRows();
+
+            wrap.appendChild(tripMakeAddButton('+ Add stat', () => {
+                items.push({ label: '', value: '' });
+                renderRows();
+            }));
+
+            wrap.appendChild(tripEditorActions('summary', () => {
+                const cleaned = items
+                    .map((s) => ({ label: s.label.trim().slice(0, 40), value: s.value.trim().slice(0, 40) }))
+                    .filter((s) => s.label || s.value)
+                    .slice(0, 12);
+                tripSaveSection('summary', cleaned, TRIP_SUMMARY, 'overview');
+            }));
+
+            return wrap;
+        }
+
+        function tripEditorAnchors() {
+            const items = tripEffAnchors().map((a) => ({ color: a.color, text: a.text }));
+            const wrap = document.createElement('div');
+            wrap.className = 'trip-section-editor';
+            const rows = document.createElement('div');
+            wrap.appendChild(rows);
+
+            const renderRows = () => {
+                rows.innerHTML = '';
+                items.forEach((item, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'trip-edit-row';
+                    const colorInput = document.createElement('input');
+                    colorInput.type = 'color';
+                    colorInput.value = /^#[0-9a-fA-F]{6}$/.test(item.color) ? item.color : '#f97316';
+                    colorInput.addEventListener('input', () => { item.color = colorInput.value; });
+                    const textInput = document.createElement('input');
+                    textInput.type = 'text';
+                    textInput.placeholder = 'e.g. **Sep 17** — birthday';
+                    textInput.maxLength = 200;
+                    textInput.value = item.text;
+                    textInput.addEventListener('input', () => { item.text = textInput.value; });
+                    row.appendChild(colorInput);
+                    row.appendChild(textInput);
+                    row.appendChild(tripMakeDelButton(() => { items.splice(idx, 1); renderRows(); }));
+                    rows.appendChild(row);
+                });
+            };
+            renderRows();
+
+            wrap.appendChild(tripMakeAddButton('+ Add date', () => {
+                items.push({ color: '#f97316', text: '' });
+                renderRows();
+            }));
+
+            wrap.appendChild(tripEditorActions('anchors', () => {
+                const cleaned = items
+                    .map((a) => ({
+                        color: /^#[0-9a-fA-F]{3,8}$/.test(a.color) ? a.color : '#f97316',
+                        text: a.text.trim().slice(0, 200)
+                    }))
+                    .filter((a) => a.text)
+                    .slice(0, 20);
+                tripSaveSection('anchors', cleaned, TRIP_ANCHORS, 'fixed dates');
+            }));
+
+            return wrap;
+        }
+
+        function tripEditorTransport() {
+            const items = tripEffTransport().map((t) => ({ text: t }));
+            const wrap = document.createElement('div');
+            wrap.className = 'trip-section-editor';
+            const rows = document.createElement('div');
+            wrap.appendChild(rows);
+
+            const renderRows = () => {
+                rows.innerHTML = '';
+                items.forEach((item, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'trip-edit-row';
+                    const textInput = document.createElement('input');
+                    textInput.type = 'text';
+                    textInput.placeholder = 'e.g. ✈️ CDG→YUL — Sep 1';
+                    textInput.maxLength = 80;
+                    textInput.value = item.text;
+                    textInput.addEventListener('input', () => { item.text = textInput.value; });
+                    row.appendChild(textInput);
+                    row.appendChild(tripMakeDelButton(() => { items.splice(idx, 1); renderRows(); }));
+                    rows.appendChild(row);
+                });
+            };
+            renderRows();
+
+            wrap.appendChild(tripMakeAddButton('+ Add transport', () => {
+                items.push({ text: '' });
+                renderRows();
+            }));
+
+            wrap.appendChild(tripEditorActions('transport', () => {
+                const cleaned = items
+                    .map((t) => t.text.trim().slice(0, 80))
+                    .filter(Boolean)
+                    .slice(0, 20);
+                tripSaveSection('transport', cleaned, TRIP_TRANSPORT, 'transport');
+            }));
+
+            return wrap;
+        }
+
+        function tripEditorBudget() {
+            const items = tripEffBudget().map((b) => ({ label: b.label, value: b.value }));
+            const wrap = document.createElement('div');
+            wrap.className = 'trip-section-editor';
+            const rows = document.createElement('div');
+            wrap.appendChild(rows);
+
+            const renderRows = () => {
+                rows.innerHTML = '';
+                items.forEach((item, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'trip-edit-row';
+                    const labelInput = document.createElement('input');
+                    labelInput.type = 'text';
+                    labelInput.className = 'trip-edit-label';
+                    labelInput.placeholder = 'Item';
+                    labelInput.maxLength = 120;
+                    labelInput.value = item.label;
+                    labelInput.addEventListener('input', () => { item.label = labelInput.value; });
+                    const valueInput = document.createElement('input');
+                    valueInput.type = 'text';
+                    valueInput.placeholder = '~€000';
+                    valueInput.maxLength = 40;
+                    valueInput.value = item.value;
+                    valueInput.addEventListener('input', () => { item.value = valueInput.value; });
+                    row.appendChild(labelInput);
+                    row.appendChild(valueInput);
+                    row.appendChild(tripMakeDelButton(() => { items.splice(idx, 1); renderRows(); }));
+                    rows.appendChild(row);
+                });
+            };
+            renderRows();
+
+            wrap.appendChild(tripMakeAddButton('+ Add line', () => {
+                items.push({ label: '', value: '' });
+                renderRows();
+            }));
+
+            wrap.appendChild(tripEditorActions('budget', () => {
+                const cleaned = items
+                    .map((b) => ({ label: b.label.trim().slice(0, 120), value: b.value.trim().slice(0, 40) }))
+                    .filter((b) => b.label || b.value)
+                    .slice(0, 40);
+                tripSaveSection('budget', cleaned, tripBudgetDefaults(), 'budget');
+            }));
+
+            return wrap;
+        }
+
+        function tripRenderComment(item, onDelete, isSuggestion) {
+            const row = document.createElement('div');
+            row.className = isSuggestion ? 'trip-comment suggestion' : 'trip-comment';
+
+            const emoji = document.createElement('span');
+            emoji.className = 'trip-comment-emoji';
+            emoji.textContent = item.emoji || '❓';
+            row.appendChild(emoji);
+
+            const body = document.createElement('div');
+            body.className = 'trip-comment-body';
+            const textEl = document.createElement('div');
+            textEl.textContent = item.text;
+            body.appendChild(textEl);
+            const meta = document.createElement('div');
+            meta.className = 'trip-comment-meta';
+            const when = formatTinyTimestamp(item.timestamp);
+            meta.textContent = when || '';
+            body.appendChild(meta);
+            row.appendChild(body);
+
+            if (typeof onDelete === 'function') {
+                const del = document.createElement('button');
+                del.className = 'trip-comment-del';
+                del.type = 'button';
+                del.textContent = '×';
+                del.title = 'Delete';
+                del.addEventListener('click', onDelete);
+                row.appendChild(del);
+            }
+
+            return row;
+        }
+
+        function renderTrip() {
+            const root = document.getElementById('tripContent');
+            if (!root) return;
+            if (!tripData) tripData = tripDefaultData();
+            root.innerHTML = '';
+
+            // Overview / summary
+            root.appendChild(tripBlockHead('Overview', 'summary', false));
+            if (tripEditingSection === 'summary') {
+                root.appendChild(tripEditorSummary());
+            } else {
+                const summary = document.createElement('div');
+                summary.className = 'trip-summary-grid';
+                tripEffSummary().forEach((stat) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'trip-stat';
+                    const sl = document.createElement('div');
+                    sl.className = 'sl';
+                    sl.textContent = stat.label;
+                    const sv = document.createElement('div');
+                    sv.className = 'sv';
+                    sv.textContent = stat.value;
+                    cell.appendChild(sl);
+                    cell.appendChild(sv);
+                    summary.appendChild(cell);
+                });
+                root.appendChild(summary);
+            }
+
+            // Anchors / fixed dates
+            root.appendChild(tripBlockHead('Fixed dates', 'anchors', false));
+            if (tripEditingSection === 'anchors') {
+                root.appendChild(tripEditorAnchors());
+            } else {
+                const anchors = document.createElement('div');
+                anchors.className = 'trip-anchors';
+                tripEffAnchors().forEach((a) => {
+                    const item = document.createElement('div');
+                    item.className = 'trip-anchor-item';
+                    const dot = document.createElement('span');
+                    dot.className = 'trip-anchor-dot';
+                    dot.style.background = a.color;
+                    item.appendChild(dot);
+                    const text = document.createElement('span');
+                    tripAppendRichText(text, a.text);
+                    item.appendChild(text);
+                    anchors.appendChild(item);
+                });
+                root.appendChild(anchors);
+            }
+
+            // Transport
+            root.appendChild(tripBlockHead('Transport', 'transport', false));
+            if (tripEditingSection === 'transport') {
+                root.appendChild(tripEditorTransport());
+            } else {
+                const transport = document.createElement('div');
+                transport.className = 'trip-transport';
+                tripEffTransport().forEach((t) => {
+                    const item = document.createElement('div');
+                    item.className = 'trip-transport-item';
+                    item.textContent = t;
+                    transport.appendChild(item);
+                });
+                root.appendChild(transport);
+            }
+
+            // Phases & days
+            TRIP_PHASES.forEach((phase) => {
+                const label = document.createElement('div');
+                label.className = 'trip-phase-label';
+                label.textContent = phase.label;
+                root.appendChild(label);
+
+                phase.days.forEach((day) => {
+                    root.appendChild(tripRenderDay(day));
+                });
+            });
+
+            // Budget
+            root.appendChild(tripBlockHead('Budget breakdown (2 people)', 'budget', true));
+            if (tripEditingSection === 'budget') {
+                root.appendChild(tripEditorBudget());
+            } else {
+                const budget = document.createElement('div');
+                budget.className = 'trip-budget';
+                const table = document.createElement('table');
+                tripEffBudget().forEach((row) => {
+                    const tr = document.createElement('tr');
+                    const td1 = document.createElement('td');
+                    td1.textContent = row.label;
+                    const td2 = document.createElement('td');
+                    td2.textContent = row.value;
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    table.appendChild(tr);
+                });
+                budget.appendChild(table);
+                root.appendChild(budget);
+            }
+
+            // Global suggestions
+            const suggestions = (tripData.suggestions || []);
+            if (suggestions.length) {
+                const sTitle = document.createElement('div');
+                sTitle.className = 'trip-block-title';
+                sTitle.textContent = '💡 Suggestions';
+                root.appendChild(sTitle);
+                const sWrap = document.createElement('div');
+                sWrap.className = 'trip-thread';
+                [...suggestions].reverse().forEach((s) => {
+                    sWrap.appendChild(tripRenderComment(s, () => {
+                        tripDeleteSuggestion(s.id);
+                    }, true));
+                });
+                root.appendChild(sWrap);
+            }
+        }
+
+        function tripRenderDay(day) {
+            const edit = tripData.edits[day.id] || null;
+            const effDayLabel = edit && edit.dayLabel ? edit.dayLabel : day.dayLabel;
+            const effTitle = edit && edit.title ? edit.title : day.title;
+            const effBadges = edit ? (Array.isArray(edit.badges) ? edit.badges : []) : (day.badges || []);
+            const effTip = edit ? (edit.tip || '') : (day.tip || '');
+            const effSleep = edit ? (Array.isArray(edit.sleep) ? edit.sleep : []) : (day.sleep || []);
+            const card = document.createElement('div');
+            card.className = 'trip-day' + (day.type ? ' type-' + day.type : '');
+
+            // Head
+            const head = document.createElement('div');
+            head.className = 'trip-day-head';
+            const num = document.createElement('span');
+            num.className = 'trip-day-num';
+            num.textContent = effDayLabel;
+            head.appendChild(num);
+            const title = document.createElement('span');
+            title.className = 'trip-day-title';
+            title.textContent = effTitle;
+            head.appendChild(title);
+            if (effBadges.length) {
+                const badges = document.createElement('span');
+                badges.className = 'trip-badges';
+                effBadges.forEach((b) => {
+                    const badge = document.createElement('span');
+                    badge.className = 'trip-badge';
+                    badge.textContent = b;
+                    badges.appendChild(badge);
+                });
+                head.appendChild(badges);
+            }
+            card.appendChild(head);
+
+            if (tripEditingDayId === day.id) {
+                card.appendChild(tripRenderDayEditor(day, edit));
+                return card;
+            }
+
+            // Description
+            const desc = document.createElement('div');
+            desc.className = 'trip-day-desc';
+            tripRenderDesc(desc, day, edit);
+            card.appendChild(desc);
+
+            // Tip
+            if (effTip) {
+                const tip = document.createElement('div');
+                tip.className = 'trip-tip';
+                tip.textContent = effTip;
+                card.appendChild(tip);
+            }
+
+            // Sleep
+            if (effSleep.length) {
+                const sleep = document.createElement('div');
+                sleep.className = 'trip-sleep';
+                effSleep.forEach((s) => {
+                    const pill = document.createElement('span');
+                    pill.className = 'trip-sleep-pill' + (s.free ? ' free' : '');
+                    pill.textContent = s.label;
+                    sleep.appendChild(pill);
+                });
+                card.appendChild(sleep);
+            }
+
+            // Actions
+            const actions = document.createElement('div');
+            actions.className = 'trip-day-actions';
+            const editBtn = document.createElement('button');
+            editBtn.type = 'button';
+            editBtn.className = 'trip-mini-btn';
+            editBtn.textContent = '✏️ Edit';
+            editBtn.addEventListener('click', () => {
+                tripEditingDayId = day.id;
+                tripEditingSection = null;
+                renderTrip();
+            });
+            actions.appendChild(editBtn);
+            if (edit) {
+                const flag = document.createElement('span');
+                flag.className = 'trip-edited-flag';
+                const who = edit.updatedBy === 'ru' ? 'Ru' : edit.updatedBy === 'kiki' ? 'Kiki' : 'someone';
+                flag.textContent = `edited by ${who} ${formatTinyTimestamp(edit.updatedAt)}`;
+                actions.appendChild(flag);
+            }
+            card.appendChild(actions);
+
+            // Comment thread
+            const thread = document.createElement('div');
+            thread.className = 'trip-thread';
+            const threadTitle = document.createElement('div');
+            threadTitle.className = 'trip-thread-title';
+            const comments = Array.isArray(tripData.comments[day.id]) ? tripData.comments[day.id] : [];
+            threadTitle.textContent = comments.length ? `💬 Comments (${comments.length})` : '💬 Comments';
+            thread.appendChild(threadTitle);
+            comments.forEach((c) => {
+                thread.appendChild(tripRenderComment(c, () => {
+                    tripDeleteComment(day.id, c.id);
+                }, false));
+            });
+
+            const form = document.createElement('form');
+            form.className = 'trip-inline-form';
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'Add a comment…';
+            input.maxLength = 400;
+            const submit = document.createElement('button');
+            submit.type = 'submit';
+            submit.textContent = 'Send';
+            form.appendChild(input);
+            form.appendChild(submit);
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const value = input.value.trim();
+                if (!value) return;
+                input.value = '';
+                tripAddComment(day.id, value);
+            });
+            thread.appendChild(form);
+            card.appendChild(thread);
+
+            return card;
+        }
+
+        function tripRenderDayEditor(day, edit) {
+            const wrap = document.createElement('div');
+            wrap.className = 'trip-day-edit';
+
+            const addLabel = (text) => {
+                const label = document.createElement('div');
+                label.className = 'trip-field-label';
+                label.textContent = text;
+                wrap.appendChild(label);
+            };
+
+            // Date label
+            addLabel('Date');
+            const dayLabelInput = document.createElement('input');
+            dayLabelInput.type = 'text';
+            dayLabelInput.className = 'trip-edit-input';
+            dayLabelInput.maxLength = 40;
+            dayLabelInput.value = edit && edit.dayLabel ? edit.dayLabel : day.dayLabel;
+            wrap.appendChild(dayLabelInput);
+
+            // Title
+            addLabel('Title');
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.className = 'trip-day-edit-title';
+            titleInput.maxLength = 200;
+            titleInput.value = edit && edit.title ? edit.title : day.title;
+            wrap.appendChild(titleInput);
+
+            // Badges
+            addLabel('Tags / badges (comma separated)');
+            const badgesInput = document.createElement('input');
+            badgesInput.type = 'text';
+            badgesInput.className = 'trip-edit-input';
+            badgesInput.placeholder = 'e.g. 1.5h drive, Family car';
+            const effBadges = edit ? (Array.isArray(edit.badges) ? edit.badges : []) : (day.badges || []);
+            badgesInput.value = effBadges.join(', ');
+            wrap.appendChild(badgesInput);
+
+            // Description
+            addLabel('Details');
+            const textarea = document.createElement('textarea');
+            textarea.value = edit && edit.descText ? edit.descText : tripDescToPlainText(day);
+            wrap.appendChild(textarea);
+
+            // Tip
+            addLabel('Tip (optional)');
+            const tipInput = document.createElement('input');
+            tipInput.type = 'text';
+            tipInput.className = 'trip-edit-input';
+            tipInput.maxLength = 400;
+            tipInput.placeholder = '💡 A helpful note';
+            tipInput.value = edit ? (edit.tip || '') : (day.tip || '');
+            wrap.appendChild(tipInput);
+
+            // Sleep
+            addLabel('Sleep / accommodation (one per line)');
+            const sleepArea = document.createElement('textarea');
+            sleepArea.style.minHeight = '60px';
+            sleepArea.placeholder = 'e.g. Banff hotel — night 2';
+            const effSleep = edit ? (Array.isArray(edit.sleep) ? edit.sleep : []) : (day.sleep || []);
+            sleepArea.value = effSleep.map((s) => s.label).join('\n');
+            wrap.appendChild(sleepArea);
+
+            const actions = document.createElement('div');
+            actions.className = 'trip-day-actions';
+
+            const saveBtn = document.createElement('button');
+            saveBtn.type = 'button';
+            saveBtn.className = 'trip-mini-btn';
+            saveBtn.textContent = '💾 Save';
+            saveBtn.addEventListener('click', () => {
+                tripSaveEdit(day.id, {
+                    dayLabel: dayLabelInput.value,
+                    title: titleInput.value,
+                    badges: tripParseBadges(badgesInput.value),
+                    descText: textarea.value,
+                    tip: tipInput.value,
+                    sleep: tripParseSleep(sleepArea.value)
+                });
+            });
+            actions.appendChild(saveBtn);
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.type = 'button';
+            cancelBtn.className = 'trip-mini-btn';
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.addEventListener('click', () => {
+                tripEditingDayId = null;
+                renderTrip();
+            });
+            actions.appendChild(cancelBtn);
+
+            if (edit) {
+                const resetBtn = document.createElement('button');
+                resetBtn.type = 'button';
+                resetBtn.className = 'trip-mini-btn';
+                resetBtn.textContent = '↺ Reset to original';
+                resetBtn.addEventListener('click', () => {
+                    tripEditingDayId = null;
+                    tripResetEdit(day.id);
+                });
+                actions.appendChild(resetBtn);
+            }
+
+            wrap.appendChild(actions);
+            return wrap;
+        }
+
+        function initTrip() {
+            if (tripInitialized) {
+                renderTrip();
+                return;
+            }
+            tripInitialized = true;
+            const cloudReady = initFirebaseSync();
+            if (!cloudReady) {
+                loadTripData();
+            }
+            renderTrip();
+        }
+
         function normalizeSongItems(raw) {
             if (!Array.isArray(raw)) return [];
             return raw
@@ -11513,6 +13367,7 @@
                 gymDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/gym`);
                 usersDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/users`);
                 datesDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/dates`);
+                tripDbRef = database.ref(`boards/${FIREBASE_BOARD_ID}/trip`);
 
                 if (firebaseUnsubscribe) {
                     firebaseUnsubscribe();
@@ -11555,6 +13410,9 @@
                 }
                 if (datesUnsubscribe) {
                     datesUnsubscribe();
+                }
+                if (tripUnsubscribe) {
+                    tripUnsubscribe();
                 }
 
                 const listener = firebaseDbRef.on('value', (snapshot) => {
@@ -11802,6 +13660,24 @@
                 });
                 datesUnsubscribe = () => datesDbRef.off('value', datesListener);
 
+                const tripListener = tripDbRef.on('value', (snapshot) => {
+                    const previousTrip = tripData;
+                    const value = snapshot.val();
+                    tripData = normalizeTripData(value);
+
+                    if (currentUser && tripHasSyncedOnce) {
+                        const prevIncoming = tripLatestIncomingTimestamp(previousTrip, currentUser.key);
+                        const nextIncoming = tripLatestIncomingTimestamp(tripData, currentUser.key);
+                        if (nextIncoming > prevIncoming) {
+                            playNotificationSound();
+                        }
+                    }
+
+                    tripHasSyncedOnce = true;
+                    renderTrip();
+                });
+                tripUnsubscribe = () => tripDbRef.off('value', tripListener);
+
                 return true;
             } catch (error) {
                 console.error('Firebase init failed, using local storage fallback:', error);
@@ -11819,6 +13695,7 @@
                 chessDbRef = null;
                 gymDbRef = null;
                 datesDbRef = null;
+                tripDbRef = null;
                 return false;
             }
         }
@@ -12873,6 +14750,16 @@
             noteInput.value = '';
             saveSongItems();
             renderSongItems();
+        });
+
+        document.getElementById('tripSuggestForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+            const input = document.getElementById('tripSuggestInput');
+            const value = input.value.trim();
+            if (!value) return;
+            input.value = '';
+            tripAddSuggestion(value);
         });
 
         document.getElementById('tasteToggleTriedBtn').addEventListener('click', () => {
